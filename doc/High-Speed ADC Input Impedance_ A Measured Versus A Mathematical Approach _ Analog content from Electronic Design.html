@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<!-- saved from url=(0103)http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach -->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#" xml:lang="en" lang="en" dir="ltr" class="js"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <title>High-Speed ADC Input Impedance: A Measured Versus A Mathematical Approach | Analog content from Electronic Design</title>
+  <meta http-equiv="content-language" content="en">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"><script type="text/javascript" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/9ea50e154b"></script><script src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/nr-998.min.js.Без названия"></script><script type="text/javascript" async="" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/elqCfg.min.js.Без названия"></script><script src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/cb=gapi.loaded_1" async=""></script><script id="facebook-jssdk" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/all.js.Без названия"></script><script type="text/javascript" async="" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/insight.min.js.Без названия"></script><script type="text/javascript" async="" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/insight.min.js.Без названия"></script><script type="text/javascript" async="" src="https://z.moatads.com/pentoncontent20495821/moatcontent.js#l1=electronicdesign.com&amp;l2=High-Speed%20ADC%20Input%20Impedance%3A%20A%20Measured%20Versus%20A%20Mathematical%20Approach&amp;l3=__page__&amp;l4=-&amp;t=1485284838655&amp;de=109364007282&amp;zMoatAB_SNPT=true"></script><script async="" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/analytics.js.Без названия"></script><script src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/cb=gapi.loaded_0" async=""></script><script type="text/javascript">window.NREUM||(NREUM={}),__nr_require=function(e,t,n){function r(n){if(!t[n]){var o=t[n]={exports:{}};e[n][0].call(o.exports,function(t){var o=e[n][1][t];return r(o||t)},o,o.exports)}return t[n].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<n.length;o++)r(n[o]);return r}({1:[function(e,t,n){function r(){}function o(e,t,n){return function(){return i(e,[(new Date).getTime()].concat(u(arguments)),t?null:this,n),t?void 0:this}}var i=e("handle"),a=e(2),u=e(3),c=e("ee").get("tracer"),f=NREUM;"undefined"==typeof window.newrelic&&(newrelic=f);var s=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit"],l="api-",p=l+"ixn-";a(s,function(e,t){f[t]=o(l+t,!0,"api")}),f.addPageAction=o(l+"addPageAction",!0),f.setCurrentRouteName=o(l+"routeName",!0),t.exports=newrelic,f.interaction=function(){return(new r).get()};var d=r.prototype={createTracer:function(e,t){var n={},r=this,o="function"==typeof t;return i(p+"tracer",[Date.now(),e,n],r),function(){if(c.emit((o?"":"no-")+"fn-start",[Date.now(),r,o],n),o)try{return t.apply(this,arguments)}finally{c.emit("fn-end",[Date.now()],n)}}}};a("setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(e,t){d[t]=o(p+t)}),newrelic.noticeError=function(e){"string"==typeof e&&(e=new Error(e)),i("err",[e,(new Date).getTime()])}},{}],2:[function(e,t,n){function r(e,t){var n=[],r="",i=0;for(r in e)o.call(e,r)&&(n[i]=t(r,e[r]),i+=1);return n}var o=Object.prototype.hasOwnProperty;t.exports=r},{}],3:[function(e,t,n){function r(e,t,n){t||(t=0),"undefined"==typeof n&&(n=e?e.length:0);for(var r=-1,o=n-t||0,i=Array(o<0?0:o);++r<o;)i[r]=e[t+r];return i}t.exports=r},{}],ee:[function(e,t,n){function r(){}function o(e){function t(e){return e&&e instanceof r?e:e?c(e,u,i):i()}function n(n,r,o){if(!p.aborted){e&&e(n,r,o);for(var i=t(o),a=v(n),u=a.length,c=0;c<u;c++)a[c].apply(i,r);var f=s[w[n]];return f&&f.push([y,n,r,i]),i}}function d(e,t){b[e]=v(e).concat(t)}function v(e){return b[e]||[]}function g(e){return l[e]=l[e]||o(n)}function m(e,t){f(e,function(e,n){t=t||"feature",w[n]=t,t in s||(s[t]=[])})}var b={},w={},y={on:d,emit:n,get:g,listeners:v,context:t,buffer:m,abort:a,aborted:!1};return y}function i(){return new r}function a(){(s.api||s.feature)&&(p.aborted=!0,s=p.backlog={})}var u="nr@context",c=e("gos"),f=e(2),s={},l={},p=t.exports=o();p.backlog=s},{}],gos:[function(e,t,n){function r(e,t,n){if(o.call(e,t))return e[t];var r=n();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(e,t,{value:r,writable:!0,enumerable:!1}),r}catch(i){}return e[t]=r,r}var o=Object.prototype.hasOwnProperty;t.exports=r},{}],handle:[function(e,t,n){function r(e,t,n,r){o.buffer([e],r),o.emit(e,t,n)}var o=e("ee").get("handle");t.exports=r,r.ee=o},{}],id:[function(e,t,n){function r(e){var t=typeof e;return!e||"object"!==t&&"function"!==t?-1:e===window?0:a(e,i,function(){return o++})}var o=1,i="nr@id",a=e("gos");t.exports=r},{}],loader:[function(e,t,n){function r(){if(!h++){var e=y.info=NREUM.info,t=l.getElementsByTagName("script")[0];if(setTimeout(f.abort,3e4),!(e&&e.licenseKey&&e.applicationID&&t))return f.abort();c(b,function(t,n){e[t]||(e[t]=n)}),u("mark",["onload",a()],null,"api");var n=l.createElement("script");n.src="https://"+e.agent,t.parentNode.insertBefore(n,t)}}function o(){"complete"===l.readyState&&i()}function i(){u("mark",["domContent",a()],null,"api")}function a(){return(new Date).getTime()}var u=e("handle"),c=e(2),f=e("ee"),s=window,l=s.document,p="addEventListener",d="attachEvent",v=s.XMLHttpRequest,g=v&&v.prototype;NREUM.o={ST:setTimeout,CT:clearTimeout,XHR:v,REQ:s.Request,EV:s.Event,PR:s.Promise,MO:s.MutationObserver},e(1);var m=""+location,b={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-998.min.js"},w=v&&g&&g[p]&&!/CriOS/.test(navigator.userAgent),y=t.exports={offset:a(),origin:m,features:{},xhrWrappable:w};l[p]?(l[p]("DOMContentLoaded",i,!1),s[p]("load",r,!1)):(l[d]("onreadystatechange",o),s[d]("onload",r)),u("mark",["firstbyte",a()],null,"api");var h=0},{}]},{},["loader"]);</script>
+  
+<link rel="canonical" href="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach">
+<meta name="keywords" content="Analog-to-Digital Converter, ADC, Pipeline Input Impedance, circuit design, network analyzer, mathematical analysis, Analog, Embedded">
+<meta name="description" content="Rob Reeder Explains why ADC input impedance varies with frequency and why that&#39;s a circuit-design challenge, then contrasts measuring with a network analyzer with calculating Zin analytically.">
+<meta name="revisit-after" content="1 day">
+<script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
+<link href="http://electronicdesign.com/opensearch/apachesolr_search" title="Search search for Electronic Design" rel="search" type="application/opensearchdescription+xml">
+<script>
+(function() {
+var d=document,h=d.getElementsByTagName('head')[0],s=d.createElement('script'),sc = 'https:' == document.location.protocol ? 'https://' : 'http://';
+s.type='text/javascript';
+s.async=true;
+s.src=sc+'s.dpmsrv.com/dpm_8effee409c625e1a2d8f5033631840e6ce1dcb64.min.js';
+h.appendChild(s);
+})();
+</script><script type="text/javascript" async="" src="http://s.dpmsrv.com/dpm_8effee409c625e1a2d8f5033631840e6ce1dcb64.min.js"></script><script src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/cc_af.js.Без названия"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+function roadblock(){}
+roadblock.page = "/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach";
+roadblock.demographic_data = [];
+roadblock.roadblockswitch = 1;
+roadblock.roadblockdisplay = 12;
+roadblock.roadblocktime = 15;
+roadblock.roadblocktimedelay = 0;
+roadblock.roadblockposition = "interstitial";
+roadblock.roadblocksize = "640x480";
+roadblock.roadblocktransparent = 1;
+roadblock.roadblocksitewide = 1;
+roadblock.ad_full_sitename = "Electronic Design";
+roadblock.adsense_ad_channel = "";
+roadblock.adsense_search_ad_channel = 8765808811;
+roadblock.adsense_max_links = 3;
+roadblock.adsense_ad_type = "text";
+roadblock.google_ui_version = 1;
+roadblock.adsense_switch = 0;
+roadblock.adsense_search_switch = 0;
+roadblock.adsense_pubid = "pub-0083033482235071";
+roadblock.adsense_adslot = "";
+roadblock.google_color_link = "";
+roadblock.adsense_adslot_width = 585;
+roadblock.adsense_adslot_height = 200;
+roadblock.ad_dart_site = "elecdes.home";
+roadblock.ad_dart_zone = "technologies/analog";
+roadblock.ad_dart_ptype = "article";
+roadblock.ad_dart_blog = "";
+roadblock.ad_dart_level = "";
+//--><!]]></script>
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="title" content="High-Speed ADC Input Impedance: A Measured Versus A Mathematical Approach">
+<link rel="image_src" href="http://electronicdesign.com/site-files/electronicdesign.com/files/uploads/xl.robreeder150x155.jpg" alt="">
+<link rel="shortcut icon" href="http://electronicdesign.com/sites/all/themes/electronicdesign/favicon.ico" type="image/x-icon">
+<meta property="og:type" content="website">
+<meta property="og:url" content="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach">
+<meta property="og:title" content="High-Speed ADC Input Impedance: A Measured Versus A Mathematical Approach">
+<meta property="og:description" content="Rob Reeder Explains why ADC input impedance varies with frequency and why that&#39;s a circuit-design challenge, then contrasts measuring with a network analyzer with calculating Zin analytically.">
+<meta property="og:image" content="http://electronicdesign.com/site-files/electronicdesign.com/files/uploads/xl.robreeder150x155.jpg">
+<link rel="alternate" type="application/rss+xml" title="Electronic Design RSS" href="http://electronicdesign.com/rss.xml">
+<script type="text/javascript" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/in.js.Без названия"></script><script src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/secureAnonymousFramework"></script>
+<script type="text/javascript" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/plusone.js.Без названия" gapi_processed="true"></script>
+<script type="text/javascript" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/widgets.js.Без названия"></script>
+  <link type="text/css" rel="stylesheet" media="all" href="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/penton_follow_user.css">
+<link type="text/css" rel="stylesheet" media="all" href="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/19a2b72cdd0fc15bf64ed261883b423d_0.css">
+<link type="text/css" rel="stylesheet" media="all" href="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/css_a90df6a64018d1c23e9ee240c479e125_0.css">
+<link type="text/css" rel="stylesheet" media="all" href="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/css_29a5e31a9cdcd377ced1909815a3e506_0.css">
+<link type="text/css" rel="stylesheet" media="all" href="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/css_3560e07b1226a85192e2942527150eb0_0.css">
+<link type="text/css" rel="stylesheet" media="all" href="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/css_b1ffbb081ca24e916f12d56f5e9bb878_0.css">
+<link type="text/css" rel="stylesheet" media="print" href="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/css_7d8f0be34e2eec60aeb767133812bec2_2.css">
+  <script type="text/javascript" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/js_aca8f579b1cbd140cf9ffb97df811417_1.js.Без названия"></script>
+<script type="text/javascript" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/js_15f92fd106358d677d7d293a4975ec29_0.js.Без названия"></script>
+<script type="text/javascript" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/js_a1faf7e86af5944f10d434d7b615967b_1.js.Без названия"></script>
+<script type="text/javascript" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/js_7af55d6a6031576fc3ff04b7d6ce760c_0.js.Без названия"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+jQuery.extend(Drupal.settings, {"basePath":"\/","penton_omniture":{"penton_omniture_suite_name":"pentonelecdesign,pentonpisces","penton_omniture_visitornamespace":"pentonmedia","penton_omniture_trackingserver":"metrics.electronicdesign.com","penton_omniture_secure_trackingserver":"smetrics.electronicdesign.com","penton_omniture_linkinternalfilters":"javascript:,electronicdesign.com,halldata.com","penton_omniture_affiliates":"ed-china.com,mwrf.com,powerelectronics.com,autoelectronics.com,mobiledevdesign.com,rfdesign.com,engineeringtv.com,sourceesb.com,planetee.com"},"apachesolr_autocomplete":{"path":"\/apachesolr_autocomplete"},"colorbox":{"transition":"elastic","speed":350,"opacity":"0.85","slideshow":false,"slideshowAuto":false,"slideshowSpeed":2500,"slideshowStart":"","slideshowStop":"","current":"{current} of {total}","previous":"\u00ab Prev","next":"Next \u00bb","close":"Close","overlayClose":true,"maxWidth":"100%","maxHeight":"100%"},"fivestar":{"titleUser":"Your rating: ","titleAverage":"Average: ","feedbackSavingVote":"Saving your vote...","feedbackVoteSaved":"Your vote has been saved.","feedbackDeletingVote":"Deleting your vote...","feedbackVoteDeleted":"Your vote has been deleted."},"user_relationships_ui":{"loadingimage":"\/sites\/all\/modules\/contrib\/user_relationships\/user_relationships_ui\/images\/loadingAnimation.gif","savingimage":"\/sites\/all\/modules\/contrib\/user_relationships\/user_relationships_ui\/images\/savingimage.gif","position":{"position":"absolute","left":"0","top":"0"}},"penton_registration":{"flyover_page_number":"3","user_is_loginned":false,"is_flyover_needed":true},"register_flyover":{"animation":"fadeIn","throbber":"\u003Cimg src=\u0022\/sites\/all\/modules\/custom\/penton_registration\/images\/ajax-loader.gif\u0022 alt=\u0022Loading...\u0022 title=\u0022Loading\u0022 width=\u0022220\u0022 height=\u002219\u0022 \/\u003E","modalOptions":{"background-color":"#000000","opacity":0.8},"modalSize":{"contentBottom":60,"contentRight":60,"height":450,"type":"fixed","width":550},"PURModal":{"closeImage":"\u003Cimg src=\u0022\/sites\/all\/modules\/contrib\/ctools\/images\/icon-close-window.png\u0022 alt=\u0022Close Window\u0022 title=\u0022Close Window\u0022 width=\u002216\u0022 height=\u002216\u0022 \/\u003E","closeText":"Close Window","loadingText":"Loading...","throbber":"\u003Cimg src=\u0022\/sites\/all\/modules\/contrib\/ctools\/images\/throbber.gif\u0022 alt=\u0022Loading...\u0022 title=\u0022Loading...\u0022 width=\u002232\u0022 height=\u002232\u0022 \/\u003E"}},"flyover":{"animation":"fadeIn","throbber":"\u003Cimg src=\u0022\/sites\/all\/modules\/custom\/penton_registration\/images\/ajax-loader.gif\u0022 alt=\u0022Loading...\u0022 title=\u0022Loading\u0022 width=\u0022220\u0022 height=\u002219\u0022 \/\u003E","modalOptions":{"background-color":"#000000","opacity":0.8},"modalSize":{"contentBottom":60,"contentRight":60,"height":200,"type":"fixed","width":400},"PURModal":{"closeImage":"\u003Cimg src=\u0022\/sites\/all\/modules\/contrib\/ctools\/images\/icon-close-window.png\u0022 alt=\u0022Close Window\u0022 title=\u0022Close Window\u0022 width=\u002216\u0022 height=\u002216\u0022 \/\u003E","closeText":"Close Window","loadingText":"Loading...","throbber":"\u003Cimg src=\u0022\/sites\/all\/modules\/contrib\/ctools\/images\/throbber.gif\u0022 alt=\u0022Loading...\u0022 title=\u0022Loading...\u0022 width=\u002232\u0022 height=\u002232\u0022 \/\u003E"}},"googleanalytics":{"trackOutbound":1,"trackMailto":1,"trackDownload":1,"trackDownloadExtensions":"7z|aac|arc|arj|asf|asx|avi|bin|csv|doc|exe|flv|gif|gz|gzip|hqx|jar|jpe?g|js|mp(2|3|4|e?g)|mov(ie)?|msi|msp|pdf|phps|png|ppt|qtm?|ra(m|r)?|sea|sit|tar|tgz|torrent|txt|wav|wma|wmv|wpd|xls|xml|z|zip","trackDomainMode":"1","trackUrlFragments":1},"register":{"animation":"fadeIn","throbber":"\u003Cimg src=\u0022\/sites\/all\/modules\/custom\/penton_registration\/images\/ajax-loader.gif\u0022 alt=\u0022Loading...\u0022 title=\u0022Loading\u0022 width=\u0022220\u0022 height=\u002219\u0022 \/\u003E","modalOptions":{"background-color":"#000000","opacity":0.8},"modalSize":{"contentBottom":60,"contentRight":60,"height":600,"type":"fixed","width":820},"PURModal":{"closeImage":"\u003Cimg src=\u0022\/sites\/all\/modules\/contrib\/ctools\/images\/icon-close-window.png\u0022 alt=\u0022Close Window\u0022 title=\u0022Close Window\u0022 width=\u002216\u0022 height=\u002216\u0022 \/\u003E","closeText":"Close Window","loadingText":"Loading...","throbber":"\u003Cimg src=\u0022\/sites\/all\/modules\/contrib\/ctools\/images\/throbber.gif\u0022 alt=\u0022Loading...\u0022 title=\u0022Loading...\u0022 width=\u002232\u0022 height=\u002232\u0022 \/\u003E"}},"register_light":{"animation":"fadeIn","throbber":"\u003Cimg src=\u0022\/sites\/all\/modules\/custom\/penton_registration\/images\/ajax-loader.gif\u0022 alt=\u0022Loading...\u0022 title=\u0022Loading\u0022 width=\u0022220\u0022 height=\u002219\u0022 \/\u003E","modalOptions":{"background-color":"#000000","opacity":0.8},"modalSize":{"contentBottom":60,"contentRight":60,"height":600,"type":"fixed","width":820},"PURModal":{"closeImage":"\u003Cimg src=\u0022\/sites\/all\/modules\/contrib\/ctools\/images\/icon-close-window.png\u0022 alt=\u0022Close Window\u0022 title=\u0022Close Window\u0022 width=\u002216\u0022 height=\u002216\u0022 \/\u003E","closeText":"Close Window","loadingText":"Loading...","throbber":"\u003Cimg src=\u0022\/sites\/all\/modules\/contrib\/ctools\/images\/throbber.gif\u0022 alt=\u0022Loading...\u0022 title=\u0022Loading...\u0022 width=\u002232\u0022 height=\u002232\u0022 \/\u003E"}},"log_in":{"animation":"fadeIn","throbber":"\u003Cimg src=\u0022\/sites\/all\/modules\/custom\/penton_registration\/images\/ajax-loader.gif\u0022 alt=\u0022Loading...\u0022 title=\u0022Loading\u0022 width=\u0022220\u0022 height=\u002219\u0022 \/\u003E","modalOptions":{"background-color":"#000000","opacity":0.8},"modalSize":{"contentBottom":60,"contentRight":60,"height":400,"type":"fixed","width":500},"PURModal":{"closeImage":"\u003Cimg src=\u0022\/sites\/all\/modules\/contrib\/ctools\/images\/icon-close-window.png\u0022 alt=\u0022Close Window\u0022 title=\u0022Close Window\u0022 width=\u002216\u0022 height=\u002216\u0022 \/\u003E","closeText":"Close Window","loadingText":"Loading...","throbber":"\u003Cimg src=\u0022\/sites\/all\/modules\/contrib\/ctools\/images\/throbber.gif\u0022 alt=\u0022Loading...\u0022 title=\u0022Loading...\u0022 width=\u002232\u0022 height=\u002232\u0022 \/\u003E"}},"penton_facebook_appid":"390228111030382"});
+//--><!]]>
+</script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+$().ready(function(){var url = $("iframe.query_strings").attr("src");$("iframe.query_strings").attr("src", url + window.location.search);});
+//--><!]]>
+</script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var _elqQ = _elqQ || []; _elqQ.push(['elqSetSiteId', '1904481191']); _elqQ.push(['elqTrackPageView']); (function () { function async_load() { var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//img.en25.com/i/elqCfg.min.js'; var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); } if (window.addEventListener) window.addEventListener('DOMContentLoaded', async_load, false); else if (window.attachEvent) window.attachEvent('onload', async_load); })();
+//--><!]]>
+</script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","//www.google-analytics.com/analytics.js","ga");ga("create", "UA-42942074-2", {"cookieDomain":".electronicdesign.com"});ga("set", "anonymizeIp", true);ga("set", "page", location.pathname + location.search + location.hash);ga("send", "pageview");
+//--><!]]>
+</script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+  (function() {
+    var useSSL = 'https:' == document.location.protocol;
+    var src = (useSSL ? 'https:' : 'http:') + '//www.googletagservices.com/tag/js/gpt.js';
+    document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
+  })();
+
+//--><!]]>
+</script><script src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/gpt.js.Без названия"></script><script id="gpt-impl-0.008092478880595166" src="https://securepubads.g.doubleclick.net/gpt/pubads_impl_108.js"></script><link rel="prefetch" href="http://tpc.googlesyndication.com/safeframe/1-0-5/html/container.html">
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+  googletag.defineSlot('/3834/elecdes.home/technologies/analog', [[1, 1]], 'gpt-inarticlevideo_1').addService(googletag.pubads())
+    .setTargeting('pos', 'inarticlevideo_1');
+ if ($(window).width() >= 768){
+  googletag.defineSlot('/3834/elecdes.home/technologies/analog', [[970, 90], [728, 90], [468, 60]], 'gpt-728_1').addService(googletag.pubads())
+    .setTargeting('pos', '728_1');
+ };
+ if ($(window).width() >= 768){
+  googletag.defineSlot('/3834/elecdes.home/technologies/analog', [[728, 90], [468, 60]], 'gpt-728_2').addService(googletag.pubads())
+    .setTargeting('pos', '728_2');
+ };
+  googletag.defineSlot('/3834/elecdes.home/technologies/analog', [[300, 100]], 'gpt-300_3').addService(googletag.pubads())
+    .setTargeting('pos', '300_3');
+  googletag.defineSlot('/3834/elecdes.home/technologies/analog', [[300, 250], [300, 600], [300, 1050]], 'gpt-300_1').addService(googletag.pubads())
+    .setTargeting('pos', '300_1');
+  googletag.defineSlot('/3834/elecdes.home/technologies/analog', [[300, 250], [300, 600]], 'gpt-300_2').addService(googletag.pubads())
+    .setTargeting('pos', '300_2');
+  googletag.defineSlot('/3834/elecdes.home/technologies/analog', [[180, 150], [125, 125]], 'gpt-technologies').addService(googletag.pubads())
+    .setTargeting('pos', 'technologies');
+  googletag.defineSlot('/3834/elecdes.home/technologies/analog', [[180, 150], [125, 125]], 'gpt-news').addService(googletag.pubads())
+    .setTargeting('pos', 'news');
+  googletag.defineSlot('/3834/elecdes.home/technologies/analog', [[180, 150], [125, 125]], 'gpt-markets').addService(googletag.pubads())
+    .setTargeting('pos', 'markets');
+  googletag.defineSlot('/3834/elecdes.home/technologies/analog', [[180, 150], [125, 125]], 'gpt-learning-resources').addService(googletag.pubads())
+    .setTargeting('pos', 'learning-resources');
+  googletag.defineSlot('/3834/elecdes.home/technologies/analog', [[180, 150], [125, 125]], 'gpt-companies').addService(googletag.pubads())
+    .setTargeting('pos', 'companies');
+  googletag.defineSlot('/3834/elecdes.home/technologies/analog', [[180, 150], [125, 125]], 'gpt-community').addService(googletag.pubads())
+    .setTargeting('pos', 'community');
+  googletag.defineSlot('/3834/elecdes.home/technologies/analog', [[180, 150], [125, 125]], 'gpt-part-search').addService(googletag.pubads())
+    .setTargeting('pos', 'part-search');
+  googletag.defineSlot('/3834/elecdes.home/technologies/analog', [[1, 1]], 'gpt-peelback_1').addService(googletag.pubads())
+    .setTargeting('pos', 'peelback_1');
+  googletag.defineSlot('/3834/elecdes.home/technologies/analog', [[1, 1]], 'gpt-floor').addService(googletag.pubads())
+    .setTargeting('pos', 'floor');
+  googletag.defineSlot('/3834/elecdes.home/technologies/analog', [[640, 480]], 'gpt-interstitial').addService(googletag.pubads())
+    .setTargeting('pos', 'interstitial');
+  googletag.defineOutOfPageSlot('/3834/elecdes.home/technologies/analog', 'gpt-pm-oop').addService(googletag.pubads());
+
+  googletag.defineOutOfPageSlot('/3834/elecdes.home/technologies/analog', 'gpt-pm-oop-skin').addService(googletag.pubads()).setTargeting('pos', 'skin');
+  googletag.pubads().setTargeting('page', '/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach').setTargeting('nid', '35639').setTargeting('contentsource', 'Electronic-Design').setTargeting('ptype', 'article').setTargeting('authors', 'rob_reeder');
+  googletag.pubads().enableSingleRequest();
+  googletag.pubads().collapseEmptyDivs();
+  googletag.pubads().enableSyncRendering();
+  googletag.enableServices();
+
+//--><!]]>
+</script>
+  <link rel="apple-touch-icon" href="http://electronicdesign.com/sites/all/themes/electronicdesign/apple-touch-icon.png">
+<style type="text/css">* html #li_ui_li_gen_1485284839755_0 a#li_ui_li_gen_1485284839755_0-link{height:1% !important;}#li_ui_li_gen_1485284839755_0{position:relative !important;overflow:visible !important;display:block !important;}#li_ui_li_gen_1485284839755_0 span{-webkit-box-sizing:content-box !important;-moz-box-sizing:content-box !important;box-sizing:content-box !important;}#li_ui_li_gen_1485284839755_0 a#li_ui_li_gen_1485284839755_0-link{border:0 !important;height:20px !important;text-decoration:none !important;padding:0 !important;margin:0 !important;display:inline-block !important;}#li_ui_li_gen_1485284839755_0 a#li_ui_li_gen_1485284839755_0-link:link, #li_ui_li_gen_1485284839755_0 a#li_ui_li_gen_1485284839755_0-link:visited, #li_ui_li_gen_1485284839755_0 a#li_ui_li_gen_1485284839755_0-link:hover, #li_ui_li_gen_1485284839755_0 a#li_ui_li_gen_1485284839755_0-link:active{border:0 !important;text-decoration:none !important;}#li_ui_li_gen_1485284839755_0 a#li_ui_li_gen_1485284839755_0-link:after{content:"." !important;display:block !important;clear:both !important;visibility:hidden !important;line-height:0 !important;height:0 !important;}#li_ui_li_gen_1485284839755_0 #li_ui_li_gen_1485284839755_0-logo{background-image:url(https://static.licdn.com/scds/common/u/images/apps/connect/sprites/sprite_connect_v14.png) !important;background-position:-56px -423px !important;background-repeat:no-repeat !important;background-color:#0077b5 !important;background-size:135px auto !important;cursor:pointer !important;border:0 !important;border-right:1px solid #066094 !important;text-indent:-9999em !important;overflow:hidden !important;padding:0 !important;margin:0 !important;position:absolute !important;left:0px !important;top:0px !important;display:block !important;width:20px !important;height:20px !important;float:right !important;border-radius:2px !important;-webkit-border-radius:2px !important;border-top-right-radius:2px !important;border-bottom-right-radius:2px !important;-webkit-border-top-right-radius:2px !important;-webkit-border-bottom-right-radius:2px !important;}#li_ui_li_gen_1485284839755_0 #li_ui_li_gen_1485284839755_0-title{color:#fff !important;cursor:pointer !important;display:block !important;white-space:nowrap !important;float:left !important;margin-left:1px !important;vertical-align:top !important;overflow:hidden !important;text-align:center !important;height:18px !important;padding:0 4px 0 23px !important;border:1px solid #000 !important;border-top-color:#0077b5 !important;border-right-color:#0077b5 !important;border-bottom-color:#0077b5 !important;border-left-color:#0077b5 !important;text-shadow:0 -1px #005887 !important;line-height:20px !important;border-radius:2px !important;-webkit-border-radius:2px !important;border-top-right-radius:2px !important;border-bottom-right-radius:2px !important;-webkit-border-top-right-radius:2px !important;-webkit-border-bottom-right-radius:2px !important;background-color:#0077b5 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#0077b5), color-stop(100%,#0077b5)) !important; background-image: -webkit-linear-gradient(top, #0077b5 0%, #0077b5 100%) !important;}#li_ui_li_gen_1485284839755_0.hovered #li_ui_li_gen_1485284839755_0-title{border:1px solid #000 !important;border-top-color:#0369a0 !important;border-right-color:#0369a0 !important;border-bottom-color:#0369a0 !important;border-left-color:#0369a0 !important;background-color:#0369a0 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#0369a0), color-stop(100%,#0369a0)) !important; background-image: -webkit-linear-gradient(top, #0369a0 0%, #0369a0 100%) !important;}#li_ui_li_gen_1485284839755_0.clicked #li_ui_li_gen_1485284839755_0-title, #li_ui_li_gen_1485284839755_0.down #li_ui_li_gen_1485284839755_0-title{color:#fff !important;border:1px solid #000 !important;border-top-color:#066094 !important;border-right-color:#066094 !important;border-bottom-color:#066094 !important;border-left-color:#066094 !important;background-color:#066094 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#066094), color-stop(100%,#066094)) !important; background-image: -webkit-linear-gradient(top, #066094 0%, #066094 100%) !important;}.IN-shadowed #li_ui_li_gen_1485284839755_0 #li_ui_li_gen_1485284839755_0-title{}.IN-shadowed #li_ui_li_gen_1485284839755_0.hovered #li_ui_li_gen_1485284839755_0-title{}.IN-shadowed #li_ui_li_gen_1485284839755_0.clicked #li_ui_li_gen_1485284839755_0-title, .IN-shadowed #li_ui_li_gen_1485284839755_0.down #li_ui_li_gen_1485284839755_0-title{}#li_ui_li_gen_1485284839755_0 #li_ui_li_gen_1485284839755_0-title-text, #li_ui_li_gen_1485284839755_0 #li_ui_li_gen_1485284839755_0-title-text *{color:#fff !important;font-size:11px !important;font-family:Arial, sans-serif !important;font-weight:bold !important;font-style:normal !important;-webkit-font-smoothing:antialiased !important;display:inline-block !important;background:transparent none !important;vertical-align:top !important;height:18px !important;line-height:20px !important;float:none !important;}#li_ui_li_gen_1485284839755_0 #li_ui_li_gen_1485284839755_0-title-text strong{font-weight:bold !important;}#li_ui_li_gen_1485284839755_0 #li_ui_li_gen_1485284839755_0-title-text em{font-style:italic !important;}#li_ui_li_gen_1485284839755_0.hovered #li_ui_li_gen_1485284839755_0-title-text, #li_ui_li_gen_1485284839755_0.hovered #li_ui_li_gen_1485284839755_0-title-text *{color:#fff !important;}#li_ui_li_gen_1485284839755_0.clicked #li_ui_li_gen_1485284839755_0-title-text, #li_ui_li_gen_1485284839755_0.down #li_ui_li_gen_1485284839755_0-title-text, #li_ui_li_gen_1485284839755_0.clicked #li_ui_li_gen_1485284839755_0-title-text *, #li_ui_li_gen_1485284839755_0.down #li_ui_li_gen_1485284839755_0-title-text *{color:#fff !important;}#li_ui_li_gen_1485284839755_0 #li_ui_li_gen_1485284839755_0-title #li_ui_li_gen_1485284839755_0-mark{display:inline-block !important;width:0px !important;overflow:hidden !important;}.success #li_ui_li_gen_1485284839755_0 #li_ui_li_gen_1485284839755_0-title{color:#fff !important;border-top-color:#0077b5 !important;border-right-color:#0077b5 !important;border-bottom-color:#0077b5 !important;border-left-color:#0077b5 !important;background-color:#0077b5 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#0077b5), color-stop(100%,#0077b5)) !important; background-image: -webkit-linear-gradient(top, #0077b5 0%, #0077b5 100%) !important;}.success #li_ui_li_gen_1485284839755_0 #li_ui_li_gen_1485284839755_0-title-text, .success #li_ui_li_gen_1485284839755_0 #li_ui_li_gen_1485284839755_0-title-text *{color:#fff !important;}.IN-shadowed .success #li_ui_li_gen_1485284839755_0 #li_ui_li_gen_1485284839755_0-title{}.success #li_ui_li_gen_1485284839755_0.hovered #li_ui_li_gen_1485284839755_0-title{color:#fff !important;border-top-color:#0369a0 !important;border-right-color:#0369a0 !important;border-bottom-color:#0369a0 !important;border-left-color:#0369a0 !important;background-color:#0369a0 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#0369a0), color-stop(100%,#0369a0)) !important; background-image: -webkit-linear-gradient(top, #0369a0 0%, #0369a0 100%) !important;}.success #li_ui_li_gen_1485284839755_0.hovered #li_ui_li_gen_1485284839755_0-title-text, .success #li_ui_li_gen_1485284839755_0.hovered #li_ui_li_gen_1485284839755_0-title-text *{color:#fff !important;}.success #li_ui_li_gen_1485284839755_0.clicked #li_ui_li_gen_1485284839755_0-title, .success #li_ui_li_gen_1485284839755_0.down #li_ui_li_gen_1485284839755_0-title{color:#fff !important;border-top-color:#066094 !important;border-right-color:#066094 !important;border-bottom-color:#066094 !important;border-left-color:#066094 !important;background-color:#066094 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#066094), color-stop(100%,#066094)) !important; background-image: -webkit-linear-gradient(top, #066094 0%, #066094 100%) !important;}.success #li_ui_li_gen_1485284839755_0.clicked #li_ui_li_gen_1485284839755_0-title-text, .success #li_ui_li_gen_1485284839755_0.down #li_ui_li_gen_1485284839755_0-title-text, .success #li_ui_li_gen_1485284839755_0.clicked #li_ui_li_gen_1485284839755_0-title-text *, .success #li_ui_li_gen_1485284839755_0.down #li_ui_li_gen_1485284839755_0-title-text *{color:#fff !important;}.IN-shadowed .success #li_ui_li_gen_1485284839755_0.clicked #li_ui_li_gen_1485284839755_0-title, .IN-shadowed .success #li_ui_li_gen_1485284839755_0.down #li_ui_li_gen_1485284839755_0-title{}* html #li_ui_li_gen_1485284841123_1 a#li_ui_li_gen_1485284841123_1-link{height:1% !important;}#li_ui_li_gen_1485284841123_1{position:relative !important;overflow:visible !important;display:block !important;}#li_ui_li_gen_1485284841123_1 span{-webkit-box-sizing:content-box !important;-moz-box-sizing:content-box !important;box-sizing:content-box !important;}#li_ui_li_gen_1485284841123_1 a#li_ui_li_gen_1485284841123_1-link{border:0 !important;height:20px !important;text-decoration:none !important;padding:0 !important;margin:0 !important;display:inline-block !important;}#li_ui_li_gen_1485284841123_1 a#li_ui_li_gen_1485284841123_1-link:link, #li_ui_li_gen_1485284841123_1 a#li_ui_li_gen_1485284841123_1-link:visited, #li_ui_li_gen_1485284841123_1 a#li_ui_li_gen_1485284841123_1-link:hover, #li_ui_li_gen_1485284841123_1 a#li_ui_li_gen_1485284841123_1-link:active{border:0 !important;text-decoration:none !important;}#li_ui_li_gen_1485284841123_1 a#li_ui_li_gen_1485284841123_1-link:after{content:"." !important;display:block !important;clear:both !important;visibility:hidden !important;line-height:0 !important;height:0 !important;}#li_ui_li_gen_1485284841123_1 #li_ui_li_gen_1485284841123_1-logo{background-image:url(https://static.licdn.com/scds/common/u/images/apps/connect/sprites/sprite_connect_v14.png) !important;background-position:-56px -423px !important;background-repeat:no-repeat !important;background-color:#0077b5 !important;background-size:135px auto !important;cursor:pointer !important;border:0 !important;border-right:1px solid #066094 !important;text-indent:-9999em !important;overflow:hidden !important;padding:0 !important;margin:0 !important;position:absolute !important;left:0px !important;top:0px !important;display:block !important;width:20px !important;height:20px !important;float:right !important;border-radius:2px !important;-webkit-border-radius:2px !important;border-top-right-radius:2px !important;border-bottom-right-radius:2px !important;-webkit-border-top-right-radius:2px !important;-webkit-border-bottom-right-radius:2px !important;}#li_ui_li_gen_1485284841123_1 #li_ui_li_gen_1485284841123_1-title{color:#fff !important;cursor:pointer !important;display:block !important;white-space:nowrap !important;float:left !important;margin-left:1px !important;vertical-align:top !important;overflow:hidden !important;text-align:center !important;height:18px !important;padding:0 4px 0 23px !important;border:1px solid #000 !important;border-top-color:#0077b5 !important;border-right-color:#0077b5 !important;border-bottom-color:#0077b5 !important;border-left-color:#0077b5 !important;text-shadow:0 -1px #005887 !important;line-height:20px !important;border-radius:2px !important;-webkit-border-radius:2px !important;border-top-right-radius:2px !important;border-bottom-right-radius:2px !important;-webkit-border-top-right-radius:2px !important;-webkit-border-bottom-right-radius:2px !important;background-color:#0077b5 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#0077b5), color-stop(100%,#0077b5)) !important; background-image: -webkit-linear-gradient(top, #0077b5 0%, #0077b5 100%) !important;}#li_ui_li_gen_1485284841123_1.hovered #li_ui_li_gen_1485284841123_1-title{border:1px solid #000 !important;border-top-color:#0369a0 !important;border-right-color:#0369a0 !important;border-bottom-color:#0369a0 !important;border-left-color:#0369a0 !important;background-color:#0369a0 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#0369a0), color-stop(100%,#0369a0)) !important; background-image: -webkit-linear-gradient(top, #0369a0 0%, #0369a0 100%) !important;}#li_ui_li_gen_1485284841123_1.clicked #li_ui_li_gen_1485284841123_1-title, #li_ui_li_gen_1485284841123_1.down #li_ui_li_gen_1485284841123_1-title{color:#fff !important;border:1px solid #000 !important;border-top-color:#066094 !important;border-right-color:#066094 !important;border-bottom-color:#066094 !important;border-left-color:#066094 !important;background-color:#066094 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#066094), color-stop(100%,#066094)) !important; background-image: -webkit-linear-gradient(top, #066094 0%, #066094 100%) !important;}.IN-shadowed #li_ui_li_gen_1485284841123_1 #li_ui_li_gen_1485284841123_1-title{}.IN-shadowed #li_ui_li_gen_1485284841123_1.hovered #li_ui_li_gen_1485284841123_1-title{}.IN-shadowed #li_ui_li_gen_1485284841123_1.clicked #li_ui_li_gen_1485284841123_1-title, .IN-shadowed #li_ui_li_gen_1485284841123_1.down #li_ui_li_gen_1485284841123_1-title{}#li_ui_li_gen_1485284841123_1 #li_ui_li_gen_1485284841123_1-title-text, #li_ui_li_gen_1485284841123_1 #li_ui_li_gen_1485284841123_1-title-text *{color:#fff !important;font-size:11px !important;font-family:Arial, sans-serif !important;font-weight:bold !important;font-style:normal !important;-webkit-font-smoothing:antialiased !important;display:inline-block !important;background:transparent none !important;vertical-align:top !important;height:18px !important;line-height:20px !important;float:none !important;}#li_ui_li_gen_1485284841123_1 #li_ui_li_gen_1485284841123_1-title-text strong{font-weight:bold !important;}#li_ui_li_gen_1485284841123_1 #li_ui_li_gen_1485284841123_1-title-text em{font-style:italic !important;}#li_ui_li_gen_1485284841123_1.hovered #li_ui_li_gen_1485284841123_1-title-text, #li_ui_li_gen_1485284841123_1.hovered #li_ui_li_gen_1485284841123_1-title-text *{color:#fff !important;}#li_ui_li_gen_1485284841123_1.clicked #li_ui_li_gen_1485284841123_1-title-text, #li_ui_li_gen_1485284841123_1.down #li_ui_li_gen_1485284841123_1-title-text, #li_ui_li_gen_1485284841123_1.clicked #li_ui_li_gen_1485284841123_1-title-text *, #li_ui_li_gen_1485284841123_1.down #li_ui_li_gen_1485284841123_1-title-text *{color:#fff !important;}#li_ui_li_gen_1485284841123_1 #li_ui_li_gen_1485284841123_1-title #li_ui_li_gen_1485284841123_1-mark{display:inline-block !important;width:0px !important;overflow:hidden !important;}.success #li_ui_li_gen_1485284841123_1 #li_ui_li_gen_1485284841123_1-title{color:#fff !important;border-top-color:#0077b5 !important;border-right-color:#0077b5 !important;border-bottom-color:#0077b5 !important;border-left-color:#0077b5 !important;background-color:#0077b5 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#0077b5), color-stop(100%,#0077b5)) !important; background-image: -webkit-linear-gradient(top, #0077b5 0%, #0077b5 100%) !important;}.success #li_ui_li_gen_1485284841123_1 #li_ui_li_gen_1485284841123_1-title-text, .success #li_ui_li_gen_1485284841123_1 #li_ui_li_gen_1485284841123_1-title-text *{color:#fff !important;}.IN-shadowed .success #li_ui_li_gen_1485284841123_1 #li_ui_li_gen_1485284841123_1-title{}.success #li_ui_li_gen_1485284841123_1.hovered #li_ui_li_gen_1485284841123_1-title{color:#fff !important;border-top-color:#0369a0 !important;border-right-color:#0369a0 !important;border-bottom-color:#0369a0 !important;border-left-color:#0369a0 !important;background-color:#0369a0 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#0369a0), color-stop(100%,#0369a0)) !important; background-image: -webkit-linear-gradient(top, #0369a0 0%, #0369a0 100%) !important;}.success #li_ui_li_gen_1485284841123_1.hovered #li_ui_li_gen_1485284841123_1-title-text, .success #li_ui_li_gen_1485284841123_1.hovered #li_ui_li_gen_1485284841123_1-title-text *{color:#fff !important;}.success #li_ui_li_gen_1485284841123_1.clicked #li_ui_li_gen_1485284841123_1-title, .success #li_ui_li_gen_1485284841123_1.down #li_ui_li_gen_1485284841123_1-title{color:#fff !important;border-top-color:#066094 !important;border-right-color:#066094 !important;border-bottom-color:#066094 !important;border-left-color:#066094 !important;background-color:#066094 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#066094), color-stop(100%,#066094)) !important; background-image: -webkit-linear-gradient(top, #066094 0%, #066094 100%) !important;}.success #li_ui_li_gen_1485284841123_1.clicked #li_ui_li_gen_1485284841123_1-title-text, .success #li_ui_li_gen_1485284841123_1.down #li_ui_li_gen_1485284841123_1-title-text, .success #li_ui_li_gen_1485284841123_1.clicked #li_ui_li_gen_1485284841123_1-title-text *, .success #li_ui_li_gen_1485284841123_1.down #li_ui_li_gen_1485284841123_1-title-text *{color:#fff !important;}.IN-shadowed .success #li_ui_li_gen_1485284841123_1.clicked #li_ui_li_gen_1485284841123_1-title, .IN-shadowed .success #li_ui_li_gen_1485284841123_1.down #li_ui_li_gen_1485284841123_1-title{}</style><script type="text/javascript" async="" src="http://s.dpmsrv.com/dpm_8effee409c625e1a2d8f5033631840e6ce1dcb64.min.js"></script><script type="text/javascript" charset="utf-8" async="" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/button.77c2615a2ccf479f754f7610612efbbe.js.Без названия"></script><script async="true" type="text/javascript" src="http://a.adroll.com/j/roundtrip.js"></script><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}.fb_link img{border:none}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_reset .fb_dialog_legacy{overflow:visible}.fb_dialog_advanced{padding:10px;-moz-border-radius:8px;-webkit-border-radius:8px;border-radius:8px}.fb_dialog_content{background:#fff;color:#333}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;_background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yL/r/s816eWC-2sl.gif);cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{top:5px;left:5px;right:auto}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent;_background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yL/r/s816eWC-2sl.gif)}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent;_background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yL/r/s816eWC-2sl.gif)}.fb_dialog_loader{background-color:#f6f7f9;border:1px solid #606060;font-size:24px;padding:20px}.fb_dialog_top_left,.fb_dialog_top_right,.fb_dialog_bottom_left,.fb_dialog_bottom_right{height:10px;width:10px;overflow:hidden;position:absolute}.fb_dialog_top_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 0;left:-10px;top:-10px}.fb_dialog_top_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -10px;right:-10px;top:-10px}.fb_dialog_bottom_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -20px;bottom:-10px;left:-10px}.fb_dialog_bottom_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -30px;right:-10px;bottom:-10px}.fb_dialog_vert_left,.fb_dialog_vert_right,.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{position:absolute;background:#525252;filter:alpha(opacity=70);opacity:.7}.fb_dialog_vert_left,.fb_dialog_vert_right{width:10px;height:100%}.fb_dialog_vert_left{margin-left:-10px}.fb_dialog_vert_right{right:0;margin-right:-10px}.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{width:100%;height:10px}.fb_dialog_horiz_top{margin-top:-10px}.fb_dialog_horiz_bottom{bottom:0;margin-bottom:-10px}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{-webkit-transform:none;height:100%;margin:0;overflow:visible;position:absolute;top:-10000px;left:0;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{width:auto;height:auto;min-height:initial;min-width:initial;background:none}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{color:#fff;display:block;padding-top:20px;clear:both;font-size:18px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .45);position:absolute;bottom:0;left:0;right:0;top:0;width:100%;min-height:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_content .dialog_header{-webkit-box-shadow:white 0 1px 1px -1px inset;background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#738ABA), to(#2C4987));border-bottom:1px solid;border-color:#1d4088;color:#fff;font:14px Helvetica, sans-serif;font-weight:bold;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{-webkit-font-smoothing:subpixel-antialiased;height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#4966A6), color-stop(.5, #355492), to(#2A4887));border:1px solid #29487d;-webkit-background-clip:padding-box;-webkit-border-radius:3px;-webkit-box-shadow:rgba(0, 0, 0, .117188) 0 1px 1px inset, rgba(255, 255, 255, .167969) 0 1px 0;display:inline-block;margin-top:3px;max-width:85px;line-height:18px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{border:none;background:none;color:#fff;font:12px Helvetica, sans-serif;font-weight:bold;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #555;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f6f7f9;border:1px solid #555;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-repeat:no-repeat;background-position:50% 50%;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_hide_iframes iframe{position:relative;left:-10000px}.fb_iframe_widget_loader{position:relative;display:inline-block}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}.fb_iframe_widget_loader iframe{min-height:32px;z-index:2;zoom:1}.fb_iframe_widget_loader .FB_Loader{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat;height:32px;width:32px;margin-left:-16px;position:absolute;left:50%;z-index:4}</style><script async="true" type="text/javascript" src="http://a.adroll.com/j/roundtrip.js"></script></head>
+
+<body class="not-front not-logged-in page-node node-type-article one-sidebar sidebar-right newsletter-flyover-executed"><div id="cboxOverlay" style="display: none;"></div><div id="colorbox" class="" style="padding-bottom: 60px; padding-right: 30px; display: none;"><div id="cboxWrapper"><div id="cboxClose"></div><div id="cboxcolorbox-print"></div><div><div id="cboxTopLeft" style="float: left;"></div><div id="cboxTopCenter" style="float: left;"></div><div id="cboxTopRight" style="float: left;"></div></div><div style="clear: left;"><div id="cboxMiddleLeft" style="float: left;"></div><div id="cboxContent" style="float: left;"><div id="cboxLoadedContent" class="" style="width: 0px; height: 0px; overflow: hidden; margin-bottom: 0px;"></div><div id="cboxLoadingOverlay" class=""></div><div id="cboxLoadingGraphic" class=""></div><div id="cboxTitle" class=""></div><div id="cboxCurrent" class=""></div><div id="cboxNext" class=""></div><div id="cboxPrevious" class=""></div><div id="cboxSlideshow" class=""></div></div><div id="cboxMiddleRight" style="float: left;"></div></div><div style="clear: left;"><div id="cboxBottomLeft" style="float: left;"></div><div id="cboxBottomCenter" style="float: left;"></div><div id="cboxBottomRight" style="float: left;"></div></div></div><div style="position: absolute; width: 9999px; visibility: hidden; display: none;"></div></div>
+
+
+<div id="pm-pg" class="pm-pg">
+    <div class="pm-hd">
+    <div class="pm-hd-pdg">
+      <div id="top">
+        <a href="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach#navigation">Skip to Navigation</a>        <a href="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach#content">Skip to Content</a>      </div>
+              <div class="pm-site-name">
+                      <a href="http://electronicdesign.com/">Electronic Design</a>                            </div>
+                    <div class="pm-search">
+          <form action="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach" accept-charset="UTF-8" method="post" id="search-theme-form">
+<div><div id="search" class="container-inline">
+  <div class="form-item" id="edit-search-theme-form-1-wrapper">
+ <label for="edit-search-theme-form-1">Search: </label>
+ <input type="text" maxlength="128" name="search_theme_form" id="edit-search-theme-form-1" size="15" value="" title="Enter the terms you wish to search for." class="form-text  apachesolr-autocomplete unprocessed  form-autocomplete" autocomplete="off">
+</div>
+<input type="image" name="op" id="edit-submit-2" value="Go!" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/search-icon.gif" class="form-submit">
+<input type="hidden" name="form_build_id" id="form-gg866eWN4odfEVMNXsWlH_Fugn6_CgiGio8Pwle1PsY" value="form-gg866eWN4odfEVMNXsWlH_Fugn6_CgiGio8Pwle1PsY">
+<input type="hidden" name="form_id" id="edit-search-theme-form" value="search_theme_form">
+</div>
+
+</div></form>
+        </div>
+                    <div class="pm-hd-region">
+            <!-- block.tpl.php -->
+<div id="block-block-171" class="block block-block ">
+        <div class="block-content">
+      <script>
+(function(){function f(a){var b=a=a.replace(":","");try{for(var e=0;100>e&&(a=decodeURIComponent(a),b!=a)&&!a.match(/^http(s)?\:/);e++)b=a}catch(c){}return a.replace(/(^\s+|\s+$)/g,"")}try{if(!location||!location.hostname||!location.pathname)return!1;var c=document.location.hostname.replace(/^www\./,""),n=function(){for(var a,b=document.getElementsByTagName("meta"),e,c=0,d=b.length;c<d;c++)if(e=b[c],"og:title"===e.getAttribute("property")){a=e.getAttribute("content");break}a||(a=document.title||"Untitled");
+return a}(),b={},b=function(a,b,c){a.l1=b;a.l2=c;a.l3="__page__";a.l4="-";return a}(b,c,n),g=(new Date).getTime(),h=Math.floor(Math.random()*Math.pow(10,12));b.t=g;b.de=h;b.zMoatAB_SNPT=!0;var c=[],k=[f(b.l1),f(b.l2),f(b.l3),f(b.l4)].join(":"),p="https://og3i93vzhywk-a.akamaihd.net/z.gif?e=17&d="+encodeURIComponent(k)+"&de="+h+"&t="+g+"&i=PENTONCONTENT1&cm=1&mp=1&ac=1&pl=1&bq=10&cs=0",q="https://px.moatads.com/pixel.gif?e=17&d="+encodeURIComponent(k)+"&de="+h+"&t="+g+"&i=PENTONCONTENT1&cm=1&mp=0&ac=1&pl=1&bq=10&ad_type=img&cs=0",
+r="https://px.moatads.com/pixel.gif?e=17&d="+encodeURIComponent(k)+"&de="+h+"&t="+g+"&i=PENTONCONTENT1&cm=1&ku=1&ac=1&pl=1&bq=10&ad_type=img&cs=0";(new Image).src=p;(new Image).src=q;for(var l in b)c.push(l+"="+encodeURIComponent(b[l]));var c=c.join("&"),d=document.createElement("script");d.type="text/javascript";d.async=!0;d.onerror=function(){(new Image).src=r};var m=document.getElementsByTagName("script")[0];m.parentNode.insertBefore(d,m);d.src="https://z.moatads.com/pentoncontent20495821/moatcontent.js#"+
+c}catch(a){try{var t="//pixel.moatads.com/pixel.gif?e=24&d=data%3Adata%3Adata%3Adata&i=MOATCONTENTABSNIPPET1&ac=1&k="+encodeURIComponent(a)+"&j="+encodeURIComponent(document.referrer)+"&cs="+(new Date).getTime();(new Image).src=t}catch(u){}}})();
+</script>    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-block-71" class="block block-block ">
+        <div class="block-content">
+      <div class="block block-menu " id="block-menu-menu-portal-links">
+<ul class="menu">
+	<li class="leaf first"><a href="http://powerelectronics.com/" target="_blank" title=""><img alt="" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/power-elec.png" title=""></a></li>
+	<li class="leaf"><a href="http://mwrf.com/" target="_blank" title=""><img alt="" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/microwaves.png" title=""></a></li>
+	<!--<li class="leaf"><a href="http://www.engineeringtv.com/" target="_blank" title=""><img alt="" src="/sites/all/themes/electronicdesign/images/engin-tv.png" title="" /></a></li>-->
+	<li class="leaf"><a href="http://globalpurchasing.com/" target="_blank" title=""><img alt="" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/globalpurchasing.png" title=""></a></li>
+	<li class="leaf last"><a href="http://www.sourceesb.com/" target="_blank" title=""><img alt="" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/source-esb.png" title=""></a></li>
+</ul>
+</div>
+    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-menu-menu-utility-nav" class="block block-menu ">
+        <div class="block-content">
+      <ul class="menu"><li class="leaf first"><a href="http://electronicdesign.com/catalog" title="">Store</a></li>
+<li class="leaf"><a href="https://penton.sub-forms.com/PEN6062_EGland1" title="">Subscribe</a></li>
+<li class="leaf"><a href="http://electronicdesign.com/about-us" title="">About Us</a></li>
+<li class="leaf"><a href="http://electronicdesign.com/contact-us" title="">Contact Us</a></li>
+<li class="leaf"><a href="http://electronicdesign.com/rss.xml" title="">RSS</a></li>
+<li class="leaf last"><a href="http://desmarketing.penton.com/" title="">Advertising</a></li>
+</ul>    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-penton_custom-login_logout" class="block block-penton_custom ">
+        <div class="block-content">
+      <!-- login-logout.tpl.php -->
+<div class="login-logout">
+<!-- remove login/register block from checkout pages -->
+  <div class="login-cont logged-out">
+    <div class="user-block">
+      <a href="http://electronicdesign.com/penton_ur/nojs/user/register" class="ctools-use-modal ctools-modal-register ctools-use-modal-processed is-processed" title="Register at this site.">Register</a>      <a href="http://electronicdesign.com/penton_ur/nojs/login" class="ctools-use-modal ctools-modal-log_in ctools-use-modal-processed is-processed" title="">Log In</a>    </div>
+    <div class="user-login-block">
+      <form action="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach?destination=node%2F35639" accept-charset="UTF-8" method="post" id="user-login-form">
+<div><div class="form-item" id="edit-name-wrapper">
+ <label for="edit-name">Display name or email address: <span class="form-required" title="This field is required.">*</span></label>
+ <input type="text" maxlength="60" name="name" id="edit-name" size="15" value="" tabindex="1" class="form-text required">
+</div>
+<div class="form-item" id="edit-pass-wrapper">
+ <label for="edit-pass">Password: <span class="form-required" title="This field is required.">*</span></label>
+ <input type="password" name="pass" id="edit-pass" maxlength="60" size="15" tabindex="2" class="form-text required">
+</div>
+<div class="form-item" id="edit-remember-me-wrapper">
+ <label class="option" for="edit-remember-me"><input type="checkbox" name="remember_me" id="edit-remember-me" value="1" checked="checked" tabindex="3" class="form-checkbox"> Remember me</label>
+</div>
+<input type="submit" name="op" id="edit-submit" value="Log in" tabindex="4" class="form-submit">
+<div class="item-list"><ul><li class="first last"><a href="http://electronicdesign.com/user/password">Forgot Your Password?</a></li>
+</ul></div><input type="hidden" name="form_build_id" id="form-nwdpQdtxG3PwG5DdgpuiekuDhtZawkPeHhsOQXQuD2I" value="form-nwdpQdtxG3PwG5DdgpuiekuDhtZawkPeHhsOQXQuD2I">
+<input type="hidden" name="form_id" id="edit-user-login-block" value="user_login_block">
+
+</div></form>
+      <div id="close-box"><a href="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach#">close</a></div>
+    </div>
+  </div>
+</div>
+<!-- / login-logout.tpl.php -->
+    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-block-121" class="block block-block ">
+        <div class="block-content">
+      <style type="text/css">
+.page-user ul.primary li:nth-child(n+5) { visibility: visible; }</style>
+    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-block-151" class="block block-block ">
+        <div class="block-content">
+      <style>
+body {
+overflow: scroll!important;
+}
+</style>    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-block-161" class="block block-block ">
+        <div class="block-content">
+      <style type="text/css">.view-landing-page-carousel .block-title, .view-landing-page-carousel .view {display:none!important;}
+</style>
+    </div>
+  </div>
+<!-- /block.tpl.php -->
+        </div>
+                    <div class="pm-nav-menu">
+            <!-- block.tpl.php -->
+<div id="block-nice_menus-1" class="block block-nice_menus ">
+        <div class="block-content">
+      <ul class="nice-menu nice-menu-down" id="nice-menu-1"><li class="menu-185520 menuparent menu-path-taxonomy-term-25782 first  odd "><a href="http://electronicdesign.com/technologies" data-ad-target="technologies" aria-haspopup="true">Technologies</a><div class="list-splitter listContainer1 cols-4 colCount-4"><ul class="listCol1 ">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="menu-185523 menu-path-taxonomy-term-25783 first  odd "><a href="http://electronicdesign.com/technologies/4g">4G</a></li><li class="menu-185524 menu-path-taxonomy-term-25784 even "><a href="http://electronicdesign.com/technologies/analog">Analog</a></li><li class="menu-185525 menu-path-taxonomy-term-25785 odd "><a href="http://electronicdesign.com/technologies/android">Android</a></li><li class="menu-185526 menu-path-taxonomy-term-25786 even "><a href="http://electronicdesign.com/technologies/boards">Boards</a></li><li class="menu-185527 menu-path-taxonomy-term-25787 odd "><a href="http://electronicdesign.com/technologies/communications">Communications</a></li><li class="menu-185528 menu-path-taxonomy-term-25788 even "><a href="http://electronicdesign.com/technologies/components">Components</a></li><li class="menu-185532 menu-path-taxonomy-term-25792 odd "><a href="http://electronicdesign.com/technologies/dsps">DSPs</a></li></ul><ul class="listCol2 "><li class="menu-185529 menu-path-taxonomy-term-25789 even "><a href="http://electronicdesign.com/technologies/dev-tools">Dev Tools</a></li><li class="menu-185530 menu-path-taxonomy-term-25790 odd "><a href="http://electronicdesign.com/technologies/digital-ics">Digital ICs</a></li><li class="menu-185531 menu-path-taxonomy-term-25791 even "><a href="http://electronicdesign.com/technologies/displays">Displays</a></li><li class="menu-185533 menu-path-taxonomy-term-25793 odd "><a href="http://electronicdesign.com/technologies/electromechanical">Electromechanical</a></li><li class="menu-185534 menu-path-taxonomy-term-25794 even "><a href="http://electronicdesign.com/technologies/embedded">Embedded</a></li><li class="menu-185535 menu-path-taxonomy-term-25795 odd "><a href="http://electronicdesign.com/technologies/fpgas">FPGAs</a></li><li class="menu-185536 menu-path-taxonomy-term-25796 even "><a href="http://electronicdesign.com/technologies/interconnects">Interconnects</a></li></ul><ul class="listCol3 "><li class="menu-934411 menu-path-taxonomy-term-50411 odd "><a href="http://electronicdesign.com/technologies/iot" title="">IoT</a></li><li class="menu-185538 menu-path-taxonomy-term-25798 even "><a href="http://electronicdesign.com/technologies/memory">Memory</a></li><li class="menu-185539 menu-path-taxonomy-term-25799 odd "><a href="http://electronicdesign.com/technologies/microcontrollers">Microcontrollers</a></li><li class="menu-185540 menu-path-taxonomy-term-25800 even "><a href="http://electronicdesign.com/technologies/microprocessors">Microprocessors</a></li><li class="menu-185541 menu-path-taxonomy-term-25801 odd "><a href="http://electronicdesign.com/technologies/passives">Passives</a></li><li class="menu-185542 menu-path-taxonomy-term-25802 even "><a href="http://electronicdesign.com/technologies/power">Power</a></li><li class="menu-185543 menu-path-taxonomy-term-25803 odd "><a href="http://electronicdesign.com/technologies/power-sources">Power Sources</a></li></ul><ul class="listCol4  last"><li class="menu-185544 menu-path-taxonomy-term-25804 even "><a href="http://electronicdesign.com/technologies/test-measurement">Test &amp; Measurement</a></li><li class="menu-185545 menu-path-taxonomy-term-25805 odd "><a href="http://electronicdesign.com/technologies/wifi">WiFi</a></li><li class="menu-185546 menu-path-taxonomy-term-25806 even "><a href="http://electronicdesign.com/technologies/windows" title="">Windows</a></li><li class="menu-185537 menu-path-taxonomy-term-25797 odd  last "><a href="http://electronicdesign.com/technologies/ios">iOS</a></li></ul></div>
+</li>
+<li class="menu-185511 menuparent menu-path-taxonomy-term-25777 even "><a href="http://electronicdesign.com/news-0" data-ad-target="news" aria-haspopup="true">News</a><div class="list-splitter listContainer2 cols-1 colCount-1"><ul class="listCol1  last">
+
+
+<li class="menu-185515 menu-path-taxonomy-term-25779 first  odd "><a href="http://electronicdesign.com/news/products">Products</a></li><li class="menu-185516 menu-path-taxonomy-term-25780 even "><a href="http://electronicdesign.com/news/trends-analysis">Trends &amp; Analysis</a></li><li class="menu-933321 menu-path-taxonomy-term-50331 odd  last "><a href="http://electronicdesign.com/gallery" title="">Image Galleries</a></li></ul></div>
+</li>
+<li class="menu-185501 menuparent menu-path-taxonomy-term-25769 odd "><a href="http://electronicdesign.com/markets" data-ad-target="markets" aria-haspopup="true">Markets</a><div class="list-splitter listContainer3 cols-1 colCount-1"><ul class="listCol1  last">
+
+
+
+
+
+
+<li class="menu-185504 menu-path-taxonomy-term-25770 first  odd "><a href="http://electronicdesign.com/markets/automotive">Automotive</a></li><li class="menu-185505 menu-path-taxonomy-term-25771 even "><a href="http://electronicdesign.com/markets/defense">Defense</a></li><li class="menu-185506 menu-path-taxonomy-term-25772 odd "><a href="http://electronicdesign.com/markets/energy">Energy</a></li><li class="menu-185507 menu-path-taxonomy-term-25773 even "><a href="http://electronicdesign.com/markets/lighting">Lighting</a></li><li class="menu-185508 menu-path-taxonomy-term-25774 odd "><a href="http://electronicdesign.com/markets/medical">Medical</a></li><li class="menu-185509 menu-path-taxonomy-term-25775 even "><a href="http://electronicdesign.com/markets/mobile">Mobile</a></li><li class="menu-185510 menu-path-taxonomy-term-25776 odd  last "><a href="http://electronicdesign.com/markets/robotics">Robotics</a></li></ul></div>
+</li>
+<li class="menu-185488 menuparent menu-path-taxonomy-term-25758 even "><a href="http://electronicdesign.com/learning-resources" data-ad-target="learning-resources" aria-haspopup="true">Learning Resources</a><div class="list-splitter listContainer4 cols-2 colCount-2"><ul class="listCol1 ">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="menu-185496 menu-path-taxonomy-term-25764 first  odd "><a href="http://electronicdesign.com/learning-resources/engineering-essentials">Engineering Essentials</a></li><li class="menu-230711 menu-path-taxonomy-term-26981 even "><a href="http://electronicdesign.com/learning-resources/design-solutions" title="">Design Solutions</a></li><li class="menu-185499 menu-path-taxonomy-term-25767 odd "><a href="http://electronicdesign.com/learning-resources/what-s-difference-between">What’s The Difference Between…</a></li><li class="menu-185497 menu-path-taxonomy-term-25765 even "><a href="http://electronicdesign.com/learning-resources/ideas-design">Ideas for Design</a></li><li class="menu-899941 menu-path-node-859401 odd "><a href="http://electronicdesign.com/trends-analysis/2015-engineering-compensation-survey-its-not-all-about-money" title="">Salary Survey</a></li><li class="menu-436681 menu-path-node-90841 even "><a href="http://electronicdesign.com/salary-calculator" title="">Salary Calculator</a></li><li class="menu-185500 menu-path-node-53141 odd "><a href="http://electronicdesign.com/white-papers" title="">White Papers</a></li><li class="menu-185492 menu-path-taxonomy-term-25760 even "><a href="http://electronicdesign.com/learning-resources/basics-design">Basics of Design</a></li></ul><ul class="listCol2  last"><li class="menu-185495 menu-path-taxonomy-term-25763 odd "><a href="http://electronicdesign.com/learning-resources/ebooks" title="">eBooks&nbsp;</a></li><li class="menu-185498 menu-path-taxonomy-term-25766 even "><a href="http://electronicdesign.com/learning-resources/webcasts">Webcasts</a></li><li class="menu-528811 menu-path-electronicdesigncom-datasheet-electronic-design-2016-leaders-issue-pdf-download odd "><a href="http://electronicdesign.com/datasheet/electronic-design-2016-leaders-issue-pdf-download" title="">2016 Leaders in Electronics</a></li><li class="menu-185494 menu-path-taxonomy-term-25762 even "><a href="http://electronicdesign.com/learning-resources/design-faqs">Design FAQs</a></li><li class="menu-740151 menu-path-node-114481 odd "><a href="http://electronicdesign.com/data-sheets-reference-designs" title="">Data Sheets</a></li><li class="menu-740161 menu-path-node-114481 even "><a href="http://electronicdesign.com/data-sheets-reference-designs" title="">Reference Designs</a></li><li class="menu-950771 menu-path-taxonomy-term-50611 odd "><a href="http://electronicdesign.com/learning-resources/11-myths-about" title="">11 Myths About...</a></li><li class="menu-951271 menu-path-electronicdesigncom-electronicdesignlibraryebookcompendiums even  last "><a href="http://electronicdesign.com/electronicdesignlibraryebookcompendiums" title="">Electronic Design Library</a></li></ul></div>
+</li>
+<li class="menu-185473 menuparent menu-path-electronicdesigncom-community-home odd "><a href="http://electronicdesign.com/community-home" title="" data-ad-target="community" aria-haspopup="true">Community</a><div class="list-splitter listContainer5 cols-2 colCount-2"><ul class="listCol1 ">
+
+
+
+
+
+
+
+
+<li class="menu-185476 menu-path-blogs first  odd "><a href="http://electronicdesign.com/blogs" title="">Blogs</a></li><li class="menu-230661 menu-path-node-3502 even "><a href="http://electronicdesign.com/author/bob-pease" title="">Bob Pease</a></li><li class="menu-185477 menu-path-taxonomy-term-25751 odd "><a href="http://electronicdesign.com/community/contributing-technical-experts">Contributing Technical Experts</a></li><li class="menu-185479 menu-path-taxonomy-term-25753 even "><a href="http://electronicdesign.com/community/engineering-hall-fame" title="">Engineering Hall of Fame</a></li><li class="menu-185480 menu-path-taxonomy-term-25754 odd "><a href="http://electronicdesign.com/community/interviews">Interviews</a></li></ul><ul class="listCol2  last"><li class="menu-185481 menu-path-taxonomy-term-25755 even "><a href="http://electronicdesign.com/community/our-editors" title="">Our Editors</a></li><li class="menu-636351 menu-path-node-839051 odd "><a href="http://electronicdesign.com/WSTEM" title="">STEM Starter Tournament</a></li><li class="menu-933711 menu-path-taxonomy-term-50371 even "><a href="http://electronicdesign.com/community/pop-quizzes" title="">Pop Quizzes</a></li><li class="menu-952041 menu-path-electronicdesigncom-bracket odd  last "><a href="http://electronicdesign.com/bracket" title="">Engineering Bracket Challenge</a></li></ul></div>
+</li>
+<li class="menu-185482 menuparent menu-path-electronicdesigncom-community-home even "><a href="http://electronicdesign.com/community-home" title="" data-ad-target="companies" aria-haspopup="true">Companies</a><div class="list-splitter listContainer6 cols-1 colCount-1"><ul class="listCol1  last">
+<li class="menu-217171 menu-path-node-54801 first  odd  last "><a href="http://electronicdesign.com/company-directory" title="">Company Directory</a></li></ul></div>
+</li>
+<li class="menu-185517 menu-path-sourceesbcom- odd  last "><a href="http://www.sourceesb.com/" title="">Part Search</a></li>
+</ul>
+    </div>
+  </div>
+<!-- /block.tpl.php -->
+        </div>
+          </div>
+  </div>
+  <!--// pm-hd -->
+
+  <div class="pm-wrp clearfix">
+    <div class="pm-wrp-pdg">
+              <div class="pm-banner-ad pm-banner-ad-top">
+            <!-- block.tpl.php -->
+<div id="block-pm_doubleclick-3" class="block block-pm_doubleclick ">
+        <div class="block-content">
+      <div class="advertisement">Advertisement</div><div id="gpt-728_1" data-gpt-slot="728_1" class="gpt-holder"><script type="text/javascript">if ($(window).width() >= 768 ){googletag.display('gpt-728_1');}else{$('#gpt-728_1').hide()};</script><script type="text/javascript" src="https://securepubads.g.doubleclick.net/gampad/ads?gdfp_req=1&amp;correlator=3693539535021239&amp;output=json_html&amp;callback=googletag.impl.pubads.setAdContentsBySlotForSync&amp;impl=ss&amp;json_a=1&amp;eid=108809080%2C21060003&amp;sc=0&amp;sfv=1-0-5&amp;iu_parts=3834%2Celecdes.home%2Ctechnologies%2Canalog&amp;enc_prev_ius=%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3%2C%2F0%2F1%2F2%2F3&amp;prev_iu_szs=1x1%2C970x90%7C728x90%7C468x60%2C728x90%7C468x60%2C300x100%2C300x250%7C300x600%7C300x1050%2C300x250%7C300x600%2C180x150%7C125x125%2C180x150%7C125x125%2C180x150%7C125x125%2C180x150%7C125x125%2C180x150%7C125x125%2C180x150%7C125x125%2C180x150%7C125x125%2C1x1%2C1x1%2C640x480%2C1x1%2C1x1&amp;ists=3&amp;prev_scp=pos%3Dinarticlevideo_1%7Cpos%3D728_1%7Cpos%3D728_2%7Cpos%3D300_3%7Cpos%3D300_1%7Cpos%3D300_2%7Cpos%3Dtechnologies%7Cpos%3Dnews%7Cpos%3Dmarkets%7Cpos%3Dlearning-resources%7Cpos%3Dcompanies%7Cpos%3Dcommunity%7Cpos%3Dpart-search%7Cpos%3Dpeelback_1%7Cpos%3Dfloor%7Cpos%3Dinterstitial%7C%7Cpos%3Dskin&amp;cust_params=page%3D%252Fanalog%252Fhigh-speed-adc-input-impedance-measured-versus-mathematical-approach%26nid%3D35639%26contentsource%3DElectronic-Design%26ptype%3Darticle%26authors%3Drob_reeder&amp;cookie_enabled=1&amp;lmt=1485283288&amp;dt=1485284838876&amp;cc=100&amp;frm=20&amp;biw=899&amp;bih=397&amp;oid=3&amp;adxs=-9%2C0%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9&amp;adys=-9%2C0%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9%2C-9&amp;adks=1854488065%2C2938497956%2C927168957%2C3770680438%2C1268079883%2C2919790519%2C615816038%2C3805403360%2C2410867668%2C3468506232%2C2747892991%2C1426495520%2C2936036783%2C2464116157%2C3233009196%2C2130375137%2C3862578689%2C711475478&amp;gut=v2&amp;ifi=1&amp;u_tz=240&amp;u_his=2&amp;u_h=768&amp;u_w=1366&amp;u_ah=728&amp;u_aw=1366&amp;u_cd=24&amp;u_nplug=5&amp;u_nmime=7&amp;u_sd=1.5&amp;flash=24.0.0&amp;url=http%3A%2F%2Felectronicdesign.com%2Fanalog%2Fhigh-speed-adc-input-impedance-measured-versus-mathematical-approach&amp;ref=https%3A%2F%2Fwww.google.ru%2F&amp;dssz=27&amp;icsg=4090&amp;std=0&amp;csl=92&amp;vrg=108&amp;vrp=108&amp;ga_vid=805065567.1485282395&amp;ga_sid=1485284839&amp;ga_hid=2145511289" id="sae-script-1"></script></div>    </div>
+  </div>
+<!-- /block.tpl.php -->
+        </div>
+      
+            <!--  header for profile edit pages -->
+      
+      
+      <div class="breadcrumb"><a href="http://electronicdesign.com/">Home</a> &gt; <a href="http://electronicdesign.com/technologies">Technologies</a> &gt; <a href="http://electronicdesign.com/technologies/analog">Analog</a> &gt; High-Speed ADC Input Impedance: A Measured Versus A Mathematical Approach</div>
+      <div class="pm-content-wrp clearfix">        <div class="pm-content">
+                                                              <h1 class="page-title">High-Speed ADC Input Impedance: A Measured Versus A Mathematical Approach</h1>
+                              <div class="pm-cont-main" id="content">
+            <div id="pm-main-pdg" class="pm-cont-pdg">
+                            <div id="node-35639" class="node node-article node-article-page page-content clearfix clearfix">
+  
+    
+    <div class="content-tools">
+      <div class="byline-date">
+        <div class="byline">
+          <span class="publish-date">Apr 1, 2011</span>
+                                    <span class="author-name">
+                <a href="http://electronicdesign.com/author/rob-reeder" rel="author">Rob Reeder</a>              </span>
+                                      <strong> | </strong>                                      <span class="source-name">
+                Electronic Design              </span>
+                              </div>
+      </div>
+    </div>
+
+    <div class="intro clearfix">
+      <div class="social-bar social-bar-top clearfix">
+                  <div class="item-list"><ul class="social-links"><li class="first"><ul class="links"><li class="forward_links first last"><a href="http://electronicdesign.com/penton_ur/nojs/user/register?path=node%2F35639&amp;nid=35639&amp;source=email" title="Forward this page" class="forward-page ctools-use-modal ctools-modal-register non-omniture  ctools-use-modal-processed is-processed">EMAIL</a></li>
+</ul></li>
+<li><div class="linkedin-button"><span class="IN-widget" style="line-height: 1; vertical-align: baseline; display: inline-block; text-align: center;"><span style="padding: 0px !important; margin: 0px !important; text-indent: 0px !important; display: inline-block !important; vertical-align: baseline !important; font-size: 1px !important;"><span id="li_ui_li_gen_1485284839755_0"><a id="li_ui_li_gen_1485284839755_0-link" href="javascript:void(0);"><span id="li_ui_li_gen_1485284839755_0-logo">in</span><span id="li_ui_li_gen_1485284839755_0-title"><span id="li_ui_li_gen_1485284839755_0-mark"></span><span id="li_ui_li_gen_1485284839755_0-title-text">Share</span></span></a></span></span></span><script type="IN/Share+init" data-url="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach"></script></div></li>
+<li><div class="twitter-button"><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" title="Twitter Tweet Button" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/tweet_button.c4fd2bd4aa9a68a5c8431a3d60ef56ae.en.html" style="position: static; visibility: visible; width: 61px; height: 20px;" data-url="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach"></iframe></div></li>
+<li><div class="googleplusone-button"><div id="___plusone_0" style="text-indent: 0px; margin: 0px; padding: 0px; background: transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block; width: 32px; height: 20px;"><iframe ng-non-bindable="" frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position: static; top: 0px; width: 32px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 20px;" tabindex="0" vspace="0" width="100%" id="I0_1485284841182" name="I0_1485284841182" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/fastbutton.html" data-gapiattached="true" title="+1"></iframe></div></div></li>
+<li class="last"><div class="fb-button"><fb:like href="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach" send="false" layout="button_count" width="115" show_faces="false" action="recommend" class=" fb_iframe_widget" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=recommend&amp;app_id=390228111030382&amp;container_width=0&amp;href=http%3A%2F%2Felectronicdesign.com%2Fanalog%2Fhigh-speed-adc-input-impedance-measured-versus-mathematical-approach&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey&amp;send=false&amp;show_faces=false&amp;width=115"><span style="vertical-align: bottom; width: 122px; height: 20px;"><iframe name="f17802e867c2bc" width="115px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" title="fb:like Facebook Social Plugin" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/like.html" style="border: none; visibility: visible; width: 122px; height: 20px;" class=""></iframe></span></fb:like></div></li>
+</ul></div>                <div class="comments-count-preview">
+          <a href="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach#comments">Comments</a> <span class="comments-count"><a href="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach#comments">0</a></span>        </div>
+      </div>
+                        </div>
+
+
+        <div class="content clear-block">
+                          
+            
+                    <div class="node-body article-body"><p><script type="text/javascript">                              jQuery(document).ready(function ($) {                                setupSidebarImageList();                              } );                              </script></p>                              <div class="relatedContentWrap">                              	<div class="imageWrap">                              		<div class="imageHeader">                              			&nbsp;</div>                              		<div class="captioned-image caption-none" style="width: 19px;"><img id="sidebarImage" name="sidebarImage" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/62639-Fig1-sm.jpg" alt="Fig 1. The plots reflect the internal sampling capacitors’ time-domain charge injection (single-ended) versus frequency-domain charge injection."></div>                              		<p id="sidebarImageText" name="sidebarImageText">Fig 1. The plots reflect the internal sampling capacitors’ time-domain charge injection (single-ended) versus frequency-domain charge injection.</p>                              		<div class="imageFooter">                              			<span class="status"><span id="sidebarCurrentPage" name="sidebarCurrentPage">1</span> of </span> <a class="enlarge" href="http://electronicdesign.com/content/content/62639/62639-Fig1.jpg" id="sidebarEnlargeImage" target="_Blank">Enlarge image</a>                              			<div class="clear">                              				&nbsp;</div>                              		</div>                              		<div id="divSidebarImages" name="divSidebarImages" style="display:none;">                              			<ul>                              				<li>                              					<div class="captioned-image caption-none" style="width: 0px;"><img content="/content/content/62639/62639-Fig1-sm.jpg;/content/content/62639/62639-Fig1.jpg" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/spacer.gif"></div>                              					<p>Fig 1. The plots reflect the internal sampling capacitors’ time-domain charge injection (single-ended) versus frequency-domain charge injection.</p>                              				</li>                              				<li>                              					<div class="captioned-image caption-none" style="width: 0px;"><img content="/content/content/62639/62639-Fig2-sm.jpg;/content/content/62639/62639-Fig2.jpg" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/spacer.gif"></div>                              					<p>Fig 2. Shown is a comparison of a sample-and-hold circuit for unbuffered (a) and buffered (b) high-speed pipeline ADCs.</p>                              				</li>                              				<li>                              					<div class="captioned-image caption-none" style="width: 0px;"><img content="/content/content/62639/62639-Fig3-sm.jpg;/content/content/62639/62639-Fig3.jpg" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/spacer.gif"></div>                              					<p>Fig 3. Impedance measurement for a converter requires an ADC evaluation board (a) with the front end stripped away and prepped for measurement (b).</p>                              				</li>                              				<li>                              					<div class="captioned-image caption-none" style="width: 0px;"><img content="/content/content/62639/62639-Fig4-sm.jpg;/content/content/62639/62639-Fig4.jpg" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/spacer.gif"></div>                              					<p>Fig 4. To de-embed trace parasitics of the removed front-end circuitry an unpopulated version of the board in Figure 3b should be used (a). A cut-down version of that board only allows front-end circuitry traces to go to the ADC’s analog input pins (b).</p>                              				</li>                              				<li>                              					<div class="captioned-image caption-none" style="width: 0px;"><img content="/content/content/62639/62639-Fig5-sm.jpg;/content/content/62639/62639-Fig5.jpg" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/spacer.gif"></div>                              					<p>Fig 5. Shown is the de-embedded trace impedance of the cut board in Figure 4b.</p>                              				</li>                              				<li>                              					<div class="captioned-image caption-none" style="width: 0px;"><img content="/content/content/62639/62639-Fig6-sm.jpg;/content/content/62639/62639-Fig6.jpg" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/spacer.gif"></div>                              					<p>Fig 6. This curve illustrates the ADC’s impedance without de-embedded traces.</p>                              				</li>                              				<li>                              					<div class="captioned-image caption-none" style="width: 0px;"><img content="/content/content/62639/62639-Fig7-sm.jpg;/content/content/62639/62639-Fig7.jpg" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/spacer.gif"></div>                              					<p>Fig 7. This curve illustrates the ADC’s impedance with de-embedded traces.</p>                              				</li>                              				<li>                              					<div class="captioned-image caption-none" style="width: 0px;"><img content="/content/content/62639/62639-Fig8-sm.jpg;/content/content/62639/62639-Fig8.jpg" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/spacer.gif"></div>                              					<p>Fig 8. The ac performance of the ADC’s internal input network is shown here in track mode, when the sample is taken.</p>                              				</li>                              				<li>                              					<div class="captioned-image caption-none" style="width: 0px;"><img content="/content/content/62639/62639-Fig9-sm.jpg;/content/content/62639/62639-Fig9.jpg" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/spacer.gif"></div>                              					<p>Fig 9. Shown is the “real” part of the converter input impedance curves, which compare measured, math, and simulation results.</p>                              				</li>                              				<li>                              					<div class="captioned-image caption-none" style="width: 0px;"><img content="/content/content/62639/62639-Fig10-sm.jpg;/content/content/62639/62639-Fig10.jpg" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/spacer.gif"></div>                              					<p>Fig 10. Shown is the “imaginary” part of the converter input impedance curves, which compare measured, math, and simulation results.</p>                              				</li>                              			</ul>                              		</div>                              	</div>                              	<div class="relatedArticleWrap">                              		<h4>                              			&nbsp;</h4>                              		<div id="relatedContent">                              			&nbsp;</div>                              	</div>                              </div>                              <p>Designing with high-speed analog-to-digital converters (ADCs) often begs the question: “What does the analog input impedance of the ADC look like over frequency?” The datasheet only gives one point. If you’re dealing with intermediate frequencies (IFs) greater than 100 MHz, then what is the input impedance? Does it change at various frequencies or does it stay fixed?</p>                              <p>When considering any new part in the signal chain, input/output impedance is usually an important spec to “bolt” the necessary signal-chain blocks together properly. For a high-speed converter, this specification has become a key issue because designs, particularly those in communications infrastructure, have moved IFs from 20-MHz baseband to over 200 MHz (4th Nyquist Zone if sampling at 122.88 MHz) and climbing.</p>                              <p>In the <em>old</em> pre-Y2K days, impedance was generally “considered” high—several kW—at baseband, and still is. However, with increasing IF frequency designs, questions regarding the actual impedance and whether it moves over frequency will occasionally pop up. Typically, the datasheet specifies differential input impedance as a simple parallel RC combination. However, not every ADC spells out what this really means.</p>                              <p><strong>To Buffer Or Not To Buffer</strong></p>                              <p>When considering input impedance effects, designers can generally choose between two types of high-speed ADCs: buffered and unbuffered (i.e., switched capacitor). Though many different converter topology choices are out there, the applications here deal with pipeline architectures.</p>                              <p>The popular CMOS switched-capacitor ADC doesn’t have an internal input buffer. Thus, its power dissipation is much lower than buffered types. The external front end connects directly to the ADC’s internal switched-capacitor sample-and-hold (SHA) circuit, which presents two problems.</p>                              <p>First, the input impedance varies with frequency and mode as it switches between sample and hold. Second, the charge injection from the internal sampling capacitors and network reflects a small amount of signal, which is packed with high-frequency content <em>(<a href="http://electronicdesign.com/content/content/62639/62639-fig1.jpg" target="_blank">Fig. 1</a>)</em>, back onto the front-end circuitry and incoming signal. This may cause settling errors for the elements (active or passive) connected to the analog inputs of the converter.</p>                              <p>In general, the input impedance of this type of converter is very high (in the several kW range) at lower frequencies (&lt;100 MHz) and rolls off to roughly 200 Ω above 200 MHz differentially. The imaginary, or capacitive, part of the input impedance also starts out at a fairly high level and tapers off to about 1 to 2 pF at high frequencies. “Matching” this input structure is a rather challenging design problem, especially at frequencies greater than 100 MHz.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>                              <p>The differential makeup of these inputs is important, especially for frequency-domain designs. A differential front-end design allows for better common-mode rejection of the charge injection, and it helps the design.</p>                              <p>It’s easier to design with buffered-input converters. The tradeoff, though, is that this type of converter consumes more power because the buffer is designed to be very linear and have low noise. The input impedance is usually specified as a fixed, differential R||C impedance. This is buffered by a transistor stage that drives the conversion process at low impedance, so charge-injection spikes and switching transients are significantly reduced.</p>                              <p>Unlike switched-capacitor ADCs, the input termination has little variation between the sample and hold phases of the conversion process. Thus, it’s much easier to design the proper “drive” circuit versus its unbuffered brother. <a href="http://electronicdesign.com/content/content/62639/62639-fig2.jpg" target="_blank">Figure 2</a> shows a simplistic view of the internal sample-and-hold circuit for buffered and unbuffered ADCs.</p>                              <p>Converter choices can be challenging, but most designs today strive for lower power. As a result, designers will opt for an unbuffered converter. If linearity performance is a higher priority over power consumption, then buffered converters are commonly used. Keep in mind that for either converter scenario, the higher the application frequency, the more challenging the front-end design. Simply choosing a buffered converter will not solve every issue. However, in some cases, it may reduce complexity.</p>                              <p><strong>Converter Input Impedance: Measurement Approach</strong></p>                              <p>On the surface it may seem daunting, but there are several ways to measure a converter’s impedance. The trick is to have a network analyzer do most of the legwork. This equipment may come with a considerable price tag, though. The advantage is that today’s network analyzers perform many more functions, like trace math and de-embedding, and then spit out a direct answer without using external software programs for tasks such as impedance conversion.</p>                              <p>Measuring a converter’s impedance requires two boards, a network analyzer, and a little “hacking” knowledge. The first board, which has the ADC/DUT (device under test) installed, is populated so it can be biased and clocked <em>(<a href="http://electronicdesign.com/content/content/62639/62639-fig3.jpg" target="_blank">Fig. 3a</a>)</em>. This high-speed ADC evaluation board has the front-end circuitry stripped away to expose only the traces to the converter’s analog input pins <em>(<a href="http://electronicdesign.com/content/content/62639/62639-fig3.jpg" target="_blank">Fig. 3b</a>)</em>.</p>                              <p>The second board de-embeds any trace parasitics of the removed front-end circuitry. To do this, an exact copy of the board in Figure 3b must be used, though it should be unpopulated <em>(<a href="http://electronicdesign.com/content/content/62639/62639-fig4.jpg" target="_blank">Fig. 4a</a>)</em>. This bare board is then cut down to the point where only those front-end circuitry traces go to the ADC’s analog input pins <em>(<a href="http://electronicdesign.com/content/content/62639/62639-fig4.jpg" target="_blank">Fig. 4b</a>)</em>.</p>                              <p>A connector needs to be mounted at the converter’s pins. (Usually there’s enough copper to complete this task.) It helps to be creative at this stage to achieve a solid connection for that connector. Generally, the ADC’s exposed paddle, or “epad,” can be used for the ground connection from the converter itself. Only one-half of the differential traces is needed, assuming both front-end circuitry traces are equal and symmetrical. This board makes a “thru” measurement, which will be de-embedded from the populated board measurement.</p>                              <p>The next step is to take the “thru” measurement on the de-embedding board <em><a href="http://electronicdesign.com/content/content/62639/62639-fig4.jpg" target="_blank">(Board 2, Fig. 4b</a>)</em> to measure an S21 <em>(<a href="http://electronicdesign.com/content/content/62639/62639-fig5.jpg">Fig. 5</a>)</em>. This file, which should be saved in touchstone format or an • .S2P file, will become the de-embedding file required to strip away all trace parasitics from the populated board.</p>                              <p>After that, simply connect the populated board <em>(<a href="http://electronicdesign.com/content/content/62639/62639-fig3.jpg">Board 1, Fig. 3b</a>)</em> to the network analyzer in a differential configuration. The board should have power and a clock applied to ensure the capture of any parasitic changes to the converter’s internal front-end design during the measurement process.</p>                              <p>By “turning on” the populated board, the converter will seem as if it were in a typical application. During this measurement, de-embed the board parasitics measured from on the previous cut board on each port (each analog input trace) <em>(<a href="http://electronicdesign.com/content/content/62639/62639-fig6.jpg" target="_blank">Fig. 6</a>)</em>. This will ultimately subtract the board parasitics from the current ADC measurement, leaving only the package and internal front-end impedance to show through <em>(<a href="http://electronicdesign.com/content/content/62639/62639-fig7.jpg" target="_blank">Fig. 7</a>)</em>.</p>                              <p><strong>Converter Input Impedance: Mathematical Approach</strong></p>                              <p>Now, let’s do a little math and see if all that lab time was worth it. The internal input impedance of any converter can be modeled <em>(<a href="http://electronicdesign.com/content/content/62639/62639-fig8.jpg">Fig. 8</a>)</em>. The network represents a good model of the input network’s ac performance in track mode, when the sample is taken.</p>                              <p>Typically, any datasheet will show some kind of static input impedance that’s differential with an R || C derived from simulation. This very simple model is shown in this manner to give a close approximation and make the math easy. Otherwise, if the equivalent impedance model also includes the sampling clock rate and duty cycle, small impedance variations can make the math much more difficult.</p>                              <p>Also, note that these values are a reflection of the ADC’s internal circuitry during the sampling process in track mode—this is when the actual sample of the signal is taken. In hold mode, the sampling switch is open and isolates the input front-end circuitry from the internal sampling process or buffer.</p>                              <p>If we derive the simple model <em>(<a href="http://electronicdesign.com/content/content/62639/62639-fig8.jpg" target="_blank">Fig. 8, again</a>)</em> and solve for the real and imaginary terms:</p>                              <p>Z<sub>0</sub> = R, Z<sub>1</sub> = 1/s • C, s = j • 2 • π • f, f = frequency</p>                              <p>Z<sub>TOTAL</sub> = 1/(1/Z0 + 1/Z1) = 1/(1/R + s • C) = 1/((1 + s • R • C)/R)) = R/(1 + s • R • C)</p>                              <p>Now sub in for s and multiply by the complex conjugate:</p>                              <p>Z<sub>TOTAL</sub> = R/(1 + j • 2 • π • f • R • C) = R/(1 + j • 2 • π • f • R • C) • ((1 – j • 2 • π • f • R • C)/(1 – j • 2 • π • f • R • C)) = (R –j • 2 • π • f • R<sup>2</sup> • C)/(1 + (2 • π • f • R • C)<sup>2</sup>)</p>                              <p>Now find the “real” and “imaginary” terms:</p>                              <p>Z<sub>TOTAL</sub> = Real + j • Imag = R/(1 + (2 • π • f • R • C)<sup>2</sup>) + j • (–2 • π • f • R<sup>2</sup> • C)/(1 + 2 • π • f • R • C)<sup>2</sup>)</p>                              <p>Real = R/(1 + (2 • π • f • R • C)<sup>2</sup>) Imag = (–2 • π • f • R<sup>2</sup> • C)/(1 + (2 • π • f • R • C)<sup>2</sup>)</p>                              <p>This mathematical model aligns very well with the ac simulation in track mode <em>(<a href="http://electronicdesign.com/content/content/62639/62639-fig9.jpg" target="_blank">Figures 9</a> and <a href="http://electronicdesign.com/content/content/62639/62639-fig10.jpg" target="_blank">Figure 10</a>)</em>. The main source of error in this simple model is the settling level of the impedance at higher frequencies. Note that these values are usually derived through a set of simulations, which are spot on.</p>                              <p>Now, look at the measurement as shown in <a href="http://electronicdesign.com/content/content/62639/62639-fig9.jpg" target="_blank">Figure 9</a> and <a href="http://electronicdesign.com/content/content/62639/62639-fig10.jpg" target="_blank">Figure 10</a>. All three curves aren’t exact, but close. That’s because some measurement error will always be present, and the simulations may not account for all the converter’s package parasitics. Thus, some mismatch is to be expected. Nonetheless, the curves are similar in shape and contour, giving a fairly good approximation of the converter’s impedance.</p>                              <p>Be aware that a network analyzer’s ability to provide a faithful measurement is only ±10 times the characteristic impedance standard of the analyzer. So if the network analyzer’s characteristic impedance is 50 Ω, then a decent measurement is only achievable between 5 and 500 Ω. This is another reason why the simplified R||C values listed in the datasheet are preferred.</p>                              <p><strong>Converter Input Impedance Wrap-Up</strong></p>                              <p>Understanding converter impedance is an essential piece in designing signal chains. In the end, why shell out lots of money for expensive test equipment or go through the trouble of measuring the impedance if it isn’t really required? Rather, use the RC parallel combination impedance found in the datasheet and just apply a little math. This can yield a quick and easy way to acquire the converter’s impedance curve.</p>                              <p>Also remember that process resistor tolerances can be as high as ±20%. Even after going through the arduous task of measuring the impedance of any device, input or output, it collects only one data point—unless, of course, many parts are being measured over several lots versus temperature and supply variations. Use the simulated R||C value in the datasheet. It provides enough information for the characteristic impedance over frequency, resulting in a properly functioning signal chain.</p>                              <p><strong>References</strong></p>                              <p>1. “<a href="http://electronicdesign.com/article/analog-and-mixed-signal/www.analog.com/static/imported-files/application_notes/587173998057911564087081655730496713845335290374441083an_742_a.pdf" target="_blank">Frequency Domain Response of Switched-Capacitor ADCs</a>,” AN-742, Analog Devices Application Note.</p>                              <p>2. “<a href="http://electronicdesign.com/article/analog-and-mixed-signal/improve_the_design_of_your_passive_wideband_adc_front_end_network.aspx" target="_blank">Improve the Design Of Your Passive Wideband ADC Front-End Network</a>,” <em>Electronic Design</em>, March 2010.</p>                              </div>                                </div>
+        <div class="social-bar social-bar-btm clearfix">
+      <div class="item-list"><ul class="interactions"><li class="first-item first">
+<span class="print_html"><a href="http://electronicdesign.com/penton_ur/nojs/user/register?nid=35639&amp;source=print" title="Display a printer-friendly version of this page." class="print-page ctools-use-modal ctools-modal-register ctools-use-modal-processed is-processed" onclick="" rel="">Print</a></span>
+</li>
+<li><a href="http://wrightsmedia.com/sites/penton/electronics/" rel="nofollow" class="reprint_html">reprints</a></li>
+<li class="last-item last"><a href="http://electronicdesign.com/user" rel="nofollow">Favorite</a></li>
+</ul></div>              <div class="item-list"><ul class="social-links"><li class="first"><ul class="links"><li class="forward_links first last"><a href="http://electronicdesign.com/penton_ur/nojs/user/register?path=node%2F35639&amp;nid=35639&amp;source=email" title="Forward this page" class="forward-page ctools-use-modal ctools-modal-register non-omniture  ctools-use-modal-processed is-processed">EMAIL</a></li>
+</ul></li>
+<li><div class="linkedin-button"><span class="IN-widget" style="line-height: 1; vertical-align: baseline; display: inline-block; text-align: center;"><span style="padding: 0px !important; margin: 0px !important; text-indent: 0px !important; display: inline-block !important; vertical-align: baseline !important; font-size: 1px !important;"><span id="li_ui_li_gen_1485284841123_1"><a id="li_ui_li_gen_1485284841123_1-link" href="javascript:void(0);"><span id="li_ui_li_gen_1485284841123_1-logo">in</span><span id="li_ui_li_gen_1485284841123_1-title"><span id="li_ui_li_gen_1485284841123_1-mark"></span><span id="li_ui_li_gen_1485284841123_1-title-text">Share</span></span></a></span></span></span><script type="IN/Share+init" data-url="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach"></script></div></li>
+<li><div class="twitter-button"><iframe id="twitter-widget-1" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" title="Twitter Tweet Button" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/tweet_button.c4fd2bd4aa9a68a5c8431a3d60ef56ae.en(1).html" style="position: static; visibility: visible; width: 61px; height: 20px;" data-url="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach"></iframe></div></li>
+<li><div class="googleplusone-button"><div id="___plusone_1" style="text-indent: 0px; margin: 0px; padding: 0px; background: transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block; width: 32px; height: 20px;"><iframe ng-non-bindable="" frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position: static; top: 0px; width: 32px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 20px;" tabindex="0" vspace="0" width="100%" id="I1_1485284841227" name="I1_1485284841227" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/fastbutton(1).html" data-gapiattached="true" title="+1"></iframe></div></div></li>
+<li class="last"><div class="fb-button"><fb:like href="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach" send="false" layout="button_count" width="115" show_faces="false" action="recommend" class=" fb_iframe_widget" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=recommend&amp;app_id=390228111030382&amp;container_width=0&amp;href=http%3A%2F%2Felectronicdesign.com%2Fanalog%2Fhigh-speed-adc-input-impedance-measured-versus-mathematical-approach&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey&amp;send=false&amp;show_faces=false&amp;width=115"><span style="vertical-align: bottom; width: 122px; height: 20px;"><iframe name="f392246e10d9ad8" width="115px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" title="fb:like Facebook Social Plugin" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/like(1).html" style="border: none; visibility: visible; width: 122px; height: 20px;" class=""></iframe></span></fb:like></div></li>
+</ul></div>          </div>
+
+    </div>
+                                              <h4 class="no-posting-permission">Please <a href="http://electronicdesign.com/penton_ur/nojs/login" class="ctools-use-modal ctools-modal-log_in ctools-use-modal-processed is-processed" title="">Log In</a> or <a href="http://electronicdesign.com/penton_ur/nojs/user/register?source=comment&amp;nid=35639" class="ctools-use-modal ctools-modal-register ctools-use-modal-processed is-processed" title="Register at this site.">Register</a> to post comments. </h4>
+                                            <div class="related-articles-block block">
+                                        <!-- block.tpl.php -->
+<div id="block-pm_doubleclick-26" class="block block-pm_doubleclick ">
+        <div class="block-content">
+      <div class="advertisement">Advertisement</div><div id="gpt-inarticlevideo_1" data-gpt-slot="inarticlevideo_1" class="gpt-holder" data-google-query-id="" style="display: none;"><script type="text/javascript">googletag.display('gpt-inarticlevideo_1');</script></div>    </div>
+  </div>
+<!-- /block.tpl.php -->
+                                                        <div class="related-articles">
+                      <h5 class="block-title">Related Articles</h5><div class="item-list"><ul><li class="first"><a href="http://electronicdesign.com/adc/inside-look-high-speed-adc-accuracy-part-2">An Inside Look at High-Speed ADC Accuracy, Part 2</a> </li>
+<li><a href="http://electronicdesign.com/adc/inside-look-high-speed-adc-accuracy">An Inside Look at High-Speed ADC Accuracy</a> <span class="comments-count">5</span> </li>
+<li><a href="http://electronicdesign.com/analog/attack-noise-gremlins-plague-high-speed-adcs">Attack The Noise Gremlins That Plague High-Speed ADCs</a> </li>
+<li><a href="http://electronicdesign.com/test-amp-measurement/toolset-takes-measured-approach-high-speed-serial-data-links">Toolset Takes A Measured Approach To High-Speed Serial Data Links </a> </li>
+<li class="last"><a href="http://electronicdesign.com/analog/mine-these-high-speed-adc-layout-nuggets-design-gold">Mine These High-Speed ADC Layout Nuggets For Design Gold</a> <span class="comments-count">1</span> </li>
+</ul></div>                    </div>
+                                  </div>
+                          </div>
+          </div>
+          <!--// pm-cont-main -->
+                                <div class="pm-cont-btm">
+              <div class="pm-cont-pdg">
+                  <!-- block.tpl.php -->
+<div id="block-block-32" class="block block-block block-highlight pointer pm-superblock-highlight">
+      <h5 class="block-title">
+      Search Parts Fast    </h5>
+        <div class="block-content">
+      <script type="text/javascript" language="javascript" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/skin.js.Без названия"></script>
+<p>
+<style type="text/css">#ESB_block {padding: 10px 0; background-color:#fff; /*border: 1px solid #ccc; border-bottom:4px solid #736e58; border-top: 4px solid #FF6500;*/ }
+#ESB_block .ESBcontent {padding-top: 3px; }	
+#ESB_block .ESBcontent .ESB_form {border: 1px solid #ccc; padding: 8px 8px 16px; width: 94%;}
+#ESB_block .block-title-sm {font-size:13px; font-weight:200;}
+#ESB_block .ESBcontent p {font-size:10px; font-weight:bold;}
+#ESB_block .button-link {float:right; padding:0; font-size:11px;}
+#ESB_block .field-registration-link-url, .button-link {width:72px; line-height:23px;}
+#ESB_block .button-link .button {border-radius:0px;}
+#InventoryTextbox {font-size:14px!important;}
+</style>
+</p>
+
+<div id="ESB_block">
+<div class="block-title-sm">Search by number or manufacturer</div>
+
+<div class="ESBcontent"><script type="text/javascript">
+function inventorySearch()
+{
+	ProductSearch( document.getElementById('InventoryTextbox').value , 'http://www.sourceesb.com/part/search/?Code=UM_NG6ED&searchtext=' + document.getElementById('InventoryTextbox').value + '&sname=PNS&type=E' ); 
+}
+</script>
+<div class="ESB_form"><input id="InventoryTextbox" name="InventoryTextbox" onkeyup="if ( DetectEnterPressed(event)) inventorySearch(); return false;" style="width:170px; border:0px;" type="textbox">
+<div class="button-link"><a class="button" href="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach#" onclick="inventorySearch(); return false;">SEARCH</a></div>
+</div>
+
+<p>&nbsp;</p>
+powered by:<br>
+<img align="absmiddle" alt="" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/source-esb-simple.png" style="vertical-align: middle; width: 200px; height: 34px;">
+<p>&nbsp;</p>
+</div>
+</div>
+    </div>
+  </div>
+<!-- /block.tpl.php -->
+              </div>
+            </div><!--// pm-cont-btm -->
+                  </div>
+        <!--// pm-content -->
+                  <div class="pm-sidebar">
+            <div class="pm-cont-pdg">
+                <!-- block.tpl.php -->
+<div id="block-configurable_sidebar-1" class="block block-configurable_sidebar ">
+        <div class="block-content">
+      <!-- block.tpl.php -->
+<div id="block-pm_doubleclick-21" class="block block-pm_doubleclick ">
+        <div class="block-content">
+      <div class="advertisement">Advertisement</div><div id="gpt-300_3" data-gpt-slot="300_3" class="gpt-holder" data-google-query-id="" style="display: none;"><script type="text/javascript">googletag.display('gpt-300_3');</script></div>    </div>
+  </div>
+<!-- /block.tpl.php -->
+<!-- block-nodeblock.tpl.php -->
+  <div id="block-nodeblock-877581" class="block block-nodeblock pm-superblock-default">
+              <div class="block-content">
+        <div class="node-body block-body"><div style="width:100%; font-family:Myriad Pro, Arial; background-color:#ffffff;">
+<div style="padding:15px; background-color:#333333; color:#ffffff; text-align:center; font-size:20px; font-weight:400;">Understanding the AirPods' Rise</div>
+
+<div style="color:#000000; text-align:center; padding:10px;"><span style="font-size:18px; font-weight:400; display:block;">Q&amp;A: What’s New in the Wireless Audio Market?</span> <span style="font-size:14px; font-weight:400; display:block; margin-top:12px;">Interview with Jawad Haider, Marvell Semiconductor</span> <span style="display:block; margin:12px 0;"><a href="http://electronicdesign.com/wifi/qa-what-s-new-wireless-audio-market" target=""><img alt="" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/1216marvellqapromo.jpg.crop_display.jpg" style="width: 190px; height: 107px; margin: 3px;"></a> </span> <a href="http://electronicdesign.com/wifi/qa-what-s-new-wireless-audio-market" style="border-radius:5px; font-size:20px; color:#ffffff; font-weight:400; background-color:#e75f01; padding:10px; text-decoration:none; border-radius: 10px; display:inline-block;">Read Now</a></div>
+</div>
+</div>      </div>
+      </div>
+<!-- /block-nodeblock.tpl.php -->
+<!-- block-nodeblock.tpl.php -->
+  <div id="block-nodeblock-877561" class="block block-nodeblock pm-superblock-default">
+              <div class="block-content">
+        <div class="node-body block-body"><div style="width:100%; font-family:Myriad Pro, Arial; background-color:#ffffff;">
+<div style="padding:15px; background-color:#333333; color:#ffffff; text-align:center; font-size:20px; font-weight:400;">What's New</div>
+
+<div style="color:#000000; text-align:center; padding:10px;"><span style="font-size:18px; font-weight:400; display:block;">Electronic Design's Products of the Week</span> <span style="font-size:14px; font-weight:400; display:block; margin-top:12px;">By&nbsp;<span style="font-size: 12.8px;">Electronic Design Staff</span></span><span style="display:block; margin:12px 0;"><a href="http://electronicdesign.com/test-measurement/electronic-design-s-products-week-1218-1224"><img alt="" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/10_1220_Linear_LTM4636.jpg.crop_display.jpg" style="width: 190px; height: 117px; margin: 3px;"></a> </span> <a href="http://electronicdesign.com/test-measurement/electronic-design-s-products-week-1218-1224" style="border-radius:5px; font-size:20px; color:#ffffff; font-weight:400; background-color:#e75f01; padding:10px; text-decoration:none; border-radius: 10px; display:inline-block;">Read Now</a></div>
+</div>
+</div>      </div>
+      </div>
+<!-- /block-nodeblock.tpl.php -->
+<!-- block.tpl.php -->
+<div id="block-pm_doubleclick-rectangle1" class="block block-pm_doubleclick ">
+        <div class="block-content">
+      <div class="advertisement">Advertisement</div><div id="gpt-300_1" data-gpt-slot="300_1" class="gpt-holder" data-google-query-id="" style="display: none;"><script type="text/javascript">googletag.display('gpt-300_1');</script></div>    </div>
+  </div>
+<!-- /block.tpl.php -->
+<!-- block-nodeblock.tpl.php -->
+  <div id="block-nodeblock-877571" class="block block-nodeblock pm-superblock-default">
+              <div class="block-content">
+        <div class="node-body block-body"><div style="width:100%; font-family:Myriad Pro, Arial; background-color:#ffffff;">
+<div style="padding:15px; background-color:#333333; color:#ffffff; text-align:center; font-size:20px; font-weight:400;">Fusing Sensors</div>
+
+<div style="color:#000000; text-align:center; padding:10px;"><span style="font-family: &quot;Myriad Pro&quot;, Arial; font-size: 18px; text-align: center;">TDK Swears by Sensor Fusion in $1.3 Billion Deal for </span><span style="font-family: &quot;Myriad Pro&quot;, Arial; font-size: 18px; text-align: center;">InvenSense</span><span style="font-size:14px; font-weight:400; display:block; margin-top:12px;">By&nbsp;<span style="font-size: 14px;">James </span>Morra</span> <span style="display:block; margin:12px 0;"><a href="http://electronicdesign.com/electromechanical/tdk-swears-sensor-fusion-13-billion-deal-invensense" target="_blank"><img alt="New Products" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/11892824806d52ccb3ea0o.jpg" style="width: 190px; height: 107px; margin: 3px;"></a> </span> <a href="http://electronicdesign.com/electromechanical/tdk-swears-sensor-fusion-13-billion-deal-invensense" style="border-radius:5px; font-size:20px; color:#ffffff; font-weight:400; background-color:#e75f01; padding:10px; text-decoration:none; border-radius: 10px; display:inline-block; ">Read Now</a></div>
+</div>
+</div>      </div>
+      </div>
+<!-- /block-nodeblock.tpl.php -->
+<!-- block-nodeblock.tpl.php -->
+  <div id="block-nodeblock-878061" class="block block-nodeblock pm-superblock-default">
+              <div class="block-content">
+        <div class="node-body block-body"><script type="text/javascript">
+document.write('\
+<iframe style="height: 285px; width: 300px" frameBorder="0" scrolling="no"\
+src="http://pages.electronicdesign.com/ED_News_EDToday_Subscribe_JL_07112016?partnerref=' + getParameterByName("partnerref") + 
+"&elq=" + getParameterByName("elq2") + 
+"&code=" + getParameterByName("code") + 
+"&PK=" + getParameterByName("PK") + 
+"&PR=" + getParameterByName("PR") +
+'"></iframe>'); 
+function getParameterByName(name) {
+ var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+ if (match == null) return "";
+ return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+</script><iframe style="height: 285px; width: 300px" frameborder="0" scrolling="no" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/ED_News_EDToday_Subscribe_JL_07112016.html"></iframe></div>      </div>
+      </div>
+<!-- /block-nodeblock.tpl.php -->
+<!-- block.tpl.php -->
+<div id="block-pm_doubleclick-4" class="block block-pm_doubleclick ">
+        <div class="block-content">
+      <div class="advertisement">Advertisement</div><div id="gpt-300_2" data-gpt-slot="300_2" class="gpt-holder" data-google-query-id="" style="display: none;"><script type="text/javascript">googletag.display('gpt-300_2');</script></div>    </div>
+  </div>
+<!-- /block.tpl.php -->
+<!-- block.tpl.php -->
+<div id="block-block-91" class="block block-block block-highlight pointer pm-superblock-highlight">
+      <h5 class="block-title">
+      Search Parts Fast    </h5>
+        <div class="block-content">
+      <script type="text/javascript" language="javascript" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/skin.js.Без названия"></script>
+<p>
+<style type="text/css">#ESB_block {padding: 10px 0; background-color:#fff; /*border: 1px solid #ccc; border-bottom:4px solid #736e58; border-top: 4px solid #FF6500;*/ }
+#ESB_block .ESBcontent {padding-top: 3px; }	
+#ESB_block .ESBcontent .ESB_form {border: 1px solid #ccc; padding: 8px 8px 16px; width: 94%;}
+#ESB_block .block-title-sm {font-size:13px; font-weight:200;}
+#ESB_block .ESBcontent p {font-size:10px; font-weight:bold;}
+#ESB_block .button-link {float:right; padding:0; font-size:11px;}
+#ESB_block .field-registration-link-url, .button-link {width:72px; line-height:23px;}
+#ESB_block .button-link .button {border-radius:0px;}
+#InventoryTextbox {font-size:14px;!important;}
+/*#block-block-91 #ESB_block .ESBcontent .button-link a {background-image:none!important;}*/
+</style>
+</p>
+
+<div id="ESB_block">
+<div class="block-title-sm">Search by number or manufacturer</div>
+
+<div class="ESBcontent"><script type="text/javascript">
+function inventorySearch()
+{
+        ProductSearch( document.getElementById('InventoryTextbox').value , 'http://sourceesb.com/part/search/?Code=UM_NG6ED&searchtext=' + document.getElementById('InventoryTextbox').value); 
+}
+
+</script>
+<div class="ESB_form"><input id="InventoryTextbox" name="InventoryTextbox" onkeyup="if ( DetectEnterPressed(event)) inventorySearch(); return false;" style="width:width:170px; border:0px;" type="textbox">
+<div class="button-link"><a class="button" href="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach#" onclick="inventorySearch(); return false;"><!--<img border="0" src="http://electronicdesign.com/site-files/electronicdesign.com/files/uploads/2011/11/search-glass.jpg" />-->SEARCH</a></div>
+</div>
+
+<p>&nbsp;</p>
+<!--<div style="text-align:center; padding-right:20px; padding:left:20px"><font style="font-size:81%;">Powered by:</font><br />
+<img align="absmiddle" alt="" src="http://electronicdesign.com/site-files/electronicdesign.com/files/uploads/2013/11/source-esb-logo.jpg" style="vertical-align: middle; width:225px; padding-top:8px; padding-bottom:8px" /><br />
+The Original Electronics Parts Search And Procurment Tool</div>-->powered by:<br>
+<img align="absmiddle" alt="" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/source-esb-simple.png" style="vertical-align: middle; width: 200px; height: 34px;"></div>
+</div>
+
+<p>&nbsp;</p>
+    </div>
+  </div>
+<!-- /block.tpl.php -->
+<!-- block.tpl.php -->
+<div id="block-penton_custom-social_media" class="block block-penton_custom block-highlight ">
+      <h5 class="block-title">
+      Connect With Us    </h5>
+        <div class="block-content">
+      <ul class="pm-socialmedia"><li><a href="http://twitter.com/ElectronicDesgn" class="ir-twitter">Twitter</a></li><li><a href="http://www.facebook.com/ElectronicDesign" class="ir-facebook">Facebook</a></li><li><a href="http://electronicdesign.com/rss.xml" class="ir-rss">RSS</a></li></ul>    </div>
+  </div>
+<!-- /block.tpl.php -->
+    </div>
+  </div>
+<!-- /block.tpl.php -->
+            </div>
+          </div><!--// pm-sidebar -->
+                      </div>
+      <!--// pm-content-wrp -->
+
+              <div class="pm-banner-ad pm-banner-ad-btm">
+            <!-- block.tpl.php -->
+<div id="block-pm_doubleclick-boombox1" class="block block-pm_doubleclick ">
+        <div class="block-content">
+      <div class="advertisement">Advertisement</div><div id="gpt-728_2" data-gpt-slot="728_2" class="gpt-holder" data-google-query-id="" style="display: none;"><script type="text/javascript">if ($(window).width() >= 768 ){googletag.display('gpt-728_2');}else{$('#gpt-728_2').hide()};</script></div>    </div>
+  </div>
+<!-- /block.tpl.php -->
+        </div>
+          </div>
+    <!--// pm-wrp-pdg -->
+  </div>
+  <!--// pm-wrp -->
+      <div class="pm-ft">
+      <div class="pm-cont-pdg">
+        <div class="pm-ft-pdg">
+            <!-- block.tpl.php -->
+<div id="block-menu-menu-main-footer-nav" class="block block-menu ">
+      <h5 class="block-title">
+      ElectronicDesign.com    </h5>
+        <div class="block-content">
+      <ul class="menu"><li class="leaf first"><a href="http://electronicdesign.com/technologies">Technologies</a></li>
+<li class="leaf"><a href="http://electronicdesign.com/news-0">News</a></li>
+<li class="leaf"><a href="http://electronicdesign.com/markets">Markets</a></li>
+<li class="leaf"><a href="http://electronicdesign.com/learning-resources">Learning Resources</a></li>
+<li class="leaf"><a href="http://electronicdesign.com/community-1">Community</a></li>
+<li class="leaf"><a href="http://electronicdesign.com/companies">Companies</a></li>
+<li class="leaf last"><a href="http://electronicdesign.com/part-search">Part Search</a></li>
+</ul>    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-panels_mini-footer_columns" class="block block-panels_mini ">
+        <div class="block-content">
+      <div class="panel-flexible panels-flexible-2 clear-block" id="mini-panel-footer_columns">
+<div class="panel-flexible-inside panels-flexible-2-inside">
+<div class="panels-flexible-region panels-flexible-region-2-footer_site_features panels-flexible-region-first">
+  <div class="inside panels-flexible-region-inside panels-flexible-region-2-footer_site_features-inside panels-flexible-region-inside-first">
+<div class="panel-pane pane-block pane-menu-menu-site-features footer-features">
+  
+      <h5 class="pane-title">Site Features</h5>
+  
+  
+  <div class="pane-content">
+    <ul class="menu"><li class="leaf first"><a href="http://electronicdesign.com/media" title="">Media Center</a></li>
+<li class="leaf"><a href="http://electronicdesign.com/newsletters/signup" title="">Newsletters</a></li>
+<li class="leaf"><a href="http://electronicdesign.com/rss.xml" title="">RSS</a></li>
+<li class="leaf"><a href="http://electronicdesign.com/site-archive" title="">Site Archive</a></li>
+<li class="leaf"><a href="http://electronicdesign.com/sitemap" title="">Sitemap</a></li>
+<li class="leaf"><a href="http://electronicdesign.com/submit-articles" title="">Submit Articles</a></li>
+<li class="leaf last"><a href="http://electronicdesign.com/device/mobile" title="">View Mobile Site</a></li>
+</ul>  </div>
+
+  
+  </div>
+  </div>
+</div>
+<div class="panels-flexible-region panels-flexible-region-2-center">
+  <div class="inside panels-flexible-region-inside panels-flexible-region-2-center-inside">
+<div class="panel-pane pane-block pane-menu-menu-footer footer-corporate">
+  
+      <h5 class="pane-title">Penton Corporate</h5>
+  
+  
+  <div class="pane-content">
+    <ul class="menu"><li class="leaf first"><a href="http://electronicdesign.com/about-us" title="">About Us</a></li>
+<li class="leaf"><a href="http://www.penton.com/privacy-policy/" title="">Privacy Policy</a></li>
+<li class="leaf"><a href="http://www.penton.com/terms-of-service/" title="">Terms of Service</a></li>
+<li class="leaf last"><a href="http://electronicdesign.com/contact-us" title="">Contact Us</a></li>
+</ul>  </div>
+
+  
+  </div>
+<div class="panel-region-separator"></div><div class="panel-pane pane-block pane-penton-custom-follow-us">
+  
+      <h5 class="pane-title">Follow Us</h5>
+  
+  
+  <div class="pane-content">
+    <div class="item-list"><ul class="pm-socialmedia"><li class="first"><a href="http://twitter.com/ElectronicDesgn" class="ir-twitter">Twitter</a></li>
+<li><a href="http://www.facebook.com/ElectronicDesign" class="ir-facebook">Facebook</a></li>
+<li class="last"><a href="http://electronicdesign.com/rss.xml" class="ir-rss">RSS</a></li>
+</ul></div>  </div>
+
+  
+  </div>
+  </div>
+</div>
+<div class="panels-flexible-region panels-flexible-region-2-footer_search panels-flexible-region-last">
+  <div class="inside panels-flexible-region-inside panels-flexible-region-2-footer_search-inside panels-flexible-region-inside-last">
+<div class="panel-pane pane-block pane-search-0 block-search">
+  
+      <h5 class="pane-title">Search ElectronicDesign.com</h5>
+  
+  
+  <div class="pane-content">
+    <form action="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach" accept-charset="UTF-8" method="post" id="search-block-form">
+<div><div id="search" class="container-inline">
+  <div class="form-item" id="edit-search-block-form-1-wrapper">
+ <label for="edit-search-block-form-1">Search: </label>
+ <input type="text" maxlength="128" name="search_block_form" id="edit-search-block-form-1" size="15" value="" title="Enter the terms you wish to search for." class="form-text  apachesolr-autocomplete unprocessed  form-autocomplete" autocomplete="off">
+</div>
+<input type="image" name="op" id="edit-submit-1" value="Go!" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/search-icon.gif" class="form-submit">
+<input type="hidden" name="form_build_id" id="form-iKuVRlhqDcTshDMIe3LU8MNtudA88e33NClApQ2eH_w" value="form-iKuVRlhqDcTshDMIe3LU8MNtudA88e33NClApQ2eH_w">
+<input type="hidden" name="form_id" id="edit-search-block-form" value="search_block_form">
+</div>
+
+</div></form>
+  </div>
+
+  
+  </div>
+<div class="panel-region-separator"></div><div class="panel-pane pane-block pane-block-11 footer-subscribe">
+  
+  
+  
+  <div class="pane-content">
+    <p>
+	<a href="https://penton-sub.halldata.com/site/PEN004567EGnew/init.do?&amp;PK=NNJWEB">PISCES</a></p>
+  </div>
+
+  
+  </div>
+  </div>
+</div>
+</div>
+</div>
+    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-menu-menu-new-hope-sources" class="block block-menu ">
+      <h5 class="block-title">
+      Electronic Design Related Sites    </h5>
+        <div class="block-content">
+      <ul class="menu"><li class="leaf first"><a href="http://machinedesign.com/" title="">Machine Design</a></li>
+<li class="leaf"><a href="http://www.sourceesb.com/" title="">SourceESB</a></li>
+<li class="leaf"><a href="http://mwrf.com/" title="">Microwaves &amp; RF</a></li>
+<li class="leaf"><a href="http://powerelectronics.com/" title="">Power Electronics</a></li>
+<li class="leaf"><a href="http://hydraulicspneumatics.com/" title="">Hydraulics &amp; Pneumatics</a></li>
+<li class="leaf"><a href="http://defenseelectronicsmag.com/" title="">Defense Electronics</a></li>
+<li class="leaf"><a href="http://globalpurchasing.com/" title="">Global Purchasing</a></li>
+<li class="leaf last"><a href="http://electronicdesign.com/electronic-design-europe-0" title="">Electronic Design Europe</a></li>
+</ul>    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-pm_doubleclick-14" class="block block-pm_doubleclick ">
+        <div class="block-content">
+      <div class="advertisement"></div><div id="gpt-technologies" data-gpt-slot="technologies" class="gpt-holder" data-google-query-id="" style="display: none;"><script type="text/javascript">googletag.display('gpt-technologies');</script></div>    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-pm_doubleclick-15" class="block block-pm_doubleclick ">
+        <div class="block-content">
+      <div class="advertisement"></div><div id="gpt-news" data-gpt-slot="news" class="gpt-holder" data-google-query-id="" style="display: none;"><script type="text/javascript">googletag.display('gpt-news');</script></div>    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-pm_doubleclick-16" class="block block-pm_doubleclick ">
+        <div class="block-content">
+      <div class="advertisement"></div><div id="gpt-markets" data-gpt-slot="markets" class="gpt-holder" data-google-query-id="" style="display: none;"><script type="text/javascript">googletag.display('gpt-markets');</script></div>    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-pm_doubleclick-17" class="block block-pm_doubleclick ">
+        <div class="block-content">
+      <div class="advertisement"></div><div id="gpt-learning-resources" data-gpt-slot="learning-resources" class="gpt-holder" data-google-query-id="" style="display: none;"><script type="text/javascript">googletag.display('gpt-learning-resources');</script></div>    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-pm_doubleclick-19" class="block block-pm_doubleclick ">
+        <div class="block-content">
+      <div class="advertisement"></div><div id="gpt-companies" data-gpt-slot="companies" class="gpt-holder" data-google-query-id="" style="display: none;"><script type="text/javascript">googletag.display('gpt-companies');</script></div>    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-pm_doubleclick-25" class="block block-pm_doubleclick ">
+        <div class="block-content">
+      <div class="advertisement">Advertisement</div><div id="gpt-community" data-gpt-slot="community" class="gpt-holder" data-google-query-id="" style="display: none;"><script type="text/javascript">googletag.display('gpt-community');</script></div>    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-pm_doubleclick-20" class="block block-pm_doubleclick ">
+        <div class="block-content">
+      <div class="advertisement"></div><div id="gpt-part-search" data-gpt-slot="part-search" class="gpt-holder" data-google-query-id="" style="display: none;"><script type="text/javascript">googletag.display('gpt-part-search');</script></div>    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-block-41" class="block block-block ">
+        <div class="block-content">
+      <style type="text/css">.nice-menu .cols-2 .listCol1, .nice-menu .cols-2 .listCol2, .nice-menu .cols-3 .listCol1, .nice-menu .cols-3 .listCol2, .nice-menu .cols-3 .listCol3 { width: 166px; }	</style>    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-pm_doubleclick-22" class="block block-pm_doubleclick ">
+        <div class="block-content">
+      <div class="advertisement">Advertisement</div><div id="gpt-peelback_1" data-gpt-slot="peelback_1" class="gpt-holder" data-google-query-id="" style="display: none;"><script type="text/javascript">googletag.display('gpt-peelback_1');</script></div>    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-pm_doubleclick-27" class="block block-pm_doubleclick ">
+        <div class="block-content">
+      <div class="advertisement">Advertisement</div><div id="gpt-floor" data-gpt-slot="floor" class="gpt-holder" data-google-query-id="" style="display: none;"><script type="text/javascript">googletag.display('gpt-floor');</script></div>    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-block-111" class="block block-block ">
+        <div class="block-content">
+      <p><span class="adroll"><script type="text/javascript">adroll_adv_id = "HMD7MMOHUNGPHCYZBSMVYA";adroll_pix_id = "LJ6EKRI4KFFS3GHJKNSY4E";(function () {var oldonload = window.onload;window.onload = function(){   __adroll_loaded=true;   var scr = document.createElement("script");   var host = (("https:" == document.location.protocol) ? "https://s.adroll.com" : "http://a.adroll.com");   scr.setAttribute('async', 'true');   scr.type = "text/javascript";   scr.src = host + "/j/roundtrip.js";   ((document.getElementsByTagName('head') || [null])[0] ||    document.getElementsByTagName('script')[0].parentNode).appendChild(scr);   if(oldonload){oldonload()}};}());</script></span></p>
+    </div>
+  </div>
+<!-- /block.tpl.php -->
+  <!-- block.tpl.php -->
+<div id="block-block-131" class="block block-block ">
+        <div class="block-content">
+      <style type="text/css">#block-penton_blog-new_post_all_blog .penton-blog-teaser:nth-child(1), #block-penton_blog-new_post_all_blog .penton-blog-teaser:nth-child(2), #block-penton_blog-new_post_all_blog .penton-blog-teaser:nth-child(3), #block-penton_blog-new_post_all_blog .penton-blog-teaser:nth-child(4), #block-penton_blog-new_post_all_blog .penton-blog-teaser:nth-child(5), #block-penton_blog-new_post_all_blog .penton-blog-teaser:nth-child(7), #block-penton_blog-new_post_all_blog .penton-blog-teaser:nth-child(9), #block-penton_blog-new_post_all_blog .penton-blog-teaser:nth-child(10), #block-block-131 {
+  display:none!important;
+}
+</style>
+    </div>
+  </div>
+<!-- /block.tpl.php -->
+<script>
+                      (function() {
+                      var d=document,h=d.getElementsByTagName('head')[0],s=d.createElement('script'),sc = 'https:' == document.location.protocol ? 'https://' : 'http://';
+                      s.type='text/javascript';
+                      s.async=true;
+                      s.src=sc+'s.dpmsrv.com/dpm_8effee409c625e1a2d8f5033631840e6ce1dcb64.min.js';
+                      h.appendChild(s);
+                      })();
+                      </script><script type="text/javascript">
+<!--//--><![CDATA[//><!--
+jQuery.extend(Drupal.settings, {"CToolsAJAX":{"scripts":{"\/sites\/all\/modules\/contrib\/jquery_update\/replace\/jquery\/1.3\/jquery.min.js":true,"\/misc\/drupal.js":true,"\/sites\/all\/modules\/custom\/penton_newsletter_import\/js\/penton_newsletter_import.js":true,"\/sites\/all\/modules\/contrib\/jquery_plugin\/jquery.cookie.min.js":true,"\/sites\/all\/modules\/custom\/penton_omniture\/demandbase_call.js":true,"\/sites\/all\/modules\/contrib\/apachesolr_autocomplete\/apachesolr_autocomplete.js":true,"\/sites\/all\/modules\/contrib\/apachesolr_autocomplete\/jquery-autocomplete\/jquery.autocomplete.js":true,"\/sites\/all\/libraries\/colorbox\/colorbox\/jquery.colorbox-min.js":true,"\/sites\/all\/modules\/contrib\/colorbox\/js\/colorbox.js":true,"\/sites\/all\/modules\/contrib\/fivestar\/js\/fivestar.js":true,"\/sites\/all\/modules\/contrib\/og\/og.js":true,"\/sites\/all\/modules\/contrib\/panels\/js\/panels.js":true,"\/sites\/all\/modules\/contrib\/user_relationships\/user_relationships_ui\/user_relationships_ui.js":true,"\/sites\/all\/modules\/custom\/penton_follow_user\/js\/penton_follow_user.js":true,"\/sites\/all\/modules\/custom\/penton_custom\/colorbox_penton_style.js":true,"\/sites\/all\/modules\/custom\/pm_doubleclick\/pm-doubleclick.js":true,"\/sites\/all\/modules\/custom\/pm_doubleclick\/roadblock.js":true,"\/sites\/all\/modules\/custom\/recently_viewed\/node.history.js":true,"\/sites\/all\/modules\/custom\/recently_viewed\/recently-viewed.js":true,"\/sites\/all\/modules\/custom\/ubercart\/contrib\/modulename\/modulename.js":true,"\/sites\/all\/modules\/custom\/ubercart\/contrib\/modulename\/jquery.form.js":true,"\/sites\/all\/modules\/custom\/ubercart\/uc_file\/uc_file.js":true,"\/sites\/all\/modules\/custom\/ubercart\/uc_roles\/uc_roles.js":true,"\/sites\/all\/libraries\/jquery_plugins\/js-url\/js-url.min.js":true,"\/sites\/all\/modules\/custom\/penton_registration\/js\/simple-registration.js":true,"\/sites\/all\/modules\/custom\/penton_registration\/js\/inline-validate.js":true,"\/sites\/all\/modules\/custom\/penton_registration\/js\/registration_settings.js":true,"\/sites\/all\/modules\/custom\/penton_registration\/js\/startup-actions.js":true,"\/sites\/all\/modules\/custom\/penton_registration\/js\/newsletter-flyover-trigger.js":true,"\/JQUERY_UPDATE_REPLACE_PATH\/jquery.form.js":true,"\/sites\/all\/modules\/contrib\/ctools\/js\/ajax-responder.js":true,"\/sites\/all\/modules\/custom\/penton_registration\/js\/penton_registration_modal.js":true,"\/sites\/all\/modules\/custom\/penton_custom\/js\/single-submittion.js":true,"\/sites\/all\/modules\/custom\/penton_user_profile\/super_cookie.js":true,"\/sites\/all\/modules\/custom\/penton_user_profile\/user_profile.js":true,"\/sites\/all\/modules\/contrib\/google_analytics\/googleanalytics.js":true,"\/sites\/all\/modules\/custom\/penton_custom\/penton_custom.js":true,"\/sites\/all\/modules\/contrib\/ajax\/jquery\/jquery.a_form.packed.js":true,"\/sites\/all\/modules\/contrib\/ajax\/ajax.js":true}}});
+//--><!]]>
+</script>
+        </div>
+      </div>
+    </div>
+  
+      <div class="pm-ft-message">
+      <div class="pm-cont-pdg">
+        <div class="pm-ft-pdg">
+          <div class="copyright">Copyright ©&nbsp;2017&nbsp;<a href="http://penton.com/">Penton</a></div><div class="powered-by"><img src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/powered_by_penton_360_white.png"></div>        </div>
+      </div>
+    </div>
+  
+</div>
+<!--// pm-pg-->
+<div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div><iframe name="fb_xdm_frame_http" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" id="fb_xdm_frame_http" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/YGoENyUbMBG.html" style="border: none;"></iframe><iframe name="fb_xdm_frame_https" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/YGoENyUbMBG(1).html" style="border: none;"></iframe></div></div><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div></div></div></div>
+<script type="text/javascript" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/ip.json"></script>
+<!-- SiteCatalyst code version: H.13 Copyright 1997-2009 Omniture, Inc. More info available at http://www.omniture.com -->
+<script type="text/javascript" language="JavaScript" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/s_code.js.Без названия"></script>
+<script type="text/javascript" language="JavaScript"><!--
+s.pageName="article:HighSpeed ADC Input Impedance A Measured Versus A Mathematical Approach";
+s.channel="technologies/analog";
+s.pageType="article";
+s.prop1="HighSpeed ADC Input Impedance A Measured Versus A Mathematical Approach";
+s.prop6="article";
+s.list1="Analog|Embedded";
+s.prop10="Apr 01, 2011";
+s.prop12="p";
+s.prop37="Electronic Design";
+s.prop41="author";
+s.eVar9="Rob Reeder";
+s.eVar72="31c2c625-cde8-4c99-a56a-366f258be083";
+/************* DO NOT ALTER ANYTHING BELOW THIS LINE ! **************/
+var s_code=s.t();if(s_code)document.write(s_code)//--></script>
+<script language="JavaScript" type="text/javascript"><!--
+if(navigator.appVersion.indexOf('MSIE')>=0)document.write(unescape('%3C')+'\!-'+'-')
+//--></script><noscript>&lt;a href="http://www.omniture.com" title="Web Analytics"&gt;&lt;img src="http://metrics.pisces-penton.com/b/ss/pentondev/1/H.21--NS/0/3866178/7959655"
+height="1" width="1" border="0" alt="" /&gt;&lt;/a&gt;</noscript><!--/DO NOT REMOVE/-->
+<!-- End SiteCatalyst code version: H.13 -->
+
+<div id="user_relationships_popup_form" class="user_relationships_ui_popup_form"></div>
+<img src="http://d.adroll.com/ipixel/IXZC4QKE6BDSVNBBOX54JQ/3BQ2N447KNEODAIZTDTY2B?ar_ed_visitor=corporate" style="position: absolute; width: 1px; height: 1px; left: -9999px; display: none !important;">
+
+<iframe id="DivShim" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/blankIframe.html" scrolling="no" frameborder="0" style="height: 0px; display: none;"></iframe>
+<div id="roadblockbackground" style="height: 0px; display: none;"></div>
+<div id="roadblockcontainer" class="ad640x480 transparent" style="height: 0px; overflow: hidden; display: none;">
+  <div id="roadblock">
+    <p id="closeRB" class="close">Sponsored Introduction <span id="showCount"><a href="javascript:void(0);" onclick="clickAndHide();return false;">Continue on to <span id="roadblockSiteName"></span></a> (or wait <span id="rc"></span> seconds) <a class="xButton" href="http://electronicdesign.com/analog/high-speed-adc-input-impedance-measured-versus-mathematical-approach#">×</a></span></p>
+    <div id="gpt-interstitial" class="introstitialAd
+      ">
+      <script type="text/javascript">
+      <!--//--><![CDATA[//><!--
+      var cookieEnabled = (navigator.cookieEnabled) ? true : false;
+      if (typeof navigator.cookieEnabled == "undefined" && !cookieEnabled) {
+        document.cookie = "testcookie"
+        cookieEnabled = (document.cookie.indexOf("testcookie") != -1) ? true : false;
+      }
+      if (cookieEnabled != null) {
+        if (cookieEnabled) {
+          function setCookie(name, value, expires, path, domain, secure) {
+            var curCookie = name + "=" + escape(value) + ((expires) ? "; expires=" + expires.toGMTString() : "") + ((path) ? "; path=" + path : "") + ((domain) ? "; domain=" + domain : "") + ((secure) ? "; secure" : "");
+            document.cookie = curCookie;
+          }
+          var one_day = 1000 * 60 * 60 * roadblock.roadblockdisplay,
+              nextday = 0,
+              index = document.cookie.indexOf('intro');
+          if (one_day != 0) {
+              nextday = new Date();
+              nextday.setTime(nextday.getTime() + one_day);
+          }
+          if (index == -1) {
+            setCookie('intro', 1, nextday, '/');
+            $('#gpt-' + roadblock.roadblockposition).addClass('processed adunit');
+                          googletag.display('gpt-interstitial');
+                      }
+        }
+      }
+      //--><!]]>
+      </script>
+    </div>
+  </div>
+</div>
+<div id="gpt-pm-oop" data-google-query-id="" style="display: none;"><script type="text/javascript">googletag.display('gpt-pm-oop');</script></div>
+      <div id="gpt-pm-oop-skin" data-google-query-id="" style="display: none;"><script type="text/javascript">googletag.display('gpt-pm-oop-skin');</script></div><script type="text/javascript" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/onepixelout.js.Без названия"></script>
+<script type="text/javascript" src="http://electronicdesign.com/sites/all/modules/custom/pm_doubleclick/navigation-ads.js?i"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+jQuery.extend(Drupal.settings, {"chartbeat":{"uid":53678,"domain":"electronicdesign.com","useCanonical":true,"noCookies":false,"sections":"Analog,Embedded","title":"High-Speed ADC Input Impedance: A Measured Versus A Mathematical Approach","authors":"Rob Reeder"}});
+//--><!]]>
+</script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+adroll_adv_id = "7ZEK2IL7IVGPDJXVTXXYOS"; adroll_pix_id = "CBHXBKCDL5E2JC4LNA3OX7"; (function () {var _onload = function(){if (document.readyState && !/loaded|complete/.test(document.readyState)){setTimeout(_onload, 10);return}if (!window.__adroll_loaded){__adroll_loaded=true;setTimeout(_onload, 50);return}var scr = document.createElement("script");var host = (("https:" == document.location.protocol) ? "https://s.adroll.com" : "http://a.adroll.com");scr.setAttribute('async', 'true');scr.type = "text/javascript";scr.src = host + "/j/roundtrip.js";((document.getElementsByTagName('head') || [null])[0] || document.getElementsByTagName('script')[0].parentNode).appendChild(scr);};if (window.addEventListener) {window.addEventListener('load', _onload, false);}else {window.attachEvent('onload', _onload)}}());
+//--><!]]>
+</script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+  var _sf_async_config=Drupal.settings.chartbeat;
+  if(0) {
+    _sf_async_config.type = 'article';
+  }
+  (function(){
+    function loadChartbeat() {
+      window._sf_endpt=(new Date()).getTime();
+      var e = document.createElement('script');
+      e.setAttribute('language', 'javascript');
+      e.setAttribute('type', 'text/javascript');
+      e.setAttribute('src', '//static.chartbeat.com/js/chartbeat.js');
+      document.body.appendChild(e);
+    }
+    var oldonload = window.onload;
+    window.onload = (typeof window.onload != 'function') ?
+       loadChartbeat : function() { oldonload(); loadChartbeat(); };
+  })();
+//--><!]]>
+</script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+jQuery.extend(Drupal.settings, {"CToolsAJAX":{"scripts":{"\/sites\/all\/modules\/contrib\/jquery_update\/replace\/jquery\/1.3\/jquery.min.js":true,"\/misc\/drupal.js":true,"\/sites\/all\/modules\/custom\/penton_newsletter_import\/js\/penton_newsletter_import.js":true,"\/sites\/all\/modules\/contrib\/jquery_plugin\/jquery.cookie.min.js":true,"\/sites\/all\/modules\/custom\/penton_omniture\/demandbase_call.js":true,"\/sites\/all\/modules\/contrib\/apachesolr_autocomplete\/apachesolr_autocomplete.js":true,"\/sites\/all\/modules\/contrib\/apachesolr_autocomplete\/jquery-autocomplete\/jquery.autocomplete.js":true,"\/sites\/all\/libraries\/colorbox\/colorbox\/jquery.colorbox-min.js":true,"\/sites\/all\/modules\/contrib\/colorbox\/js\/colorbox.js":true,"\/sites\/all\/modules\/contrib\/fivestar\/js\/fivestar.js":true,"\/sites\/all\/modules\/contrib\/og\/og.js":true,"\/sites\/all\/modules\/contrib\/panels\/js\/panels.js":true,"\/sites\/all\/modules\/contrib\/user_relationships\/user_relationships_ui\/user_relationships_ui.js":true,"\/sites\/all\/modules\/custom\/penton_follow_user\/js\/penton_follow_user.js":true,"\/sites\/all\/modules\/custom\/penton_custom\/colorbox_penton_style.js":true,"\/sites\/all\/modules\/custom\/pm_doubleclick\/pm-doubleclick.js":true,"\/sites\/all\/modules\/custom\/pm_doubleclick\/roadblock.js":true,"\/sites\/all\/modules\/custom\/recently_viewed\/node.history.js":true,"\/sites\/all\/modules\/custom\/recently_viewed\/recently-viewed.js":true,"\/sites\/all\/modules\/custom\/ubercart\/contrib\/modulename\/modulename.js":true,"\/sites\/all\/modules\/custom\/ubercart\/contrib\/modulename\/jquery.form.js":true,"\/sites\/all\/modules\/custom\/ubercart\/uc_file\/uc_file.js":true,"\/sites\/all\/modules\/custom\/ubercart\/uc_roles\/uc_roles.js":true,"\/sites\/all\/libraries\/jquery_plugins\/js-url\/js-url.min.js":true,"\/sites\/all\/modules\/custom\/penton_registration\/js\/simple-registration.js":true,"\/sites\/all\/modules\/custom\/penton_registration\/js\/inline-validate.js":true,"\/sites\/all\/modules\/custom\/penton_registration\/js\/registration_settings.js":true,"\/sites\/all\/modules\/custom\/penton_registration\/js\/startup-actions.js":true,"\/sites\/all\/modules\/custom\/penton_registration\/js\/newsletter-flyover-trigger.js":true,"\/JQUERY_UPDATE_REPLACE_PATH\/jquery.form.js":true,"\/sites\/all\/modules\/contrib\/ctools\/js\/ajax-responder.js":true,"\/sites\/all\/modules\/custom\/penton_registration\/js\/penton_registration_modal.js":true,"\/sites\/all\/modules\/custom\/penton_custom\/js\/single-submittion.js":true,"\/sites\/all\/modules\/custom\/penton_user_profile\/super_cookie.js":true,"\/sites\/all\/modules\/custom\/penton_user_profile\/user_profile.js":true,"\/sites\/all\/modules\/contrib\/google_analytics\/googleanalytics.js":true,"\/sites\/all\/modules\/custom\/penton_custom\/penton_custom.js":true,"\/sites\/all\/modules\/contrib\/ajax\/jquery\/jquery.a_form.packed.js":true,"\/sites\/all\/modules\/contrib\/ajax\/ajax.js":true,"\/sites\/all\/modules\/contrib\/swftools\/onepixelout\/onepixelout.js":true,"\/sites\/all\/modules\/custom\/pm_doubleclick\/navigation-ads.js":true},"css":{"\/sites\/all\/modules\/contrib\/itweak_upload\/itweak_upload.css":true,"\/modules\/node\/node.css":true,"\/modules\/system\/defaults.css":true,"\/modules\/system\/system.css":true,"\/modules\/system\/system-menus.css":true,"\/sites\/all\/modules\/contrib\/advanced_profile\/theme\/advanced_profile.css":true,"\/modules\/poll\/poll.css":true,"\/sites\/all\/modules\/contrib\/apachesolr_autocomplete\/apachesolr_autocomplete.css":true,"\/sites\/all\/modules\/contrib\/apachesolr_autocomplete\/jquery-autocomplete\/jquery.autocomplete.css":true,"\/sites\/all\/modules\/contrib\/cck\/theme\/content-module.css":true,"\/sites\/all\/modules\/contrib\/ckeditor\/ckeditor.css":true,"\/sites\/all\/modules\/contrib\/ctools\/css\/ctools.css":true,"\/sites\/all\/modules\/contrib\/date\/date.css":true,"\/sites\/all\/modules\/contrib\/date\/date_popup\/themes\/datepicker.css":true,"\/sites\/all\/modules\/contrib\/date\/date_popup\/themes\/jquery.timeentry.css":true,"\/sites\/all\/modules\/contrib\/filefield\/filefield.css":true,"\/sites\/all\/modules\/contrib\/fivestar\/css\/fivestar.css":true,"\/sites\/all\/modules\/contrib\/mollom\/mollom.css":true,"\/sites\/all\/modules\/contrib\/nice_menus\/nice_menus.css":true,"\/sites\/all\/modules\/contrib\/nice_menus\/nice_menus_default.css":true,"\/sites\/all\/modules\/contrib\/og\/theme\/og.css":true,"\/sites\/all\/modules\/contrib\/panels\/css\/panels.css":true,"\/sites\/all\/modules\/contrib\/quote\/quote.css":true,"\/sites\/all\/modules\/contrib\/user_relationships\/user_relationships_ui\/user_relationships_ui.css":true,"\/sites\/all\/modules\/custom\/geshifilter\/geshifilter.css":true,"\/sites\/all\/modules\/custom\/logintoboggan\/logintoboggan.css":true,"\/sites\/all\/modules\/custom\/penton_blog\/theme\/penton-blog.css":true,"\/sites\/all\/modules\/custom\/penton_follow_user\/theme\/penton_follow_user.css":true,"\/sites\/all\/modules\/custom\/penton_custom\/colorbox_penton_style.css":true,"\/sites\/all\/modules\/custom\/pm_doubleclick\/pm-doubleclick.css":true,"\/sites\/all\/modules\/custom\/pm_doubleclick\/navigation-ads.css":true,"\/sites\/all\/modules\/custom\/ubercart\/uc_attribute\/uc_attribute.css":true,"\/sites\/all\/modules\/custom\/ubercart\/uc_file\/uc_file.css":true,"\/sites\/all\/modules\/custom\/ubercart\/uc_order\/uc_order.css":true,"\/sites\/all\/modules\/custom\/ubercart\/uc_product\/uc_product.css":true,"\/sites\/all\/modules\/custom\/ubercart\/uc_roles\/uc_roles.css":true,"\/sites\/all\/modules\/custom\/ubercart\/uc_store\/uc_store.css":true,"\/sites\/all\/modules\/features\/penton_features_gated_content\/theme\/css\/gated-content.css":true,"\/modules\/forum\/forum.css":true,"\/sites\/all\/libraries\/chosen\/chosen.min.css":true,"\/sites\/all\/modules\/custom\/penton_registration\/css\/simple-registration.css":true,"\/sites\/all\/modules\/custom\/penton_registration\/css\/simple-registration-mobile.css":true,"\/sites\/all\/modules\/contrib\/ctools\/css\/modal.css":true,"\/sites\/all\/modules\/contrib\/cck\/modules\/fieldgroup\/fieldgroup.css":true,"\/sites\/all\/modules\/contrib\/views\/css\/views.css":true,"\/sites\/all\/modules\/custom\/penton_custom\/penton_custom.css":true,"\/sites\/all\/modules\/contrib\/forward\/forward.css":true,"\/sites\/all\/modules\/contrib\/print\/css\/printlinks.css":true,"\/modules\/comment\/comment.css":true,"\/sites\/all\/modules\/custom\/imagefield_zip\/imagefield_zip.css":true,"\/sites\/all\/modules\/contrib\/panels\/plugins\/layouts\/flexible\/flexible.css":true,"\/site-files\/electronicdesign.com\/files\/ctools\/css\/19a2b72cdd0fc15bf64ed261883b423d_0.css":true,"\/sites\/all\/themes\/pisces_core\/css\/penton-apachesolr.css":true,"\/sites\/all\/themes\/pisces_core\/css\/layout.css":true,"\/sites\/all\/themes\/pisces_core\/css\/navigation.css":true,"\/sites\/all\/themes\/pisces_core\/stylesheets\/pisces-desktop.css":true,"\/sites\/all\/themes\/pisces_core\/css\/pisces-core.css":true,"\/sites\/all\/themes\/pisces_core\/css\/blocks.css":true,"\/sites\/all\/themes\/pisces_core\/css\/user.css":true,"\/sites\/all\/themes\/pisces_core\/css\/style.css":true,"\/sites\/all\/themes\/pisces_core\/css\/add2home.css":true,"\/site-files\/electronicdesign.com\/files\/less\/58824bce8e71c4.27206551\/sites\/all\/themes\/electronicdesign\/css\/subtheme-vars.css":true,"\/sites\/all\/themes\/electronicdesign\/css\/subtheme.css":true,"\/sites\/all\/themes\/pisces_core\/css\/print.css":true}}});
+//--><!]]>
+</script>
+<script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","licenseKey":"9ea50e154b","applicationID":"3055008","transactionName":"NVJRYkMDWxVXBkRfXgwYclVFC1oIGQtfUlQ9R1JRVD1DD1MS","queueTime":0,"applicationTime":1656,"atts":"GRVSFAsZSBs=","errorBeacon":"bam.nr-data.net","agent":""}</script>
+
+
+<script src="https://dc.ads.linkedin.com/collect/?time=1485284841141&amp;pid=594&amp;url=http%3A%2F%2Felectronicdesign.com%2Fanalog%2Fhigh-speed-adc-input-impedance-measured-versus-mathematical-approach&amp;pageUrl=http%3A%2F%2Felectronicdesign.com%2Fanalog%2Fhigh-speed-adc-input-impedance-measured-versus-mathematical-approach&amp;ref=https%3A%2F%2Fwww.google.ru%2F&amp;fmt=js&amp;s=1" type="text/javascript"></script><iframe name="oauth2relay827827769" id="oauth2relay827827769" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/postmessageRelay.html" tabindex="-1" aria-hidden="true" style="width: 1px; height: 1px; position: absolute; top: -100px;"></iframe><iframe id="rufous-sandbox" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" style="position: absolute; visibility: hidden; display: none; width: 0px; height: 0px; padding: 0px; border: none;" title="Twitter analytics iframe" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/saved_resource.html"></iframe><iframe id="LOTCCFrameTue Jan 24 2017 23:07:24 GMT+0400 (Московское время (зима))" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/rt=ifr.html" style="border: 0px; width: 0px; height: 0px; display: block;"></iframe><script language="javascript" type="text/javascript" src="./High-Speed ADC Input Impedance_ A Measured Versus A Mathematical Approach _ Analog content from Electronic Design_files/chartbeat.js.Без названия"></script></body></html>

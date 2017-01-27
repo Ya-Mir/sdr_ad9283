@@ -1,0 +1,6 @@
+http://www.analog.com/ru/design-center/interactive-design-tools/rf-impedance-matching-calculator.html
+http://www.analog.com/en/design-center/simulation-models/s-parameters.html
+https://ez.analog.com/thread/91524
+cic@analog.com
+https://habrahabr.ru/post/313692/
+

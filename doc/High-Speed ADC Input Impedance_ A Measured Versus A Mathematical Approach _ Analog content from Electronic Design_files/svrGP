@@ -1,0 +1,5 @@
+function GetElqContentPersonalizationValue(strDataField){ var strTemp = '';        if(strDataField == 'V_Total_Pages' || strDataField == 'Total_Pages'){strTemp = '2';}
+        if(strDataField == 'V_Total_Visits' || strDataField == 'Total_Visits'){strTemp = '1';}
+        if(strDataField == 'V_LastVisitDateAndTime' || strDataField == 'LastVisitDateAndTime'){strTemp = '2017-01-24 13:41:37.037';}
+        if(strDataField == 'V_ElqCompanyName' || strDataField == 'ElqCompanyName'){strTemp = 'Ethernet To The Home broadband access';}
+	return strTemp; } if (this.SetElqContent){ SetElqContent(); }

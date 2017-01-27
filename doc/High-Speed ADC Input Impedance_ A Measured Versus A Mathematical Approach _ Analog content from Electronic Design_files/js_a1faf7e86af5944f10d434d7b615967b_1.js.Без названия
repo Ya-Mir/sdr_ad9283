@@ -1,0 +1,3181 @@
+
+var topicHistory = function(cookieName) {
+	//When the cookie is saved the items will be a comma seperated string
+	//So we will split the cookie by comma to get the original array
+	var cookie = $.cookie(cookieName);
+	//Load the items or a new array if null.
+	var items = cookie ? cookie.split(/,/) : new Array();
+	
+	//Return a object that we can use to access the array.
+	//while hiding direct access to the declared items array
+	//this is called closures see http://www.jibbering.com/faq/faq_notes/closures.html
+	return {
+	    "add": function(val) {
+	        //Add to the items.
+	      	if($.inArray(val, items) === -1) {
+	        	items.push(val);
+	        	if (items.length > 5) {
+	        		var shrink = new Array();
+	        		for(var i = items.length - 5; i < items.length; i++){
+	        			shrink.push(items[i]);
+	        		}
+	        		$.cookie(cookieName, shrink,  { path: '/', expires: 7 });	
+	        	} else {
+	        		$.cookie(cookieName, items,  { path: '/', expires: 7 });
+	        	}
+	        }
+	    },
+	    "clear": function() {
+	        //clear the cookie.
+	        $.cookie(cookieName, null);
+	    },
+	    "items": function() {
+	        //Get all the items.
+	        return items.reverse();
+	    }
+	  }
+}
+
+;/**/
+Drupal.behaviors.recentlyViewed = function (context) {
+  var list = new topicHistory("topic_list");
+  var topics = list.items();
+  if (topics.length > 0) {
+    $('#block-recently_viewed-recently_viewed').prepend('<h5 class="block-title">Your Recently Viewed Topics</h5>');
+
+    for (var i = 0; i < topics.length; i++) {
+      $("#topic_history").append(topics[i]);
+      if (i < topics.length - 1) {
+        $("#topic_history").append(', ');
+      }
+    }
+  } else {
+    $("#block-recently_viewed-recently_viewed").css('display','none');    
+  }
+};
+;/**/
+/**
+ * 
+ */
+Drupal.behaviors.ubercartModuleName = function (context) {    
+  $("#edit-panes-customer-primary-email").blur(function () {
+	hostname = $(location).attr('pathname').split('/').slice(0, -2).join('/');
+    email = $('#edit-panes-customer-primary-email').fieldValue();
+    path = $.merge($(location).attr('pathname').split('/').slice(0, -2), ['modulename/validate',email]).join('/');
+    
+    $.post(path, { name: this.value }, function(data) {
+    	if(data == '"in use"') {
+    		/* alert('We already have a profile associated with this email address.  Please login or click here if you have forgotten your password.') */
+			$('#email-container').show();
+			$('.underlay').show();
+    	}
+    });
+  });
+  $('#email-container').click(function() {
+	  $('.underlay').hide();
+	  $(this).hide();
+  });
+  $('.underlay').click(function() {
+	  $('#email-container').hide();
+	  $(this).hide();
+  });
+  $('.cancel').click(function() {
+	  $('#email-container').hide();
+	  $('.underlay').hide();
+  });
+  $(document).keyup(function(e) {
+    if (e.keyCode == 27) { $('.underlay').click(); }
+  });
+
+};;/**/
+/*!
+ * jQuery Form Plugin
+ * version: 2.84 (12-AUG-2011)
+ * @requires jQuery v1.3.2 or later
+ *
+ * Examples and documentation at: http://malsup.com/jquery/form/
+ * Dual licensed under the MIT and GPL licenses:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *   http://www.gnu.org/licenses/gpl.html
+ */
+;(function($) {
+
+/*
+	Usage Note:
+	-----------
+	Do not use both ajaxSubmit and ajaxForm on the same form.  These
+	functions are intended to be exclusive.  Use ajaxSubmit if you want
+	to bind your own submit handler to the form.  For example,
+
+	$(document).ready(function() {
+		$('#myForm').bind('submit', function(e) {
+			e.preventDefault(); // <-- important
+			$(this).ajaxSubmit({
+				target: '#output'
+			});
+		});
+	});
+
+	Use ajaxForm when you want the plugin to manage all the event binding
+	for you.  For example,
+
+	$(document).ready(function() {
+		$('#myForm').ajaxForm({
+			target: '#output'
+		});
+	});
+
+	When using ajaxForm, the ajaxSubmit function will be invoked for you
+	at the appropriate time.
+*/
+
+/**
+ * ajaxSubmit() provides a mechanism for immediately submitting
+ * an HTML form using AJAX.
+ */
+$.fn.ajaxSubmit = function(options) {
+	// fast fail if nothing selected (http://dev.jquery.com/ticket/2752)
+	if (!this.length) {
+		log('ajaxSubmit: skipping submit process - no element selected');
+		return this;
+	}
+	
+	var method, action, url, $form = this;
+
+	if (typeof options == 'function') {
+		options = { success: options };
+	}
+
+	method = this.attr('method');
+	action = this.attr('action');
+	url = (typeof action === 'string') ? $.trim(action) : '';
+	url = url || window.location.href || '';
+	if (url) {
+		// clean url (don't include hash vaue)
+		url = (url.match(/^([^#]+)/)||[])[1];
+	}
+
+	options = $.extend(true, {
+		url:  url,
+		success: $.ajaxSettings.success,
+		type: method || 'GET',
+		iframeSrc: /^https/i.test(window.location.href || '') ? 'javascript:false' : 'about:blank'
+	}, options);
+
+	// hook for manipulating the form data before it is extracted;
+	// convenient for use with rich editors like tinyMCE or FCKEditor
+	var veto = {};
+	this.trigger('form-pre-serialize', [this, options, veto]);
+	if (veto.veto) {
+		log('ajaxSubmit: submit vetoed via form-pre-serialize trigger');
+		return this;
+	}
+
+	// provide opportunity to alter form data before it is serialized
+	if (options.beforeSerialize && options.beforeSerialize(this, options) === false) {
+		log('ajaxSubmit: submit aborted via beforeSerialize callback');
+		return this;
+	}
+
+	var n,v,a = this.formToArray(options.semantic);
+	if (options.data) {
+		options.extraData = options.data;
+		for (n in options.data) {
+			if( $.isArray(options.data[n]) ) {
+				for (var k in options.data[n]) {
+					a.push( { name: n, value: options.data[n][k] } );
+				}
+			}
+			else {
+				v = options.data[n];
+				v = $.isFunction(v) ? v() : v; // if value is fn, invoke it
+				a.push( { name: n, value: v } );
+			}
+		}
+	}
+
+	// give pre-submit callback an opportunity to abort the submit
+	if (options.beforeSubmit && options.beforeSubmit(a, this, options) === false) {
+		log('ajaxSubmit: submit aborted via beforeSubmit callback');
+		return this;
+	}
+
+	// fire vetoable 'validate' event
+	this.trigger('form-submit-validate', [a, this, options, veto]);
+	if (veto.veto) {
+		log('ajaxSubmit: submit vetoed via form-submit-validate trigger');
+		return this;
+	}
+
+	var q = $.param(a);
+
+	if (options.type.toUpperCase() == 'GET') {
+		options.url += (options.url.indexOf('?') >= 0 ? '&' : '?') + q;
+		options.data = null;  // data is null for 'get'
+	}
+	else {
+		options.data = q; // data is the query string for 'post'
+	}
+
+	var callbacks = [];
+	if (options.resetForm) {
+		callbacks.push(function() { $form.resetForm(); });
+	}
+	if (options.clearForm) {
+		callbacks.push(function() { $form.clearForm(); });
+	}
+
+	// perform a load on the target only if dataType is not provided
+	if (!options.dataType && options.target) {
+		var oldSuccess = options.success || function(){};
+		callbacks.push(function(data) {
+			var fn = options.replaceTarget ? 'replaceWith' : 'html';
+			$(options.target)[fn](data).each(oldSuccess, arguments);
+		});
+	}
+	else if (options.success) {
+		callbacks.push(options.success);
+	}
+
+	options.success = function(data, status, xhr) { // jQuery 1.4+ passes xhr as 3rd arg
+		var context = options.context || options;   // jQuery 1.4+ supports scope context 
+		for (var i=0, max=callbacks.length; i < max; i++) {
+			callbacks[i].apply(context, [data, status, xhr || $form, $form]);
+		}
+	};
+
+	// are there files to upload?
+	var fileInputs = $('input:file', this).length > 0;
+	var mp = 'multipart/form-data';
+	var multipart = ($form.attr('enctype') == mp || $form.attr('encoding') == mp);
+
+	// options.iframe allows user to force iframe mode
+	// 06-NOV-09: now defaulting to iframe mode if file input is detected
+   if (options.iframe !== false && (fileInputs || options.iframe || multipart)) {
+	   // hack to fix Safari hang (thanks to Tim Molendijk for this)
+	   // see:  http://groups.google.com/group/jquery-dev/browse_thread/thread/36395b7ab510dd5d
+	   if (options.closeKeepAlive) {
+		   $.get(options.closeKeepAlive, function() { fileUpload(a); });
+		}
+	   else {
+		   fileUpload(a);
+		}
+   }
+   else {
+		// IE7 massage (see issue 57)
+		if ($.browser.msie && method == 'get') { 
+			var ieMeth = $form[0].getAttribute('method');
+			if (typeof ieMeth === 'string')
+				options.type = ieMeth;
+		}
+		$.ajax(options);
+   }
+
+	// fire 'notify' event
+	this.trigger('form-submit-notify', [this, options]);
+	return this;
+
+
+	// private function for handling file uploads (hat tip to YAHOO!)
+	function fileUpload(a) {
+		var form = $form[0], el, i, s, g, id, $io, io, xhr, sub, n, timedOut, timeoutHandle;
+        var useProp = !!$.fn.prop;
+
+        if (a) {
+        	// ensure that every serialized input is still enabled
+          	for (i=0; i < a.length; i++) {
+                el = $(form[a[i].name]);
+                el[ useProp ? 'prop' : 'attr' ]('disabled', false);
+          	}
+        }
+
+		if ($(':input[name=submit],:input[id=submit]', form).length) {
+			// if there is an input with a name or id of 'submit' then we won't be
+			// able to invoke the submit fn on the form (at least not x-browser)
+			alert('Error: Form elements must not have name or id of "submit".');
+			return;
+		}
+		
+		s = $.extend(true, {}, $.ajaxSettings, options);
+		s.context = s.context || s;
+		id = 'jqFormIO' + (new Date().getTime());
+		if (s.iframeTarget) {
+			$io = $(s.iframeTarget);
+			n = $io.attr('name');
+			if (n == null)
+			 	$io.attr('name', id);
+			else
+				id = n;
+		}
+		else {
+			$io = $('<iframe name="' + id + '" src="'+ s.iframeSrc +'" />');
+			$io.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
+		}
+		io = $io[0];
+
+
+		xhr = { // mock object
+			aborted: 0,
+			responseText: null,
+			responseXML: null,
+			status: 0,
+			statusText: 'n/a',
+			getAllResponseHeaders: function() {},
+			getResponseHeader: function() {},
+			setRequestHeader: function() {},
+			abort: function(status) {
+				var e = (status === 'timeout' ? 'timeout' : 'aborted');
+				log('aborting upload... ' + e);
+				this.aborted = 1;
+				$io.attr('src', s.iframeSrc); // abort op in progress
+				xhr.error = e;
+				s.error && s.error.call(s.context, xhr, e, status);
+				g && $.event.trigger("ajaxError", [xhr, s, e]);
+				s.complete && s.complete.call(s.context, xhr, e);
+			}
+		};
+
+		g = s.global;
+		// trigger ajax global events so that activity/block indicators work like normal
+		if (g && ! $.active++) {
+			$.event.trigger("ajaxStart");
+		}
+		if (g) {
+			$.event.trigger("ajaxSend", [xhr, s]);
+		}
+
+		if (s.beforeSend && s.beforeSend.call(s.context, xhr, s) === false) {
+			if (s.global) {
+				$.active--;
+			}
+			return;
+		}
+		if (xhr.aborted) {
+			return;
+		}
+
+		// add submitting element to data if we know it
+		sub = form.clk;
+		if (sub) {
+			n = sub.name;
+			if (n && !sub.disabled) {
+				s.extraData = s.extraData || {};
+				s.extraData[n] = sub.value;
+				if (sub.type == "image") {
+					s.extraData[n+'.x'] = form.clk_x;
+					s.extraData[n+'.y'] = form.clk_y;
+				}
+			}
+		}
+		
+		var CLIENT_TIMEOUT_ABORT = 1;
+		var SERVER_ABORT = 2;
+
+		function getDoc(frame) {
+			var doc = frame.contentWindow ? frame.contentWindow.document : frame.contentDocument ? frame.contentDocument : frame.document;
+			return doc;
+		}
+		
+		// take a breath so that pending repaints get some cpu time before the upload starts
+		function doSubmit() {
+			// make sure form attrs are set
+			var t = $form.attr('target'), a = $form.attr('action');
+
+			// update form attrs in IE friendly way
+			form.setAttribute('target',id);
+			if (!method) {
+				form.setAttribute('method', 'POST');
+			}
+			if (a != s.url) {
+				form.setAttribute('action', s.url);
+			}
+
+			// ie borks in some cases when setting encoding
+			if (! s.skipEncodingOverride && (!method || /post/i.test(method))) {
+				$form.attr({
+					encoding: 'multipart/form-data',
+					enctype:  'multipart/form-data'
+				});
+			}
+
+			// support timout
+			if (s.timeout) {
+				timeoutHandle = setTimeout(function() { timedOut = true; cb(CLIENT_TIMEOUT_ABORT); }, s.timeout);
+			}
+			
+			// look for server aborts
+			function checkState() {
+				try {
+					var state = getDoc(io).readyState;
+					log('state = ' + state);
+					if (state.toLowerCase() == 'uninitialized')
+						setTimeout(checkState,50);
+				}
+				catch(e) {
+					log('Server abort: ' , e, ' (', e.name, ')');
+					cb(SERVER_ABORT);
+					timeoutHandle && clearTimeout(timeoutHandle);
+					timeoutHandle = undefined;
+				}
+			}
+
+			// add "extra" data to form if provided in options
+			var extraInputs = [];
+			try {
+				if (s.extraData) {
+					for (var n in s.extraData) {
+						extraInputs.push(
+							$('<input type="hidden" name="'+n+'" />').attr('value',s.extraData[n])
+								.appendTo(form)[0]);
+					}
+				}
+
+				if (!s.iframeTarget) {
+					// add iframe to doc and submit the form
+					$io.appendTo('body');
+	                io.attachEvent ? io.attachEvent('onload', cb) : io.addEventListener('load', cb, false);
+				}
+				setTimeout(checkState,15);
+				form.submit();
+			}
+			finally {
+				// reset attrs and remove "extra" input elements
+				form.setAttribute('action',a);
+				if(t) {
+					form.setAttribute('target', t);
+				} else {
+					$form.removeAttr('target');
+				}
+				$(extraInputs).remove();
+			}
+		}
+
+		if (s.forceSync) {
+			doSubmit();
+		}
+		else {
+			setTimeout(doSubmit, 10); // this lets dom updates render
+		}
+
+		var data, doc, domCheckCount = 50, callbackProcessed;
+
+		function cb(e) {
+			if (xhr.aborted || callbackProcessed) {
+				return;
+			}
+			try {
+				doc = getDoc(io);
+			}
+			catch(ex) {
+				log('cannot access response document: ', ex);
+				e = SERVER_ABORT;
+			}
+			if (e === CLIENT_TIMEOUT_ABORT && xhr) {
+				xhr.abort('timeout');
+				return;
+			}
+			else if (e == SERVER_ABORT && xhr) {
+				xhr.abort('server abort');
+				return;
+			}
+
+			if (!doc || doc.location.href == s.iframeSrc) {
+				// response not received yet
+				if (!timedOut)
+					return;
+			}
+            io.detachEvent ? io.detachEvent('onload', cb) : io.removeEventListener('load', cb, false);
+
+			var status = 'success', errMsg;
+			try {
+				if (timedOut) {
+					throw 'timeout';
+				}
+
+				var isXml = s.dataType == 'xml' || doc.XMLDocument || $.isXMLDoc(doc);
+				log('isXml='+isXml);
+				if (!isXml && window.opera && (doc.body == null || doc.body.innerHTML == '')) {
+					if (--domCheckCount) {
+						// in some browsers (Opera) the iframe DOM is not always traversable when
+						// the onload callback fires, so we loop a bit to accommodate
+						log('requeing onLoad callback, DOM not available');
+						setTimeout(cb, 250);
+						return;
+					}
+					// let this fall through because server response could be an empty document
+					//log('Could not access iframe DOM after mutiple tries.');
+					//throw 'DOMException: not available';
+				}
+
+				//log('response detected');
+                var docRoot = doc.body ? doc.body : doc.documentElement;
+                xhr.responseText = docRoot ? docRoot.innerHTML : null;
+				xhr.responseXML = doc.XMLDocument ? doc.XMLDocument : doc;
+				if (isXml)
+					s.dataType = 'xml';
+				xhr.getResponseHeader = function(header){
+					var headers = {'content-type': s.dataType};
+					return headers[header];
+				};
+                // support for XHR 'status' & 'statusText' emulation :
+                if (docRoot) {
+                    xhr.status = Number( docRoot.getAttribute('status') ) || xhr.status;
+                    xhr.statusText = docRoot.getAttribute('statusText') || xhr.statusText;
+                }
+
+				var dt = s.dataType || '';
+				var scr = /(json|script|text)/.test(dt.toLowerCase());
+				if (scr || s.textarea) {
+					// see if user embedded response in textarea
+					var ta = doc.getElementsByTagName('textarea')[0];
+					if (ta) {
+						xhr.responseText = ta.value;
+                        // support for XHR 'status' & 'statusText' emulation :
+                        xhr.status = Number( ta.getAttribute('status') ) || xhr.status;
+                        xhr.statusText = ta.getAttribute('statusText') || xhr.statusText;
+					}
+					else if (scr) {
+						// account for browsers injecting pre around json response
+						var pre = doc.getElementsByTagName('pre')[0];
+						var b = doc.getElementsByTagName('body')[0];
+						if (pre) {
+							xhr.responseText = pre.textContent ? pre.textContent : pre.innerHTML;
+						}
+						else if (b) {
+							xhr.responseText = b.innerHTML;
+						}
+					}
+				}
+				else if (s.dataType == 'xml' && !xhr.responseXML && xhr.responseText != null) {
+					xhr.responseXML = toXml(xhr.responseText);
+				}
+
+                try {
+                    data = httpData(xhr, s.dataType, s);
+                }
+                catch (e) {
+                    status = 'parsererror';
+                    xhr.error = errMsg = (e || status);
+                }
+			}
+			catch (e) {
+				log('error caught: ',e);
+				status = 'error';
+                xhr.error = errMsg = (e || status);
+			}
+
+			if (xhr.aborted) {
+				log('upload aborted');
+				status = null;
+			}
+
+            if (xhr.status) { // we've set xhr.status
+                status = (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) ? 'success' : 'error';
+            }
+
+			// ordering of these callbacks/triggers is odd, but that's how $.ajax does it
+			if (status === 'success') {
+				s.success && s.success.call(s.context, data, 'success', xhr);
+				g && $.event.trigger("ajaxSuccess", [xhr, s]);
+			}
+            else if (status) {
+				if (errMsg == undefined)
+					errMsg = xhr.statusText;
+				s.error && s.error.call(s.context, xhr, status, errMsg);
+				g && $.event.trigger("ajaxError", [xhr, s, errMsg]);
+            }
+
+			g && $.event.trigger("ajaxComplete", [xhr, s]);
+
+			if (g && ! --$.active) {
+				$.event.trigger("ajaxStop");
+			}
+
+			s.complete && s.complete.call(s.context, xhr, status);
+
+			callbackProcessed = true;
+			if (s.timeout)
+				clearTimeout(timeoutHandle);
+
+			// clean up
+			setTimeout(function() {
+				if (!s.iframeTarget)
+					$io.remove();
+				xhr.responseXML = null;
+			}, 100);
+		}
+
+		var toXml = $.parseXML || function(s, doc) { // use parseXML if available (jQuery 1.5+)
+			if (window.ActiveXObject) {
+				doc = new ActiveXObject('Microsoft.XMLDOM');
+				doc.async = 'false';
+				doc.loadXML(s);
+			}
+			else {
+				doc = (new DOMParser()).parseFromString(s, 'text/xml');
+			}
+			return (doc && doc.documentElement && doc.documentElement.nodeName != 'parsererror') ? doc : null;
+		};
+		var parseJSON = $.parseJSON || function(s) {
+			return window['eval']('(' + s + ')');
+		};
+
+		var httpData = function( xhr, type, s ) { // mostly lifted from jq1.4.4
+
+			var ct = xhr.getResponseHeader('content-type') || '',
+				xml = type === 'xml' || !type && ct.indexOf('xml') >= 0,
+				data = xml ? xhr.responseXML : xhr.responseText;
+
+			if (xml && data.documentElement.nodeName === 'parsererror') {
+				$.error && $.error('parsererror');
+			}
+			if (s && s.dataFilter) {
+				data = s.dataFilter(data, type);
+			}
+			if (typeof data === 'string') {
+				if (type === 'json' || !type && ct.indexOf('json') >= 0) {
+					data = parseJSON(data);
+				} else if (type === "script" || !type && ct.indexOf("javascript") >= 0) {
+					$.globalEval(data);
+				}
+			}
+			return data;
+		};
+	}
+};
+
+/**
+ * ajaxForm() provides a mechanism for fully automating form submission.
+ *
+ * The advantages of using this method instead of ajaxSubmit() are:
+ *
+ * 1: This method will include coordinates for <input type="image" /> elements (if the element
+ *	is used to submit the form).
+ * 2. This method will include the submit element's name/value data (for the element that was
+ *	used to submit the form).
+ * 3. This method binds the submit() method to the form for you.
+ *
+ * The options argument for ajaxForm works exactly as it does for ajaxSubmit.  ajaxForm merely
+ * passes the options argument along after properly binding events for submit elements and
+ * the form itself.
+ */
+$.fn.ajaxForm = function(options) {
+	// in jQuery 1.3+ we can fix mistakes with the ready state
+	if (this.length === 0) {
+		var o = { s: this.selector, c: this.context };
+		if (!$.isReady && o.s) {
+			log('DOM not ready, queuing ajaxForm');
+			$(function() {
+				$(o.s,o.c).ajaxForm(options);
+			});
+			return this;
+		}
+		// is your DOM ready?  http://docs.jquery.com/Tutorials:Introducing_$(document).ready()
+		log('terminating; zero elements found by selector' + ($.isReady ? '' : ' (DOM not ready)'));
+		return this;
+	}
+
+	return this.ajaxFormUnbind().bind('submit.form-plugin', function(e) {
+		if (!e.isDefaultPrevented()) { // if event has been canceled, don't proceed
+			e.preventDefault();
+			$(this).ajaxSubmit(options);
+		}
+	}).bind('click.form-plugin', function(e) {
+		var target = e.target;
+		var $el = $(target);
+		if (!($el.is(":submit,input:image"))) {
+			// is this a child element of the submit el?  (ex: a span within a button)
+			var t = $el.closest(':submit');
+			if (t.length == 0) {
+				return;
+			}
+			target = t[0];
+		}
+		var form = this;
+		form.clk = target;
+		if (target.type == 'image') {
+			if (e.offsetX != undefined) {
+				form.clk_x = e.offsetX;
+				form.clk_y = e.offsetY;
+			} else if (typeof $.fn.offset == 'function') { // try to use dimensions plugin
+				var offset = $el.offset();
+				form.clk_x = e.pageX - offset.left;
+				form.clk_y = e.pageY - offset.top;
+			} else {
+				form.clk_x = e.pageX - target.offsetLeft;
+				form.clk_y = e.pageY - target.offsetTop;
+			}
+		}
+		// clear form vars
+		setTimeout(function() { form.clk = form.clk_x = form.clk_y = null; }, 100);
+	});
+};
+
+// ajaxFormUnbind unbinds the event handlers that were bound by ajaxForm
+$.fn.ajaxFormUnbind = function() {
+	return this.unbind('submit.form-plugin click.form-plugin');
+};
+
+/**
+ * formToArray() gathers form element data into an array of objects that can
+ * be passed to any of the following ajax functions: $.get, $.post, or load.
+ * Each object in the array has both a 'name' and 'value' property.  An example of
+ * an array for a simple login form might be:
+ *
+ * [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ]
+ *
+ * It is this array that is passed to pre-submit callback functions provided to the
+ * ajaxSubmit() and ajaxForm() methods.
+ */
+$.fn.formToArray = function(semantic) {
+	var a = [];
+	if (this.length === 0) {
+		return a;
+	}
+
+	var form = this[0];
+	var els = semantic ? form.getElementsByTagName('*') : form.elements;
+	if (!els) {
+		return a;
+	}
+
+	var i,j,n,v,el,max,jmax;
+	for(i=0, max=els.length; i < max; i++) {
+		el = els[i];
+		n = el.name;
+		if (!n) {
+			continue;
+		}
+
+		if (semantic && form.clk && el.type == "image") {
+			// handle image inputs on the fly when semantic == true
+			if(!el.disabled && form.clk == el) {
+				a.push({name: n, value: $(el).val()});
+				a.push({name: n+'.x', value: form.clk_x}, {name: n+'.y', value: form.clk_y});
+			}
+			continue;
+		}
+
+		v = $.fieldValue(el, true);
+		if (v && v.constructor == Array) {
+			for(j=0, jmax=v.length; j < jmax; j++) {
+				a.push({name: n, value: v[j]});
+			}
+		}
+		else if (v !== null && typeof v != 'undefined') {
+			a.push({name: n, value: v});
+		}
+	}
+
+	if (!semantic && form.clk) {
+		// input type=='image' are not found in elements array! handle it here
+		var $input = $(form.clk), input = $input[0];
+		n = input.name;
+		if (n && !input.disabled && input.type == 'image') {
+			a.push({name: n, value: $input.val()});
+			a.push({name: n+'.x', value: form.clk_x}, {name: n+'.y', value: form.clk_y});
+		}
+	}
+	return a;
+};
+
+/**
+ * Serializes form data into a 'submittable' string. This method will return a string
+ * in the format: name1=value1&amp;name2=value2
+ */
+$.fn.formSerialize = function(semantic) {
+	//hand off to jQuery.param for proper encoding
+	return $.param(this.formToArray(semantic));
+};
+
+/**
+ * Serializes all field elements in the jQuery object into a query string.
+ * This method will return a string in the format: name1=value1&amp;name2=value2
+ */
+$.fn.fieldSerialize = function(successful) {
+	var a = [];
+	this.each(function() {
+		var n = this.name;
+		if (!n) {
+			return;
+		}
+		var v = $.fieldValue(this, successful);
+		if (v && v.constructor == Array) {
+			for (var i=0,max=v.length; i < max; i++) {
+				a.push({name: n, value: v[i]});
+			}
+		}
+		else if (v !== null && typeof v != 'undefined') {
+			a.push({name: this.name, value: v});
+		}
+	});
+	//hand off to jQuery.param for proper encoding
+	return $.param(a);
+};
+
+/**
+ * Returns the value(s) of the element in the matched set.  For example, consider the following form:
+ *
+ *  <form><fieldset>
+ *	  <input name="A" type="text" />
+ *	  <input name="A" type="text" />
+ *	  <input name="B" type="checkbox" value="B1" />
+ *	  <input name="B" type="checkbox" value="B2"/>
+ *	  <input name="C" type="radio" value="C1" />
+ *	  <input name="C" type="radio" value="C2" />
+ *  </fieldset></form>
+ *
+ *  var v = $(':text').fieldValue();
+ *  // if no values are entered into the text inputs
+ *  v == ['','']
+ *  // if values entered into the text inputs are 'foo' and 'bar'
+ *  v == ['foo','bar']
+ *
+ *  var v = $(':checkbox').fieldValue();
+ *  // if neither checkbox is checked
+ *  v === undefined
+ *  // if both checkboxes are checked
+ *  v == ['B1', 'B2']
+ *
+ *  var v = $(':radio').fieldValue();
+ *  // if neither radio is checked
+ *  v === undefined
+ *  // if first radio is checked
+ *  v == ['C1']
+ *
+ * The successful argument controls whether or not the field element must be 'successful'
+ * (per http://www.w3.org/TR/html4/interact/forms.html#successful-controls).
+ * The default value of the successful argument is true.  If this value is false the value(s)
+ * for each element is returned.
+ *
+ * Note: This method *always* returns an array.  If no valid value can be determined the
+ *	   array will be empty, otherwise it will contain one or more values.
+ */
+$.fn.fieldValue = function(successful) {
+	for (var val=[], i=0, max=this.length; i < max; i++) {
+		var el = this[i];
+		var v = $.fieldValue(el, successful);
+		if (v === null || typeof v == 'undefined' || (v.constructor == Array && !v.length)) {
+			continue;
+		}
+		v.constructor == Array ? $.merge(val, v) : val.push(v);
+	}
+	return val;
+};
+
+/**
+ * Returns the value of the field element.
+ */
+$.fieldValue = function(el, successful) {
+	var n = el.name, t = el.type, tag = el.tagName.toLowerCase();
+	if (successful === undefined) {
+		successful = true;
+	}
+
+	if (successful && (!n || el.disabled || t == 'reset' || t == 'button' ||
+		(t == 'checkbox' || t == 'radio') && !el.checked ||
+		(t == 'submit' || t == 'image') && el.form && el.form.clk != el ||
+		tag == 'select' && el.selectedIndex == -1)) {
+			return null;
+	}
+
+	if (tag == 'select') {
+		var index = el.selectedIndex;
+		if (index < 0) {
+			return null;
+		}
+		var a = [], ops = el.options;
+		var one = (t == 'select-one');
+		var max = (one ? index+1 : ops.length);
+		for(var i=(one ? index : 0); i < max; i++) {
+			var op = ops[i];
+			if (op.selected) {
+				var v = op.value;
+				if (!v) { // extra pain for IE...
+					v = (op.attributes && op.attributes['value'] && !(op.attributes['value'].specified)) ? op.text : op.value;
+				}
+				if (one) {
+					return v;
+				}
+				a.push(v);
+			}
+		}
+		return a;
+	}
+	return $(el).val();
+};
+
+/**
+ * Clears the form data.  Takes the following actions on the form's input fields:
+ *  - input text fields will have their 'value' property set to the empty string
+ *  - select elements will have their 'selectedIndex' property set to -1
+ *  - checkbox and radio inputs will have their 'checked' property set to false
+ *  - inputs of type submit, button, reset, and hidden will *not* be effected
+ *  - button elements will *not* be effected
+ */
+$.fn.clearForm = function() {
+	return this.each(function() {
+		$('input,select,textarea', this).clearFields();
+	});
+};
+
+/**
+ * Clears the selected form elements.
+ */
+$.fn.clearFields = $.fn.clearInputs = function() {
+	var re = /^(?:color|date|datetime|email|month|number|password|range|search|tel|text|time|url|week)$/i; // 'hidden' is not in this list
+	return this.each(function() {
+		var t = this.type, tag = this.tagName.toLowerCase();
+		if (re.test(t) || tag == 'textarea') {
+			this.value = '';
+		}
+		else if (t == 'checkbox' || t == 'radio') {
+			this.checked = false;
+		}
+		else if (tag == 'select') {
+			this.selectedIndex = -1;
+		}
+	});
+};
+
+/**
+ * Resets the form data.  Causes all form elements to be reset to their original value.
+ */
+$.fn.resetForm = function() {
+	return this.each(function() {
+		// guard against an input with the name of 'reset'
+		// note that IE reports the reset function as an 'object'
+		if (typeof this.reset == 'function' || (typeof this.reset == 'object' && !this.reset.nodeType)) {
+			this.reset();
+		}
+	});
+};
+
+/**
+ * Enables or disables any matching elements.
+ */
+$.fn.enable = function(b) {
+	if (b === undefined) {
+		b = true;
+	}
+	return this.each(function() {
+		this.disabled = !b;
+	});
+};
+
+/**
+ * Checks/unchecks any matching checkboxes or radio buttons and
+ * selects/deselects and matching option elements.
+ */
+$.fn.selected = function(select) {
+	if (select === undefined) {
+		select = true;
+	}
+	return this.each(function() {
+		var t = this.type;
+		if (t == 'checkbox' || t == 'radio') {
+			this.checked = select;
+		}
+		else if (this.tagName.toLowerCase() == 'option') {
+			var $sel = $(this).parent('select');
+			if (select && $sel[0] && $sel[0].type == 'select-one') {
+				// deselect all other options
+				$sel.find('option').selected(false);
+			}
+			this.selected = select;
+		}
+	});
+};
+
+// helper fn for console logging
+function log() {
+	var msg = '[jquery.form] ' + Array.prototype.join.call(arguments,'');
+	if (window.console && window.console.log) {
+		window.console.log(msg);
+	}
+	else if (window.opera && window.opera.postError) {
+		window.opera.postError(msg);
+	}
+};
+
+})(jQuery);
+;/**/
+/**
+ * @file
+ * Modifies the file selection and download access expiration interfaces.
+ */
+
+var uc_file_list = {};
+
+/**
+ * Disables duration amount when its type is "never".
+ */
+function _uc_file_expiration_disable_check(granularity, quantity) {
+  // 'never' means there's no point in setting a duration.
+  if ($(granularity).val() == 'never') {
+    $(quantity).attr('disabled', 'disabled').val('');
+  }
+  // Anything besides 'never' should enable setting a duration.
+  else {
+    $(quantity).removeAttr('disabled');
+  }
+}
+
+/**
+ * Adds files to delete to the list.
+ */
+function _uc_file_delete_list_populate() {
+  $('.affected-file-name').empty().append(uc_file_list[$('#edit-recurse-directories').attr('checked')]);
+}
+
+Drupal.behaviors.ubercartUcFile = function (context) {
+    _uc_file_expiration_disable_check('#edit-uc-file-download-limit-duration-granularity', '#edit-uc-file-download-limit-duration-qty');
+    _uc_file_expiration_disable_check('#edit-download-limit-duration-granularity', '#edit-download-limit-duration-qty');
+    _uc_file_expiration_disable_check('#edit-download-limit-duration-granularity', '#edit-download-limit-duration-qty');
+    _uc_file_delete_list_populate();
+
+    toggle_limit_settings('#edit-download-override', '#edit-download-limit-number-wrapper');
+    toggle_limit_settings('#edit-location-override', '#edit-download-limit-addresses-wrapper');
+    toggle_limit_settings('#edit-time-override', '#edit-download-limit-duration-qty-wrapper');
+    toggle_limit_settings('#edit-time-override', '#edit-download-limit-duration-granularity-wrapper');
+  }
+;
+
+// When you change the global file expiration granularity select.
+Drupal.behaviors.ucGlobalFileDownloadGranularity = function(context) {
+  $('#edit-uc-file-download-limit-duration-granularity:not(.ucGlobalFileDownloadGranularity-processed)', context).addClass('ucGlobalFileDownloadGranularity-processed').change(
+    function() {
+      _uc_file_expiration_disable_check('#edit-uc-file-download-limit-duration-granularity', '#edit-uc-file-download-limit-duration-qty');
+    }
+  );
+}
+
+// When you change the per-file expiration granularity select.
+Drupal.behaviors.ucFileDownloadGranularity = function(context) {
+  $('#edit-download-limit-duration-granularity:not(.ucFileDownloadGranularity-processed)', context).addClass('ucFileDownloadGranularity-processed').change(
+    function() {
+      _uc_file_expiration_disable_check('#edit-download-limit-duration-granularity', '#edit-download-limit-duration-qty');
+    }
+  );
+}
+
+
+
+// When you click 'Check all' on the file action form.
+Drupal.behaviors.ucFileSelectAll = function(context) {
+  $('#uc_file_select_all:not(.ucFileSelectAll-processed)', context).addClass('ucFileSelectAll-processed').click(
+    function() {
+      $('.form-checkbox').attr('checked', true);
+    }
+  );
+}
+
+// When you click 'Uncheck all' on the file action form.
+Drupal.behaviors.ucFileSelectNone = function(context) {
+  $('#uc_file_select_none:not(.ucFileSelectNone-processed)', context).addClass('ucFileSelectNone-processed').click(
+    function() {
+      $('.form-checkbox').removeAttr('checked');
+    }
+  );
+}
+
+// When you (un)check the recursion option on the file deletion form.
+Drupal.behaviors.ucFileDeleteList = function(context) {
+  $('#edit-recurse-directories:not(.ucFileDeleteList-processed)', context).addClass('ucFileDeleteList-processed').change(
+    function() {
+      _uc_file_delete_list_populate()
+    }
+  );
+}
+
+/**
+ * Give visual feedback to the user about download numbers.
+ *
+ * TODO: would be to use AJAX to get the new download key and
+ * insert it into the link if the user hasn't exceeded download limits.
+ * I dunno if that's technically feasible though.
+ */
+function uc_file_update_download(id, accessed, limit) {
+  if (accessed < limit || limit == -1) {
+
+    // Handle the max download number as well.
+    var downloads = '';
+    downloads += accessed + 1;
+    downloads += '/';
+    downloads += limit == -1 ? 'Unlimited' : limit;
+    $('td#download-' + id).html(downloads);
+    $('td#download-' + id).attr("onclick", "");
+  }
+}
+
+Drupal.behaviors.ucFileLimitDownloads = function(context) {
+  $('#edit-download-override:not(.ucFileLimitDownloads-processed)', context).addClass('ucFileLimitDownloads-processed').click(
+    function() {
+      toggle_limit_settings('#edit-download-override', '#edit-download-limit-number-wrapper');
+    }
+  );
+}
+
+Drupal.behaviors.ucFileLimitLocations = function(context) {
+  $('#edit-location-override:not(.ucFileLimitLocations-processed)', context).addClass('ucFileLimitLocations-processed').click(
+    function() {
+      toggle_limit_settings('#edit-location-override', '#edit-download-limit-addresses-wrapper');
+    }
+  );
+}
+
+Drupal.behaviors.ucFileLimitTime = function(context) {
+  $('#edit-time-override:not(.ucFileLimitTime-processed)', context).addClass('ucFileLimitTime-processed').click(
+    function() {
+      toggle_limit_settings('#edit-time-override', '#edit-download-limit-duration-qty-wrapper');
+      toggle_limit_settings('#edit-time-override', '#edit-download-limit-duration-granularity-wrapper');
+    }
+  );
+}
+
+/**
+ * Toggle the limit settings.
+ */
+function toggle_limit_settings(cause, effect) {
+  if ($(cause).attr('checked')) {
+    $(effect).show();
+  }
+  else {
+    $(effect).hide();
+  }
+}
+;/**/
+
+/**
+ * @file
+ * Enables and disables expiration fields to prevent invalid configurations.
+ */
+
+/**
+ * Disables duration amount when its type is "never".
+ */
+function _uc_role_expiration_disable_check(granularity, quantity) {
+  // 'never' means there's no point in setting a duration.
+  if ($(granularity).val() == 'never') {
+    $(quantity).attr('disabled', 'disabled').val('');
+  }
+  // Anything besides 'never' should enable setting a duration.
+  else {
+    $(quantity).removeAttr('disabled');
+  }
+}
+
+/**
+ * Switch between relative and absolute expiration durations.
+ */
+function expiration_switcher() {
+  if ($('#edit-expiration').val() == 'abs') {
+    $("#edit-uc-roles-expire-relative-duration-wrapper").hide();
+    $("#edit-uc-roles-expire-relative-granularity-wrapper").hide();
+    $("#edit-uc-roles-by-quantity-wrapper").hide();
+    $("#edit-uc-roles-expire-absolute-wrapper").show();
+  }
+  else {
+    $("#edit-uc-roles-expire-absolute-wrapper").hide();
+    $("#edit-uc-roles-expire-relative-duration-wrapper").show();
+    $("#edit-uc-roles-expire-relative-granularity-wrapper").show();
+    $("#edit-uc-roles-by-quantity-wrapper").show();
+  }
+}
+
+/**
+ * Set the default state for expiration duration.
+ */
+function expiration_switcher_default() {
+  if ($('#edit-uc-roles-default-end-expiration').val() == 'abs') {
+    $("#edit-uc-roles-default-length-wrapper").attr('style', 'display:none;');
+    $("#edit-uc-roles-default-granularity-wrapper").attr('style', 'display:none;');
+    $("#edit-uc-roles-default-by-quantity-wrapper").attr('style', 'display:none;');
+    $("#edit-uc-roles-default-end-time-wrapper").removeAttr('style');
+  }
+  else {
+    $("#edit-uc-roles-default-length-wrapper").removeAttr('style');
+    $("#edit-uc-roles-default-granularity-wrapper").removeAttr('style');
+    $("#edit-uc-roles-default-by-quantity-wrapper").removeAttr('style');
+    $("#edit-uc-roles-default-end-time-wrapper").attr('style', 'display:none;');
+  }
+}
+
+/**
+ * Override the expiration duration default state.
+ */
+function uc_roles_expiration_default_override() {
+  if ($('#edit-end-override').length == 0) {
+    return;
+  }
+
+  if ($('#edit-end-override').attr('checked')) {
+    $('#edit-expiration-wrapper').removeAttr('style');
+    $('#edit-uc-roles-expire-absolute-wrapper').removeAttr('style');
+    $('#edit-uc-roles-expire-relative-duration-wrapper').removeAttr('style');
+    $('#edit-uc-roles-expire-relative-granularity-wrapper').removeAttr('style');
+    $('#edit-uc-roles-by-quantity-wrapper').removeAttr('style');
+    expiration_switcher();
+  }
+  else {
+    $('#edit-expiration-wrapper').attr('style', 'display:none;');
+    $('#edit-uc-roles-expire-relative-duration-wrapper').attr('style', 'display:none;');
+    $('#edit-uc-roles-expire-relative-granularity-wrapper').attr('style', 'display:none;');
+    $('#edit-uc-roles-by-quantity-wrapper').attr('style', 'display:none;');
+    $('#edit-uc-roles-expire-absolute-wrapper').attr('style', 'display:none;');
+  }
+}
+
+Drupal.behaviors.ubercartUcRoles = function (context) {
+    _uc_role_expiration_disable_check('#edit-uc-roles-expire-relative-granularity', '#edit-uc-roles-expire-relative-duration');
+    _uc_role_expiration_disable_check('#edit-uc-roles-default-granularity', '#edit-uc-roles-default-length');
+    _uc_role_expiration_disable_check('#edit-uc-roles-reminder-granularity', '#edit-uc-roles-reminder-length');
+    uc_roles_expiration_default_override();
+    expiration_switcher_default();
+  }
+;
+
+// When you change the role expiration time select.
+Drupal.behaviors.ucRoleExpirationTime = function(context) {
+  $("#edit-expiration:not(.ucRoleExpirationTime-processed)", context).addClass('ucRoleExpirationTime-processed').change(
+    function() {
+      expiration_switcher();
+    }
+  );
+}
+
+// When you change the default role expiration time select.
+Drupal.behaviors.ucRoleDefaultExpirationTimeDefault = function(context) {
+  $("#edit-uc-roles-default-end-expiration:not(.ucRoleDefaultExpirationTimeDefault-processed)", context).addClass('ucRoleDefaultExpirationTimeDefault-processed').change(
+    function() {
+      expiration_switcher_default();
+    }
+  );
+}
+
+// When you change the role expiration time select.
+Drupal.behaviors.ucRoleExpirationTimeDefault = function(context) {
+  $("#edit-uc-roles-end-expiration:not(.ucRoleExpirationTimeDefault-processed)", context).addClass('ucRoleExpirationTimeDefault-processed').change(
+    function() {
+      expiration_switcher_default();
+    }
+  );
+}
+
+// When you change the role expiration granularity select.
+Drupal.behaviors.ucRoleExpirationGranularity = function(context) {
+  $('#edit-uc-roles-expire-relative-granularity:not(.ucRoleExpirationGranularity-processed)', context).addClass('ucRoleExpirationGranularity-processed').change(
+    function() {
+      _uc_role_expiration_disable_check('#edit-uc-roles-expire-relative-granularity', '#edit-uc-roles-expire-relative-duration');
+    }
+  );
+}
+
+// When you change the default role expiration granularity select.
+Drupal.behaviors.ucRoleDefaultExpirationGranularity = function(context) {
+  $('#edit-uc-roles-default-granularity:not(.ucRoleDefaultExpirationGranularity-processed)', context).addClass('ucRoleDefaultExpirationGranularity-processed').change(
+    function() {
+      _uc_role_expiration_disable_check('#edit-uc-roles-default-granularity', '#edit-uc-roles-default-length');
+    }
+  );
+}
+
+// When you change the default role expiration granularity select.
+Drupal.behaviors.ucRoleReminderExpirationGranularity = function(context) {
+  $('#edit-uc-roles-reminder-granularity:not(.ucRoleReminderExpirationGranularity-processed)', context).addClass('ucRoleReminderExpirationGranularity-processed').change(
+    function() {
+      _uc_role_expiration_disable_check('#edit-uc-roles-reminder-granularity', '#edit-uc-roles-reminder-length');
+    }
+  );
+}
+
+// When you change the default role expiration granularity select.
+Drupal.behaviors.ucRoleExpirationEndOverride = function(context) {
+  $('#edit-end-override:not(.ucRoleExpirationEndOverride-processed)', context).addClass('ucRoleExpirationEndOverride-processed').click(
+    function() {
+      uc_roles_expiration_default_override();
+    }
+  );
+}
+
+;/**/
+/* url() v1.7.3 - http://github.com/websanova/js-url */window.url=(function(){function b(c){return !isNaN(parseFloat(c))&&isFinite(c)}return function a(p,d){var c=d||window.location.toString();if(c.substring(0,2)==="//"){c="http:"+c}else{if(c.split("://").length===1){c="http://"+c}}d=c.split("/");var g={auth:""},o=d[2].split("@");if(o.length===1){o=o[0].split(":")}else{g.auth=o[0];o=o[1].split(":")}g.protocol=d[0],g.hostname=o[0],g.port=(o[1]||"80"),g.pathname="/"+d.slice(3,d.length).join("/").split("?")[0].split("#")[0];var e=g.pathname;if(e.split(".").length===1&&e[e.length-1]!=="/"){e+="/"}var k=g.hostname,l=k.split("."),m=e.split("/");if(!p){return c}else{if(p==="hostname"){return k}else{if(p==="domain"){return l.slice(-2).join(".")}else{if(p==="tld"){return l.slice(-1).join(".")}else{if(p==="sub"){return l.slice(0,l.length-2).join(".")}else{if(p==="port"){return g.port||"80"}else{if(p==="protocol"){return g.protocol.split(":")[0]}else{if(p==="auth"){return g.auth}else{if(p==="user"){return g.auth.split(":")[0]}else{if(p==="pass"){return g.auth.split(":")[1]||""}else{if(p==="path"){return e}else{if(p[0]==="."){p=p.substring(1);if(b(p)){p=parseInt(p);return l[p<0?l.length+p:p-1]||""}}else{if(b(p)){p=parseInt(p);return m[p<0?m.length-1+p:p]||""}else{if(p==="file"){return m.slice(-1)[0]}else{if(p==="filename"){return m.slice(-1)[0].split(".")[0]}else{if(p==="fileext"){return m.slice(-1)[0].split(".")[1]||""}else{if(p[0]==="?"||p[0]==="#"){var h=c,f=null;if(p[0]==="?"){h=(h.split("?")[1]||"").split("#")[0]}else{if(p[0]==="#"){h=(h.split("#")[1]||"")}}if(!p[1]){return h}p=p.substring(1);h=h.split("&");for(var j=0,n=h.length;j<n;j++){f=h[j].split("=");if(f[0]===p){return f[1]}}}}}}}}}}}}}}}}}}}return""}})();;/**/
+(function($) {
+    "use strict";
+    if (typeof $ === 'undefined') { return false; }
+
+    Drupal.behaviors.simple_registration = function(context) {
+        $('#modal-content .hidden-error-message').each(function() {
+          this.parentNode.className += ' hidden-error-message-li';
+        });
+        var defaultWidth = "248px",
+            newsletterWidth = '163px';
+        //Prevent mollom to scroll top
+        $('a.mollom-switch-captcha', context).click(function (e) {
+            e.preventDefault();
+            return 0;
+        });
+        $(".chosen_ready_country").each(function() {
+            var $this = $(this);
+            $this.chosen({width: ($this.closest('.block').length ? newsletterWidth : defaultWidth)})
+                .on('change', function () {
+                    var $this = $(this),
+                        $canada_legal = $this.closest('form').find(".canada-legal-text"),
+                        $legal = $this.closest('form').find(".legal-text");
+
+                    if ($this.val().toLowerCase() === 'canada' && !$canada_legal.hasClass('is-simple-form')) {
+                        $legal.addClass('hide');
+                        $canada_legal.removeClass('hide');
+                    } else {
+                        $canada_legal.addClass('hide');
+                        $legal.removeClass('hide');
+                    }
+                });
+        });
+
+        $(".chosen_ready").each(function(i, el) {
+            var $el = $(el);
+            $el.on('chosen:ready', function(e, p) {
+                var $span = $(e.currentTarget).next().find('.chosen-single span');
+                if($span.html() === 'Please Select') {
+                    $span.addClass('chosen-please-select');
+                }
+            });
+            $el.chosen({
+                disable_search_threshold: 100,
+                width:  ($el.closest('.block').length ? newsletterWidth : defaultWidth),
+                allow_single_deselect: $el.hasClass('chosen_deselect')
+            });
+            if ($el.hasClass('error')) {
+                $el.next('.chosen-container').find('> a:first').addClass('error');
+            }
+            $el.on('change', function(e, p) {
+                var $span = $(e.currentTarget).next().find('.chosen-single span');
+                if(p['selected'] === '') {
+                    $span.addClass('chosen-please-select');
+                } else {
+                    $span.removeClass('chosen-please-select');
+                }
+            });
+        });
+        //disable omniture
+        $(".chosen-single").addClass('non-omniture');
+    };
+
+})(window.jq183);
+;/**/
+(function($) {
+    "use strict";
+    if (typeof $ === 'undefined') { return false; }
+
+Drupal.behaviors.ValidateReg = function(context) {
+    /* necessary to explicitly set attribute in order for this to work in Drupal */
+    $(".form-text .required").attr('required', 'required');
+    $(".form-select .required").attr('required', 'required');
+
+    function isChosen(el) {
+        var $el = $(el), elChosen = $el.next();
+        return $el.hasClass('chosen_ready') && elChosen.length && elChosen.hasClass('chosen-container');
+    }
+    function isRadioOrCheckboxesGroup(el) {
+        var $el = $(el);
+        return $el.closest('.form-radios, .form-checkboxes').length > 0;
+    }
+    function getGroupErrorPlacement(el) {
+        return $(el).closest('.form-radios, .form-checkboxes').find('.form-item:last')
+    }
+    function getFormItem(el) {
+        return $(el).parents('.form-item:first');
+    }
+    function removeServerError(el) {
+        var item = getFormItem(el),
+            err = item.nextUntil('.form-item', 'label.error:first');
+        if (err.length) {
+            err.remove();
+        }
+    }
+    $.validator.setDefaults({
+        ignore: ":hidden:not(.chosen_ready):not(#edit-legal-canada)",
+        errorPlacement: function(err, el) {
+            var item = getFormItem(el);
+            removeServerError(el);
+            if (isRadioOrCheckboxesGroup(el)) {
+                item = getGroupErrorPlacement(el);
+            }
+            err.insertAfter(item);
+        },
+        highlight: function(el, errorClass, validClass) {
+            var $el = isChosen(el) ? $(el).next().find('a:first, ul:first') : $(el);
+            if (isRadioOrCheckboxesGroup(el)) {
+                return;
+            }
+            if (el.type === "radio") {
+                $el = $('[name="' + el.name + '"]', el.form);
+            }
+            $el.addClass(errorClass).removeClass(validClass);
+        },
+        unhighlight: function(el, errorClass, validClass) {
+            removeServerError(el);
+            var $el = isChosen(el) ? $(el).next().find('a:first, ul:first') : $(el);
+            if (isRadioOrCheckboxesGroup(el)) {
+                return;
+            }
+            if (el.type === "radio") {
+                $el = $('[name="' + el.name + '"]', el.form);
+            }
+            $el.removeClass(errorClass).addClass(validClass);
+        }
+    });
+    $.validator.addMethod('multi_email', function(value, element) {
+        var i, n, emails = value.split(/[,;\n\s]+/), email;
+        for (i = 0, n = emails.length; i < n; i++) {
+            email = $.trim(emails[i]);
+            if ('' !== email && !$.validator.methods.email.call(this, email, element)) {
+                return false;
+            }
+        }
+        return true;
+    });
+    $.validator.addMethod('legacy', function(value, element) {
+        var i, n, country = $(element).closest('form').find("[name=country]");
+        if (country.val().toLowerCase() === 'canada') {
+            return element.checked;
+        }
+        return true;
+    });
+    $.validator.addMethod('legal_characters', function(value, element) {
+        if (value.match(/[^\x80-\xF7 a-z0-9@_.\'-]/i)) {
+            return false;
+        }
+        return true;
+    });
+    var formsReg = [
+        '#user-register',
+        '#penton-registration-step1',
+        '#penton-registration-light-form',
+        '#penton-registration-light-for-email-form',
+        '#penton-registration-newsletter-flyover-form',
+        '#penton-registration-additional-questions-form-1',
+        '#penton-registration-additional-questions-form-2',
+        '#penton-registration-additional-questions-form-3',
+        '#penton-registration-additional-questions-form-4',
+        '#penton-registration-additional-questions-form-5',
+        '#penton-registration-additional-questions-form-6',
+        '#penton-registration-additional-questions-form-7',
+        '#penton-registration-additional-questions-form-8',
+        '#penton-registration-additional-questions-form-9',
+        '#penton-registration-additional-questions-form-10'
+    ].join(','), formLogin = [
+        '#penton-registration-email-form',
+        '#penton-registration-email-and-login-form'
+    ].join(','), userLogin = [
+        '#user-login'
+    ].join(','), userPass = [
+        '#user-pass'
+    ].join(','), regOptions = {
+        rules: {
+            mail: {required: true, maxlength: 128, email: true},
+            name: {required: true, minlength: 4, legal_characters: true},
+            pass: {required: true, minlength: 6},
+            "mollom[captcha]": {required: true},
+            "recipients": {multi_email: true},
+            "legal_canada": {legacy: true}
+        },
+        messages: {
+            mail: {
+                required: "Please enter your e-mail address.",
+                email: "Please enter a valid e-mail address.",
+                maxlength: $.validator.format("Your e-mail address exceeds the maximum allowable {0} characters.")
+            },
+            name: {
+                required: "Enter your username.",
+                minlength: $.validator.format("Enter at least {0} characters."),
+                legal_characters: "The username contains an illegal character."
+            },
+            pass: {
+                required: "Please enter your password.",
+                minlength: $.validator.format("Your password must be at least {0} characters long.")
+            },
+            "mollom[captcha]": {
+                required: "Captcha is required."
+            },
+            "recipients": {
+                multi_email: "One of your Recipient addresses is invalid."
+            },
+            "legal_canada": {
+                legacy: "You need to agree with these terms."
+            }
+        }
+    }, loginOptions = {
+        rules: {
+            "mail": { email: true },
+            "recipients": regOptions.rules.recipients
+        },
+        messages: {
+            "recipients": regOptions.messages.recipients,
+            "mail": regOptions.messages.mail
+        }
+    }, userLoginOptions = {
+        rules: {
+            name: {required: true},
+            pass: {required: true}
+        },
+        messages: {
+            name: {
+                required: "Please enter your username or e-mail address."
+            },
+            pass: {
+                required: "Please enter your password."
+            }
+        }
+    }, userPassOptions = {
+        rules: {
+            name: {required: true, email: true},
+            "mollom[captcha]": {required: true}
+        },
+        messages: {
+            name: {
+                required: "Please enter your e-mail address.",
+                email: "Please enter a valid e-mail address."
+            },
+            "mollom[captcha]": {
+                required: "Captcha is required."
+            }
+        }
+    };
+
+    // validate radio buttons groups
+    var radioGroups = [];
+    $('.form-radios.radios-required').each(function () {
+        var radioName = $(this).find('.form-radio:first').attr('name');
+        if(typeof radioName != 'undefined') {
+            radioGroups.push(radioName);
+        }
+    });
+    radioGroups.forEach(function (e) {
+        regOptions["rules"][e] = {required: true};
+    });
+
+    // validate checkboxes groups
+    $.validator.addMethod('checkboxes_required', function (value, element) {
+        var formGroup = $(element).closest('.form-checkboxes');
+        if (formGroup.length) {
+            return formGroup.find('.form-checkbox:checked').length > 0;
+        }
+        return true;
+    });
+    var checkboxesGroups = [];
+    $('.form-checkboxes.checkboxes-required .form-checkbox:first').each(function () {
+        var checkboxName = $(this).attr('name');
+        if(typeof checkboxName != 'undefined') {
+            checkboxesGroups.push(checkboxName);
+        }
+    });
+    checkboxesGroups.forEach(function (e) {
+        regOptions["rules"][e] = {"checkboxes_required": true};
+        regOptions["messages"][e] = {"checkboxes_required": 'This field is required.'};
+    });
+
+    $(formsReg).validate(regOptions);
+    $(formLogin).validate(loginOptions);
+    $(userLogin).validate(userLoginOptions);
+    $(userPass).validate(userPassOptions);
+
+    addValidateEvents([formsReg, formsReg].join(','));
+    function addValidateEvents(selector) {
+        var fields = $(selector).find('.chosen_ready');
+        if (!fields.length) {
+            return;
+        }
+        fields.on('change', function(e) {
+            $(this.form).validate().element(this);
+        });
+    }
+  addCheckboxesValidateEvents([formsReg, formsReg].join(','));
+    function addCheckboxesValidateEvents(selector) {
+        var checkboxesFields = $(selector).find('.form-checkboxes.checkboxes-required');
+        if(!checkboxesFields.length) {
+            return;
+        }
+        checkboxesFields.each(function () {
+            var checkboxesGroup = $(this),
+                firstCheckbox = checkboxesGroup.find('.form-checkbox:first');
+            checkboxesGroup.find('.form-checkbox').on('change', function (e) {
+                $(this.form).validate().element(firstCheckbox);
+            })
+        });
+    }
+};
+
+})(window.jq183);;/**/
+$(function() {
+    var enableWelcomeMessage = $('input[name="simple_registration|welcome_message|enable"]');
+    var welcomeMessageBlocks = enableWelcomeMessage.closest('.form-item').siblings();
+
+    var hideBlocks = function(blocksToHide, elementToCheck, prop, condition) {
+        if (elementToCheck.attr(prop) == condition) {
+            blocksToHide.each(function(){
+                $(this).css('display', '');
+            });
+        } else {
+            blocksToHide.each(function(){
+                $(this).css('display', 'none');
+            });
+        }
+    };
+
+    if (window.location.pathname == '/user/register') {
+        document.getElementById("pm-main-pdg").className += " visible-user-register-page";
+    }
+
+//    var enableInteractive = $("input[name='penton_registration|interactive|enable']");
+//    var interactiveFieldSet = enableInteractive.closest('fieldset');
+//    var validationFieldSet = interactiveFieldSet.next('fieldset');
+//    var regModesFieldSet = $("select[name='penton_registration|reg_mode|navigation_bar_link']").closest('fieldset');
+//    interactiveFieldSet = interactiveFieldSet.add(interactiveFieldSet.find('fieldset'));
+//    validationFieldSet = validationFieldSet.add(validationFieldSet.find('fieldset'));
+//
+//    var visibleBlocks = interactiveFieldSet.add(validationFieldSet).add(regModesFieldSet);
+//    var requiredInteractiveBlocks = $("#penton-registration-simple-admin-settings fieldset").not(visibleBlocks);
+//
+//    var hideWelcomeMessageBlocks = function(){
+//        hideBlocks(welcomeMessageBlocks, enableWelcomeMessage, 'checked', true);
+//    };
+//
+//    var hideRequiredInteractiveBlocks = function(){
+//        hideBlocks(requiredInteractiveBlocks, enableInteractive, 'checked', true);
+//    };
+//    var placeInteractiveWarningMessage = function(interactiveCheckbox){
+//        interactiveCheckbox.closest('fieldset').removeClass('collapsed');
+//        var warningMessage = $('<div id="interactive-warning-message" class="messages warning">Warning! Some registration features will not working properly without Interactive mode '+
+//        '(e.g. modal windows won\'t be activated and there will be no difference between simple and full flat registration pages)</div>');
+//        if (!interactiveCheckbox.is(':checked')) {
+//            var description = interactiveCheckbox.closest('.form-item').find('.description');
+//            warningMessage.insertBefore(description);
+//        } else {
+//            $('#interactive-warning-message').remove();
+//        }
+//    };
+//
+//    hideWelcomeMessageBlocks();
+//    enableWelcomeMessage.click(function() {
+//        hideWelcomeMessageBlocks();
+//    });
+//
+//    hideRequiredInteractiveBlocks();
+//    placeInteractiveWarningMessage(enableInteractive);
+//    enableInteractive.click(function() {
+//        hideRequiredInteractiveBlocks();
+//        placeInteractiveWarningMessage(enableInteractive);
+//    });
+});
+;/**/
+$(window).load(function(){
+    var datasheet = $('.datasheet-download');
+    if (datasheet.attr('data-startup-load')){
+//        window.location.href = datasheet.find('a').attr('href');
+        var uri = datasheet.find('a').attr('href');
+        var uriArr = uri.split('/');
+        var name = uriArr[uriArr.length - 1];
+        var link = document.createElement("a");
+        link.download = name;
+        link.href = uri;
+        link.click();
+
+    }
+    var print = $("[data-startup-print]:first");
+    if (print.length){
+      window.location.href = print.attr('href');
+    }
+});
+;/**/
+
+$(document).ready(function() {
+    if(location.host === 'iw-us-500.industryweek.com') {
+        $('.login-logout').css('display', 'none');
+        return false;
+    }
+    document.getElementsByTagName('body')[0].className += ' newsletter-flyover-executed';
+    var flyover_page_number = Drupal.settings.penton_registration.flyover_page_number;
+    var is_flyover_needed = Drupal.settings.penton_registration.is_flyover_needed;
+    var user_is_loginned = Drupal.settings.penton_registration.user_is_loginned;
+    var newsletter_flyover_pages_counter = getCookie('newsletter_flyover_pages_counter');
+    if(newsletter_flyover_pages_counter == 'undefined') {
+        newsletter_flyover_pages_counter = undefined;
+    }
+    var expired = 365 * 24 * 60 * 60; //one year
+    if(newsletter_flyover_pages_counter == -2) {
+        setCookie('newsletter_flyover_pages_counter', -1, {expires: expired, path: "/" });
+        return;
+    }
+    if(is_flyover_needed
+      && newsletter_flyover_pages_counter != -1
+      && window.location.pathname != '/penton_ur/thank-you'
+      && window.location.host.indexOf('m.') !== 0) {
+        if(window.location.pathname == '/user/register' ||
+            window.location.pathname == '/user/login' ||
+            window.location.pathname == '/user/password') {
+            setCookie('newsletter_flyover_pages_counter', undefined, {path: "/"});
+        }else if (newsletter_flyover_pages_counter == undefined) {
+            if(parseInt(flyover_page_number) == 1) {
+                showFlyover();
+            }else {
+                setCookie('newsletter_flyover_pages_counter', 1, {path: "/"});
+            }
+        } else {
+            if (parseInt(newsletter_flyover_pages_counter) >= parseInt(flyover_page_number) - 1) {
+                showFlyover();
+            } else {
+                setCookie('newsletter_flyover_pages_counter', parseInt(newsletter_flyover_pages_counter) + 1, {path: "/" });
+            }
+        }
+    }
+    function showFlyover() {
+        setCookie('newsletter_flyover_pages_counter', -2, {expires: expired, path: "/" });
+        var modal_class;
+        if(user_is_loginned) {
+            modal_class = "ctools-modal-flyover";
+        }else {
+            modal_class = "ctools-modal-register_flyover";
+        }
+
+        $("<a></a>").attr("href", '/penton_ur/nojs/newsletter/flyover').addClass(modal_class).addClass('ctools-use-modal-processed').click(Drupal.CTools.Modal.clickAjaxLink).click();
+        var $modal_window = $ ( ".ctools-modal-content" );
+        var $modal_content = $ ( ".modal-content" );
+        var $spinner = $ ( ".penton_registration_spinner_area" );
+        $modal_window.css( "background", "none repeat scroll 0% 0% #FFF" );
+        $modal_window.css( "border", "1px solid #FFF" );
+        $modal_content.css( "border", "1px solid #FFF" );
+        if (modal_class == "ctools-modal-register_flyover") {
+            $modal_window.css( "height", "570px" );
+            $modal_content.css( "height", "535px" );
+        } else {
+            $modal_window.css( "height", "300px" );
+            $modal_window.css( "width", "500px" );
+            $modal_content.css( "height", "235px" );
+            $modal_content.css( "width", "450px" );
+        }
+    }
+    function getCookie(name) {
+        var matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
+    function setCookie(name, value, options) {
+        options = options || {};
+
+        var expires = options.expires;
+
+        if (typeof expires == "number" && expires) {
+            var d = new Date();
+            d.setTime(d.getTime() + expires*1000);
+            expires = options.expires = d;
+        }
+        if (expires && expires.toUTCString) {
+            options.expires = expires.toUTCString();
+        }
+
+        value = encodeURIComponent(value);
+
+        var updatedCookie = name + "=" + value;
+
+        for(var propName in options) {
+            updatedCookie += "; " + propName;
+            var propValue = options[propName];
+            if (propValue !== true) {
+                updatedCookie += "=" + propValue;
+            }
+        }
+        document.cookie = updatedCookie;
+    }
+});;/**/
+/**
+ * @file
+ *
+ * CTools flexible AJAX responder object.
+ */
+
+(function ($) {
+  Drupal.CTools = Drupal.CTools || {};
+  Drupal.CTools.AJAX = Drupal.CTools.AJAX || {};
+  Drupal.CTools.AJAX.commands = Drupal.CTools.AJAX.commands || {};
+  Drupal.CTools.AJAX.commandCache = Drupal.CTools.AJAX.comandCache || {} ;
+  Drupal.CTools.AJAX.scripts = {};
+  Drupal.CTools.AJAX.css = {};
+
+  /**
+   * Success callback for an ajax request.
+   *
+   * This function expects to receive a packet of data from a JSON object
+   * which is essentially a list of commands. Each commands must have a
+   * 'command' setting and this setting must resolve to a function in the
+   * Drupal.CTools.AJAX.commands space.
+   */
+  Drupal.CTools.AJAX.respond = function(data) {
+    for (i in data) {
+      if (data[i]['command'] && Drupal.CTools.AJAX.commands[data[i]['command']]) {
+        Drupal.CTools.AJAX.commands[data[i]['command']](data[i]);
+      }
+    }
+  };
+
+  /**
+   * Grab the response from the server and store it.
+   */
+  Drupal.CTools.AJAX.warmCache = function () {
+    // Store this expression for a minor speed improvement.
+    $this = $(this);
+    var old_url = $this.attr('href');
+    // If we are currently fetching, or if we have fetched this already which is
+    // ideal for things like pagers, where the previous page might already have
+    // been seen in the cache.
+    if ($this.hasClass('ctools-fetching') || Drupal.CTools.AJAX.commandCache[old_url]) {
+      return false;
+    }
+
+    // Grab all the links that match this url and add the fetching class.
+    // This allows the caching system to grab each url once and only once
+    // instead of grabbing the url once per <a>.
+    var $objects = $('a[href="' + old_url + '"]')
+    $objects.addClass('ctools-fetching');
+    try {
+      url = Drupal.CTools.AJAX.urlReplaceNojs(url);
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: { 'js': 1, 'ctools_ajax': 1},
+        global: true,
+        success: function (data) {
+          Drupal.CTools.AJAX.commandCache[old_url] = data;
+          $objects.addClass('ctools-cache-warmed').trigger('ctools-cache-warm', [data]);
+        },
+        complete: function() {
+          $objects.removeClass('ctools-fetching');
+        },
+        dataType: 'json'
+      });
+    }
+    catch (err) {
+      $objects.removeClass('ctools-fetching');
+      return false;
+    }
+
+    return false;
+  };
+
+  /**
+   * Cachable click handler to fetch the commands out of the cache or from url.
+   */
+  Drupal.CTools.AJAX.clickAJAXCacheLink = function () {
+    $this = $(this);
+    if ($this.hasClass('ctools-fetching')) {
+      $this.bind('ctools-cache-warm', function (event, data) {
+        Drupal.CTools.AJAX.respond(data);
+      });
+      return false;
+    }
+    else {
+      if ($this.hasClass('ctools-cache-warmed') && Drupal.CTools.AJAX.commandCache[$this.attr('href')]) {
+        Drupal.CTools.AJAX.respond(Drupal.CTools.AJAX.commandCache[$this.attr('href')]);
+        return false;
+      }
+      else {
+        return Drupal.CTools.AJAX.clickAJAXLink.apply(this);
+      }
+    }
+  };
+
+  /**
+   * Generic replacement click handler to open the modal with the destination
+   * specified by the href of the link.
+   */
+  Drupal.CTools.AJAX.clickAJAXLink = function() {
+    if ($(this).hasClass('ctools-ajaxing')) {
+      return false;
+    }
+
+    var url = $(this).attr('href');
+    var object = $(this);
+    $(this).addClass('ctools-ajaxing');
+    try {
+      url = Drupal.CTools.AJAX.urlReplaceNojs(url);
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: { 'js': 1, 'ctools_ajax': 1},
+        global: true,
+        success: Drupal.CTools.AJAX.respond,
+        error: function(xhr) {
+          Drupal.CTools.AJAX.handleErrors(xhr, url);
+        },
+        complete: function() {
+          $('.ctools-ajaxing').removeClass('ctools-ajaxing');
+        },
+        dataType: 'json'
+      });
+    }
+    catch (err) {
+      alert("An error occurred while attempting to process " + url);
+      $('.ctools-ajaxing').removeClass('ctools-ajaxing');
+      return false;
+    }
+
+    return false;
+  };
+
+  /**
+   * Generic replacement click handler to open the modal with the destination
+   * specified by the href of the link.
+   */
+  Drupal.CTools.AJAX.clickAJAXButton = function() {
+    if ($(this).hasClass('ctools-ajaxing')) {
+      return false;
+    }
+
+    // Put our button in.
+    this.form.clk = this;
+
+    var url = Drupal.CTools.AJAX.findURL(this);
+    $(this).addClass('ctools-ajaxing');
+    var object = $(this);
+    try {
+      if (url) {
+        url = Drupal.CTools.AJAX.urlReplaceNojs(url);;
+        $.ajax({
+          type: "POST",
+          url: url,
+          data: { 'js': 1, 'ctools_ajax': 1},
+          global: true,
+          success: Drupal.CTools.AJAX.respond,
+          error: function(xhr) {
+            Drupal.CTools.AJAX.handleErrors(xhr, url);
+          },
+          complete: function() {
+            $('.ctools-ajaxing').removeClass('ctools-ajaxing');
+          },
+          dataType: 'json'
+        });
+      }
+      else {
+        var form = this.form;
+        url = $(form).attr('action');
+        setTimeout(function() { Drupal.CTools.AJAX.ajaxSubmit(form, url); }, 1);
+      }
+    }
+    catch (err) {
+      alert("An error occurred while attempting to process " + url);
+      $(this).removeClass('ctools-ajaxing');
+      return false;
+    }
+    return false;
+  };
+
+  /**
+   * Event handler to submit an AJAX form.
+   *
+   * Using a secondary event ensures that our form submission is last, which
+   * is needed when submitting wysiwyg controlled forms, for example.
+   */
+  Drupal.CTools.AJAX.ajaxSubmit = function (form, url) {
+    $form = $(form);
+
+    if ($form.hasClass('ctools-ajaxing')) {
+      return false;
+    }
+
+    $form.addClass('ctools-ajaxing');
+
+    try {
+      url = Drupal.CTools.AJAX.urlReplaceNojs(url);
+
+      var ajaxOptions = {
+        type: 'POST',
+        url: url,
+        data: { 'js': 1, 'ctools_ajax': 1},
+        global: true,
+        success: Drupal.CTools.AJAX.respond,
+        error: function(xhr) {
+          Drupal.CTools.AJAX.handleErrors(xhr, url);
+        },
+        complete: function() {
+          $('.ctools-ajaxing').removeClass('ctools-ajaxing');
+          $('div.ctools-ajaxing-temporary').remove();
+        },
+        dataType: 'json'
+      };
+
+      // If the form requires uploads, use an iframe instead and add data to
+      // the submit to support this and use the proper response.
+      if ($form.attr('enctype') == 'multipart/form-data') {
+        $form.append('<input type="hidden" name="ctools_multipart" value="1">');
+        ajaxIframeOptions = {
+          success: Drupal.CTools.AJAX.iFrameJsonRespond,
+          iframe: true
+        };
+        ajaxOptions = $.extend(ajaxOptions, ajaxIframeOptions);
+      }
+
+      $form.ajaxSubmit(ajaxOptions);
+    }
+    catch (err) {
+      alert("An error occurred while attempting to process " + url);
+      $('.ctools-ajaxing').removeClass('ctools-ajaxing');
+      $('div.ctools-ajaxing-temporary').remove();
+      return false;
+    }
+  };
+
+  /**
+   * Wrapper for handling JSON responses from an iframe submission
+   */
+  Drupal.CTools.AJAX.iFrameJsonRespond = function(data) {
+    var myJson = eval(data);
+    Drupal.CTools.AJAX.respond(myJson);
+  }
+
+  /**
+   * Display error in a more fashion way
+   */
+  Drupal.CTools.AJAX.handleErrors = function(xhr, path) {
+    var error_text = '';
+
+    if ((xhr.status == 500 && xhr.responseText) || xhr.status == 200) {
+      error_text = xhr.responseText;
+
+      // Replace all &lt; and &gt; by < and >
+      error_text = error_text.replace("/&(lt|gt);/g", function (m, p) {
+        return (p == "lt")? "<" : ">";
+      });
+
+      // Now, replace all html tags by empty spaces
+      error_text = error_text.replace(/<("[^"]*"|'[^']*'|[^'">])*>/gi,"");
+
+      // Fix end lines
+      error_text = error_text.replace(/[\n]+\s+/g,"\n");
+    }
+    else if (xhr.status == 500) {
+      error_text = xhr.status + ': ' + Drupal.t("Internal server error. Please see server or PHP logs for error information.");
+    }
+    else {
+      error_text = xhr.status + ': ' + xhr.statusText;
+    }
+
+    alert(Drupal.t("An error occurred at @path.\n\nError Description: @error", {'@path': path, '@error': error_text}));
+  }
+
+  /**
+   * Generic replacement for change handler to execute ajax method.
+   */
+  Drupal.CTools.AJAX.changeAJAX = function () {
+    if ($(this).hasClass('ctools-ajaxing')) {
+      return false;
+    }
+
+    var url = Drupal.CTools.AJAX.findURL(this);
+    $(this).addClass('ctools-ajaxing');
+    var object = $(this);
+    var form_id = $(object).parents('form').get(0).id;
+    try {
+      if (url) {
+        url = Drupal.CTools.AJAX.urlReplaceNojs(url);
+        $.ajax({
+          type: "POST",
+          url: url,
+          data: {'ctools_changed': $(this).val(), 'js': 1, 'ctools_ajax': 1 },
+          global: true,
+          success: Drupal.CTools.AJAX.respond,
+          error: function(xhr) {
+            Drupal.CTools.AJAX.handleErrors(xhr, url);
+          },
+          complete: function() {
+            $('.ctools-ajaxing').removeClass('ctools-ajaxing');
+            if ($(object).hasClass('ctools-ajax-submit-onchange')) {
+              $('form#' + form_id).submit();
+            }
+          },
+          dataType: 'json'
+        });
+      }
+      else {
+        if ($(object).hasClass('ctools-ajax-submit-onchange')) {
+          $('form#' + form_id).submit();
+        }
+        return false;
+      }
+    }
+    catch (err) {
+      alert("An error occurred while attempting to process " + url);
+      $('.ctools-ajaxing').removeClass('ctools-ajaxing');
+      return false;
+    }
+    return false;
+  };
+
+  /**
+   * Find a URL for an AJAX button.
+   *
+   * The URL for this gadget will be composed of the values of items by
+   * taking the ID of this item and adding -url and looking for that
+   * class. They need to be in the form in order since we will
+   * concat them all together using '/'.
+   */
+  Drupal.CTools.AJAX.findURL = function(item) {
+    var url = '';
+    var url_class = '.' + $(item).attr('id') + '-url';
+    $(url_class).each(
+      function() {
+        if (url && $(this).val()) {
+          url += '/';
+        }
+        url += $(this).val();
+      });
+    return url;
+  };
+
+  Drupal.CTools.AJAX.getPath = function (link) {
+    if (!link) {
+      return;
+    }
+
+    var index = link.indexOf('?');
+    if (index != -1) {
+      link = link.substr(0, index);
+    }
+
+    return link;
+  }
+
+  Drupal.CTools.AJAX.commands.prepend = function(data) {
+    $(data.selector).prepend(data.data);
+    Drupal.attachBehaviors($(data.selector));
+  };
+
+  Drupal.CTools.AJAX.commands.append = function(data) {
+    $(data.selector).append(data.data);
+    Drupal.attachBehaviors($(data.selector));
+  };
+
+  Drupal.CTools.AJAX.commands.replace = function(data) {
+    $(data.selector).replaceWith(data.data);
+    Drupal.attachBehaviors($(data.selector));
+  };
+
+  Drupal.CTools.AJAX.commands.after = function(data) {
+    var object = $(data.data);
+    $(data.selector).after(object);
+    Drupal.attachBehaviors(object);
+  };
+
+  Drupal.CTools.AJAX.commands.before = function(data) {
+    var object = $(data.data);
+    $(data.selector).before(object);
+    Drupal.attachBehaviors(object);
+  };
+
+  Drupal.CTools.AJAX.commands.html = function(data) {
+    $(data.selector).html(data.data);
+    Drupal.attachBehaviors($(data.selector));
+  };
+
+  Drupal.CTools.AJAX.commands.remove = function(data) {
+    $(data.selector).remove();
+  };
+
+  Drupal.CTools.AJAX.commands.changed = function(data) {
+    if (!$(data.selector).hasClass('changed')) {
+      $(data.selector).addClass('changed');
+      if (data.star) {
+        $(data.selector).find(data.star).append(' <span class="star">*</span> ');
+      }
+    }
+  };
+
+  Drupal.CTools.AJAX.commands.alert = function(data) {
+    alert(data.text, data.title);
+  };
+
+  Drupal.CTools.AJAX.commands.css = function(data) {
+  /*
+    if (data.selector && data.selector.contains('* html ')) {
+      // This indicates an IE hack and we should only do it if we are IE.
+      if (!jQuery.browser.msie) {
+        return;
+      }
+      data.selector = data.selector.replace('* html ', '');
+    }
+  */
+    $(data.selector).css(data.argument);
+  };
+
+  Drupal.CTools.AJAX.commands.css_files = function(data) {
+    // Build a list of css files already loaded:
+    $('link:not(.ctools-temporary-css)').each(function () {
+      if ($(this).attr('type') == 'text/css') {
+        var link = Drupal.CTools.AJAX.getPath($(this).attr('href'));
+        if (link) {
+          Drupal.CTools.AJAX.css[link] = $(this).attr('href');
+        }
+      }
+    });
+
+    var html = '';
+    for (var i = 0; i < data.argument.length; i++) {
+      var link = Drupal.CTools.AJAX.getPath(data.argument[i].file);
+      if (!Drupal.CTools.AJAX.css[link]) {
+        html += '<link class="ctools-temporary-css" type="text/css" rel="stylesheet" media="' + data.argument[i].media +
+          '" href="' + data.argument[i].file + '" />';
+      }
+    }
+
+    if (html) {
+      $('link.ctools-temporary-css').remove();
+      $('body').append($(html));
+    }
+  };
+
+  Drupal.CTools.AJAX.commands.settings = function(data) {
+    $.extend(Drupal.settings, data.argument);
+  };
+
+  Drupal.CTools.AJAX.commands.scripts = function(data) {
+    // Build a list of scripts already loaded:
+    var scripts = {};
+    $('script').each(function () {
+      var link = Drupal.CTools.AJAX.getPath($(this).attr('src'));
+      if (link) {
+        Drupal.CTools.AJAX.scripts[link] = $(this).attr('src');
+      }
+    });
+
+    var html = '';
+    var head = document.getElementsByTagName('head')[0];
+    for (var i = 0; i < data.argument.length; i++) {
+      var link = Drupal.CTools.AJAX.getPath(data.argument[i]);
+      if (!Drupal.CTools.AJAX.scripts[link]) {
+        Drupal.CTools.AJAX.scripts[link] = link;
+        // Use this to actually get the script tag into the dom, which is
+        // needed for scripts that self-reference to determine paths.
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = data.argument[i];
+        head.appendChild(script);
+        html += '<script type="text/javascript" src="' + data.argument[i] + '"></script>';
+      }
+    }
+
+    if (html) {
+      $('body').append($(html));
+    }
+  };
+
+  Drupal.CTools.AJAX.commands.data = function(data) {
+    $(data.selector).data(data.name, data.value);
+  };
+
+  Drupal.CTools.AJAX.commands.attr = function(data) {
+    $(data.selector).attr(data.name, data.value);
+  };
+
+  Drupal.CTools.AJAX.commands.restripe = function(data) {
+    // :even and :odd are reversed because jquery counts from 0 and
+    // we count from 1, so we're out of sync.
+    $('tbody tr:not(:hidden)', $(data.selector))
+      .removeClass('even')
+      .removeClass('odd')
+      .filter(':even')
+        .addClass('odd')
+      .end()
+      .filter(':odd')
+        .addClass('even');
+  };
+
+  Drupal.CTools.AJAX.commands.redirect = function(data) {
+    if (data.delay > 0) {
+      setTimeout(function () {
+        location.href = data.url;
+      }, data.delay);
+    }
+    else {
+      location.href = data.url;
+    }
+  };
+
+  Drupal.CTools.AJAX.commands.reload = function(data) {
+    location.reload();
+  };
+
+  Drupal.CTools.AJAX.commands.submit = function(data) {
+    $(data.selector).submit();
+  }
+
+  /**
+   * Replacing 'nojs' with 'ajax' in the URL allows for an easy method to let
+   * the server detect when it needs to degrade gracefully. 
+   * There are five scenarios to check for:
+   * 1. /nojs/
+   * 2. /nojs$ - The end of a URL string.
+   * 3. /nojs? - Followed by a query (with clean URLs enabled).
+   *      E.g.: path/nojs?destination=foobar
+   * 4. /nojs& - Followed by a query (without clean URLs enabled).
+   *      E.g.: ?q=path/nojs&destination=foobar
+   * 5. /nojs# - Followed by a fragment.
+   *      E.g.: path/nojs#myfragment
+   */
+  Drupal.CTools.AJAX.urlReplaceNojs = function(url) {
+    return url.replace(/\/nojs(\/|$|\?|&|#)/g, '/ajax$1');
+  }
+
+  /**
+   * Bind links that will open modals to the appropriate function.
+   */
+  Drupal.behaviors.CToolsAJAX = function(context) {
+    // Bind links
+
+    // Note that doing so in this order means that the two classes can be
+    // used together safely.
+    $('a.ctools-use-ajax-cache:not(.ctools-use-ajax-processed)', context)
+      .addClass('ctools-use-ajax-processed')
+      .click(Drupal.CTools.AJAX.clickAJAXCacheLink)
+      .each(function () {
+        Drupal.CTools.AJAX.warmCache.apply(this);
+      });
+
+    $('a.ctools-use-ajax:not(.ctools-use-ajax-processed)', context)
+      .addClass('ctools-use-ajax-processed')
+      .click(Drupal.CTools.AJAX.clickAJAXLink);
+
+
+    // Bind buttons
+    $('input.ctools-use-ajax:not(.ctools-use-ajax-processed), button.ctools-use-ajax:not(.ctools-use-ajax-processed)', context)
+      .addClass('ctools-use-ajax-processed')
+      .click(Drupal.CTools.AJAX.clickAJAXButton);
+
+    // Bind select
+    $('select, input:text, input:radio, input:checkbox', context)
+       .filter('.ctools-use-ajax-onchange:not(.ctools-use-ajax-processed)')
+       .addClass('ctools-use-ajax-processed')
+       .change(Drupal.CTools.AJAX.changeAJAX);
+
+    // Add information about loaded CSS and JS files.
+    if (Drupal.settings.CToolsAJAX && Drupal.settings.CToolsAJAX.css) {
+      $.extend(Drupal.CTools.AJAX.css, Drupal.settings.CToolsAJAX.css);
+    }
+    if (Drupal.settings.CToolsAJAX && Drupal.settings.CToolsAJAX.scripts) {
+      $.extend(Drupal.CTools.AJAX.scripts, Drupal.settings.CToolsAJAX.scripts);
+    }
+  };
+})(jQuery);
+;/**/
+// $Id: modal.js,v 1.17.2.20 2010/10/20 19:22:08 merlinofchaos Exp $
+/**
+ * @file
+ *
+ * Implement a modal form.
+ *
+ * @see modal.inc for documentation.
+ *
+ * This javascript relies on the CTools ajax responder.
+ */
+
+(function ($) {
+    "use strict";
+    if (typeof $ === 'undefined') { return false; }
+    // Make sure our objects are defined.
+    Drupal.CTools = Drupal.CTools || {};
+    Drupal.CTools.Modal = Drupal.CTools.Modal || {};
+
+    var modalEventHandler;
+    var modalContentClose;
+    var modalContentResize;
+
+    Drupal.behaviors.step_esp_web_services_subscribe = function (context) {
+        $("#button-step-esp-web-services-subscribe").hide();
+    };
+
+    /**
+     * Display the modal
+     *
+     * @todo -- document the settings.
+     */
+    Drupal.CTools.Modal.show = function (choice) {
+        var opts = {};
+
+        if (choice && typeof choice === 'string' && Drupal.settings[choice]) {
+            // This notation guarantees we are actually copying it.
+            $.extend(true, opts, Drupal.settings[choice]);
+        } else if (choice) {
+            $.extend(true, opts, choice);
+        }
+
+        var defaults = {
+            modalTheme: 'CToolsModalDialog',
+            throbberTheme: 'CToolsModalThrobber',
+            animation: 'show',
+            animationSpeed: 'fast',
+            modalSize: {
+                type: 'scale',
+                width: 0.8,
+                height: 0.8,
+                addWidth: 0,
+                addHeight: 0,
+                // How much to remove from the inner content to make space for the
+                // theming.
+                contentRight: 25,
+                contentBottom: 45
+            },
+            modalOptions: {
+                opacity: 0.55,
+                background: '#fff'
+            }
+        };
+
+        var settings = {};
+        $.extend(true, settings, defaults, Drupal.settings.PURModal, opts);
+
+        if (Drupal.CTools.Modal.currentSettings && Drupal.CTools.Modal.currentSettings !== settings) {
+            Drupal.CTools.Modal.modal.remove();
+            Drupal.CTools.Modal.modal = null;
+        }
+
+        Drupal.CTools.Modal.currentSettings = settings;
+
+        var resize = function (e) {
+            // When creating the modal, it actually exists only in a theoretical
+            // place that is not in the DOM. But once the modal exists, it is in the
+            // DOM so the context must be set appropriately.
+            var context = e ? document : Drupal.CTools.Modal.modal, width, height;
+
+            if (Drupal.CTools.Modal.currentSettings.modalSize.type === 'scale') {
+                width = $(window).width() * Drupal.CTools.Modal.currentSettings.modalSize.width;
+                height = $(window).height() * Drupal.CTools.Modal.currentSettings.modalSize.height;
+            } else {
+                width = Drupal.CTools.Modal.currentSettings.modalSize.width;
+                height = Drupal.CTools.Modal.currentSettings.modalSize.height;
+            }
+
+            // Use the additionol pixels for creating the width and height.
+            $('div.ctools-modal-content', context).css({
+                'width': width + Drupal.CTools.Modal.currentSettings.modalSize.addWidth + 'px',
+                'height': height + Drupal.CTools.Modal.currentSettings.modalSize.addHeight + 'px'
+            });
+            $('div.ctools-modal-content .modal-content', context).css({
+                'width': (width - Drupal.CTools.Modal.currentSettings.modalSize.contentRight) + 'px',
+                'height': (height - Drupal.CTools.Modal.currentSettings.modalSize.contentBottom) + 'px'
+            });
+        };
+
+        if (!Drupal.CTools.Modal.modal) {
+            Drupal.CTools.Modal.modal = $(Drupal.theme(settings.modalTheme));
+            if (settings.modalSize.type === 'scale') {
+                $(window).bind('resize', resize);
+            }
+        }
+
+        resize();
+
+        $('span.modal-title', Drupal.CTools.Modal.modal).html(Drupal.CTools.Modal.currentSettings.loadingText);
+        Drupal.CTools.Modal.modalContent(Drupal.CTools.Modal.modal, settings.modalOptions, settings.animation, settings.animationSpeed);
+        $('#modalContent .modal-content').html(Drupal.theme(settings.throbberTheme));
+    };
+
+    /**
+     * Hide the modal
+     */
+    Drupal.CTools.Modal.dismiss = function () {
+        if (Drupal.CTools.Modal.modal) {
+            Drupal.CTools.Modal.unmodalContent(Drupal.CTools.Modal.modal);
+        }
+    };
+
+    /**
+     * Provide the HTML to create the modal dialog.
+     */
+    Drupal.theme.prototype.CToolsModalDialog = function () {
+        var html = '';
+        html += '  <div id="ctools-modal">';
+        html += '    <div class="ctools-modal-content">'; // panels-modal-content
+        html += '      <div class="modal-header">';
+        html += '        <a class="close" href="#">';
+        html += Drupal.CTools.Modal.currentSettings.closeText + Drupal.CTools.Modal.currentSettings.closeImage;
+        html += '        </a>';
+        html += '        <span id="modal-title" class="modal-title">&nbsp;</span>';
+        html += '      </div>';
+        html += '      <div id="modal-content" class="modal-content">';
+        html += '      </div>';
+        html += '    </div>';
+        html += '  </div>';
+
+        return html;
+    };
+
+    /**
+     * Provide the HTML to create the throbber.
+     */
+    Drupal.theme.prototype.CToolsModalThrobber = function () {
+        var html = '';
+        html += '  <div id="modal-throbber">';
+        html += '    <div class="modal-throbber-wrapper">';
+        html += Drupal.CTools.Modal.currentSettings.throbber;
+        html += '    </div>';
+        html += '  </div>';
+
+        return html;
+    };
+
+    /**
+     * Figure out what settings string to use to display a modal.
+     */
+    Drupal.CTools.Modal.getSettings = function (object) {
+        var match = $(object).attr('class').match(/ctools-modal-(\S+)/);
+        if (match) {
+            return match[1];
+        }
+    };
+
+    /**
+     * Click function for modals that can be cached.
+     */
+    Drupal.CTools.Modal.clickAjaxCacheLink = function () {
+        Drupal.CTools.Modal.show(Drupal.CTools.Modal.getSettings(this));
+        return Drupal.CTools.AJAX.clickAJAXCacheLink.apply(this);
+    };
+
+    /**
+     * Generic replacement click handler to open the modal with the destination
+     * specified by the href of the link.
+     */
+    Drupal.CTools.Modal.clickAjaxLink = function () {
+        // show the empty dialog right away.
+        Drupal.CTools.Modal.show(Drupal.CTools.Modal.getSettings(this));
+        Drupal.CTools.AJAX.clickAJAXLink.apply(this);
+        if (!$(this).hasClass('ctools-ajaxing')) {
+            Drupal.CTools.Modal.dismiss();
+        }
+
+        return false;
+    };
+
+    /**
+     * Generic replacement click handler to open the modal with the destination
+     * specified by the href of the link.
+     */
+    Drupal.CTools.Modal.clickAjaxButton = function () {
+        if ($(this).hasClass('ctools-ajaxing')) {
+            return false;
+        }
+
+        Drupal.CTools.Modal.show(Drupal.CTools.Modal.getSettings(this));
+        Drupal.CTools.AJAX.clickAJAXButton.apply(this);
+        if (!$(this).hasClass('ctools-ajaxing')) {
+            Drupal.CTools.Modal.dismiss();
+        }
+        return false;
+    };
+
+    /**
+     * Submit responder to do an AJAX submit on all modal forms.
+     */
+    Drupal.CTools.Modal.submitAjaxForm = function (e) {
+        var form = $(this);
+        var url = form.attr('action');
+        if(form.valid()){
+            Drupal.CTools.Modal.showPreLoader();
+            setTimeout(function () {
+                Drupal.CTools.AJAX.ajaxSubmit(form, url);
+            }, 1);
+        } else {
+            Drupal.CTools.Modal.hidePreLoader();
+        }
+        return false;
+    };
+
+    /**
+     * Bind links that will open modals to the appropriate function.
+     */
+    Drupal.behaviors.ZZCToolsModal = function (context) {
+        // Bind links
+        // Note that doing so in this order means that the two classes can be
+        // used together safely.
+        $('a.ctools-use-modal-cache:not(.ctools-use-modal-processed)', context)
+            .addClass('ctools-use-modal-processed')
+            .click(Drupal.CTools.Modal.clickAjaxCacheLink)
+            .each(function () {
+                Drupal.CTools.AJAX.warmCache.apply(this);
+            });
+
+        $('a.ctools-use-modal:not(.ctools-use-modal-processed)', context)
+            .addClass('ctools-use-modal-processed')
+            .click(Drupal.CTools.Modal.clickAjaxLink);
+
+        // Bind buttons
+        $('input.ctools-use-modal:not(.ctools-use-modal-processed), button.ctools-use-modal:not(.ctools-use-modal-processed)', context)
+            .addClass('ctools-use-modal-processed')
+            .click(Drupal.CTools.Modal.clickAjaxButton);
+
+        // Bind submit links in the modal form.
+        $('#modal-content form:not(.ctools-use-modal-processed)', context)
+            .addClass('ctools-use-modal-processed')
+            .submit(Drupal.CTools.Modal.submitAjaxForm)
+            .bind('CToolsAJAXSubmit', Drupal.CTools.AJAX.ajaxSubmit);
+
+        // add click handlers so that we can tell which button was clicked,
+        // because the AJAX submit does not set the values properly.
+
+        $('#modal-content input[type="submit"]:not(.ctools-use-modal-processed), #modal-content button:not(.ctools-use-modal-processed)', context)
+            .addClass('ctools-use-modal-processed')
+            .click(function () {
+                if (Drupal.autocompleteSubmit && !Drupal.autocompleteSubmit()) {
+                    return false;
+                }
+
+                // Make sure it knows our button.
+                if (!$(this.form).hasClass('ctools-ajaxing')) {
+                    this.form.clk = this;Drupal.behaviors.step_esp_web_services_subscribe = function (context) {
+		$("#button-step-esp-web-services-subscribe").hide();
+	}
+                }
+            });
+
+    };
+
+    // The following are implementations of AJAX responder commands.
+
+    /**
+     * AJAX responder command to place HTML within the modal.
+     */
+    Drupal.CTools.AJAX.commands.modal_display = function (command) {
+        $('#modal-title').html(command.title);
+        $('#modal-content').html(command.output);
+        Drupal.attachBehaviors();
+    };
+
+    /**
+     * AJAX responder command to dismiss the modal.
+     */
+    Drupal.CTools.AJAX.commands.modal_dismiss = function (command) {
+        Drupal.CTools.Modal.dismiss();
+        $('link.ctools-temporary-css').remove();
+    };
+
+    /**
+     * Display loading
+     */
+    Drupal.CTools.AJAX.commands.modal_loading = function (command) {
+        Drupal.CTools.AJAX.commands.modal_display({
+            output: Drupal.theme(Drupal.CTools.Modal.currentSettings.throbberTheme),
+            title: Drupal.CTools.Modal.currentSettings.loadingText
+        });
+    };
+
+    /**
+     * modalContent
+     * @param content string to display in the content box
+     * @param css obj of css attributes
+     * @param animation (fadeIn, slideDown, show)
+     * @param speed (valid animation speeds slow, medium, fast or # in ms)
+     */
+    Drupal.CTools.Modal.modalContent = function (content, css, animation, speed) {
+        // If our animation isn't set, make it just show/pop
+        if (!animation) {
+            animation = 'show';
+        } else {
+            // If our animation isn't "fadeIn" or "slideDown" then it always is show
+            if (animation !== 'fadeIn' && animation !== 'slideDown') {
+                animation = 'show';
+            }
+        }
+
+        if (!speed) {
+            speed = 'fast';
+        }
+
+        /* Build our base attributes and allow them to be overriden */
+        css = $.extend({
+            position: 'absolute',
+            left: '0px',
+            margin: '0px',
+            background: '#000',
+            opacity: '.55'
+        }, css);
+
+        // Add opacity handling for IE.
+        css.filter = 'alpha(opacity=' + (100 * css.opacity) + ')';
+        content.hide();
+
+        // if we already have a modalContent, remove it
+        var modalBackdrop = $('#modalBackdrop'),
+            modalContent = $('#modalContent');
+        if (modalBackdrop.length) { modalBackdrop.remove();}
+        if (modalContent.length) { modalContent.remove(); }
+        var wt;
+        // position code lifted from http://www.quirksmode.org/viewport/compatibility.html
+        if (window.self.pageYOffset) { // all except Explorer
+            wt = window.self.pageYOffset;
+        } else if (document.documentElement && document.documentElement.scrollTop) { // Explorer 6 Strict
+            wt = document.documentElement.scrollTop;
+        } else if (document.body) { // all other Explorers
+            wt = document.body.scrollTop;
+        }
+
+        // Get our dimensions
+
+        // Get the docHeight and (ugly hack) add 50 pixels to make sure we dont have a *visible* border below our div
+        var docHeight = $(document).height() + 50;
+        var docWidth = $(document).width();
+        var winHeight = $(window).height();
+        var winWidth = $(window).width();
+        if (docHeight < winHeight) { docHeight = winHeight; }
+
+        // Create our divs
+        $('body').append('<div id="modalBackdrop" style="z-index: 30000; display: none;"></div><div id="modalContent" style="z-index: 30001; position: absolute;">' + $(content).html() + '</div>');
+
+        // Keyboard and focus event handler ensures focus stays on modal elements only
+        modalEventHandler = function (event) {
+            var target = null;
+            if (event) { //Mozilla
+                target = event.target;
+            } else { //IE
+                event = window.event;
+                target = event.srcElement;
+            }
+            if ($(target).filter('*:visible').parents('#modalContent').size()) {
+                // allow the event only if target is a visible child node of #modalContent
+                return true;
+            }
+            var modalContent = $('#modalContent');
+            if (modalContent.length) { modalContent.get(0).focus(); }
+            return false;
+        };
+        $('body').bind('focus', modalEventHandler)
+            .bind('keypress', modalEventHandler);
+
+        // Create our content div, get the dimensions, and hide it
+        modalContent = $('#modalContent').css('top', '-1000px');
+        var mdcTop = wt + (winHeight / 2) - (modalContent.outerHeight() / 2);
+        var mdcLeft = (winWidth / 2) - (modalContent.outerWidth() / 2);
+        $('#modalBackdrop').css(css).css('top', 0).css('height', docHeight + 'px').css('width', docWidth + 'px').show();
+        // IE9 bug: modalContent may disappear due to width being auto (0px) so we set it explicitly
+        modalContent.css('width', (modalContent.outerWidth() - 10) + 'px');
+        modalContent.css({top: mdcTop + 'px', left: mdcLeft + 'px'}).hide()[animation](speed);
+
+        // Bind a click for closing the modalContent
+        modalContentClose = function () {
+            var form = $('form.ctools-use-modal-processed');
+            close();
+            reloadPisces(form);
+            return false;
+        };
+
+        $('.close').bind('click', modalContentClose);
+
+        // reload the page
+        function reloadPisces(form) {
+            if(form.hasClass('penton_registration_reload_after_close')) {
+                var root = location.protocol + '//' + location.host + "/";
+                if (document.URL == root) {
+                    location.reload();
+                } else {
+                    var link_to_modal = document.URL.indexOf("?modal=true&instance=register");
+                    if (link_to_modal > 0) {
+                        window.location = root;
+                        return false;
+                    }
+                    location.reload();
+                }
+            }
+            return false;
+        }
+
+        // Close the open modal content and backdrop
+        function close() {
+            // Unbind the events
+            $(window).unbind('resize', modalContentResize);
+            $('body').unbind('focus', modalEventHandler)
+                .unbind('keypress', modalEventHandler);
+            $('.close').unbind('click', modalContentClose);
+            $(document).trigger('CToolsDetachBehaviors', $('#modalContent'));
+            // Set our animation parameters and use them
+            if (animation === 'fadeIn') { animation = 'fadeOut'; }
+            if (animation === 'slideDown') { animation = 'slideUp'; }
+            if (animation === 'show') { animation = 'hide'; }
+
+            // Close the content
+            modalContent.hide()[animation](speed);
+
+            // Remove the content and reload the page
+            $('#modalContent').remove();
+            $('#modalBackdrop').remove();
+        }
+
+        // Move and resize the modalBackdrop and modalContent on resize of the window
+        modalContentResize = function () {
+            // Get our heights
+            var docHeight = $(document).height();
+            var docWidth = $(document).width();
+            var winHeight = $(window).height();
+            var winWidth = $(window).width();
+            if (docHeight < winHeight) { docHeight = winHeight; }
+
+            // Get where we should move content to
+            var modalContent = $('#modalContent');
+            var mdcTop = ( winHeight / 2 ) - (  modalContent.outerHeight() / 2);
+            var mdcLeft = ( winWidth / 2 ) - ( modalContent.outerWidth() / 2);
+
+            // Apply the changes
+            $('#modalBackdrop').css('height', docHeight + 'px').css('width', docWidth + 'px').show();
+            modalContent.css('top', mdcTop + 'px').css('left', mdcLeft + 'px').show();
+        };
+        $(window).bind('resize', modalContentResize);
+
+        $('#modalContent').focus();
+    };
+
+    /**
+     * unmodalContent
+     * @param content (The jQuery object to remove)
+     * @param animation (fadeOut, slideUp, show)
+     * @param speed (valid animation speeds slow, medium, fast or # in ms)
+     */
+    Drupal.CTools.Modal.unmodalContent = function (content, animation, speed) {
+        // If our animation isn't set, make it just show/pop
+        if (!animation) {
+            animation = 'show';
+        } else {
+            // If our animation isn't "fade" then it always is show
+            if (( animation !== 'fadeOut' ) && ( animation !== 'slideUp')) { animation = 'show'; }
+        }
+        // Set a speed if we dont have one
+        if (!speed) { speed = 'fast'; }
+
+        // Unbind the events we bound
+        $(window).unbind('resize', modalContentResize);
+        $('body').unbind('focus', modalEventHandler)
+            .unbind('keypress', modalEventHandler);
+        $('.close').unbind('click', modalContentClose);
+        $(document).trigger('CToolsDetachBehaviors', $('#modalContent'));
+
+        // jQuery magic loop through the instances and run the animations or removal.
+        content.each(function () {
+            if (animation === 'fade') {
+                $('#modalContent').fadeOut(speed, function () {
+                    $('#modalBackdrop').fadeOut(speed, function () {
+                        $(this).remove();
+                    });
+                    $(this).remove();
+                });
+            } else {
+                if (animation === 'slide') {
+                    $('#modalContent').slideUp(speed, function () {
+                        $('#modalBackdrop').slideUp(speed, function () {
+                            $(this).remove();
+                        });
+                        $(this).remove();
+                    });
+                } else {
+                    $('#modalContent').remove();
+                    $('#modalBackdrop').remove();
+                }
+            }
+        });
+    };
+
+    Drupal.CTools.Modal.showPreLoader = function() {
+        var spinner = $('#modalContent .penton_registration_spinner_area'),
+            button = $('#modalContent .form-submit');
+        if (spinner.length) {
+            spinner.remove();
+        }
+        if (button.length) {
+            button.hide();
+            $('<div>',{class: 'penton_registration_spinner_area',text:'submitting...'}).insertAfter(button);
+        }
+    };
+
+    Drupal.CTools.Modal.hidePreLoader = function() {
+        var spinner = $('#modalContent .penton_registration_spinner_area'),
+            button = $('#modalContent .form-submit');
+        if (spinner.length) {
+            spinner.remove();
+        }
+        if (button.length) {
+            button.show();
+        }
+
+    };
+
+})(window.jq183);
+;/**/
+(function($) {
+  'use strict';
+
+  $.fn.preventDoubleSubmission = function () {
+
+    $(this).each(function() {
+      $(this).submit(function(e) {
+        if(!$(this).hasClass('single-submission-send')) {
+          $(this).addClass('single-submission-send');
+        } else {
+          e.preventDefault();
+        }
+      });
+    });
+
+    return this;
+  };
+
+  $(function() {
+    $('.single-submission').preventDoubleSubmission();
+  });
+}(jQuery));
+;/**/
+/**
+*
+*  Base64 encode / decode
+*  http://www.webtoolkit.info/
+*
+**/
+var Base64 = {
+
+  // private property
+  _keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+
+  // public method for encoding
+  encode : function (input) {
+    var output = "";
+    var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+    var i = 0;
+
+    input = Base64._utf8_encode(input);
+
+    while (i < input.length) {
+
+      chr1 = input.charCodeAt(i++);
+      chr2 = input.charCodeAt(i++);
+      chr3 = input.charCodeAt(i++);
+
+      enc1 = chr1 >> 2;
+      enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+      enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+      enc4 = chr3 & 63;
+
+      if (isNaN(chr2)) {
+        enc3 = enc4 = 64;
+      } else if (isNaN(chr3)) {
+        enc4 = 64;
+      }
+
+      output = output +
+      this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
+      this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
+
+    }
+
+    return output;
+  },
+
+  // public method for decoding
+  decode : function (input) {
+    var output = "";
+    var chr1, chr2, chr3;
+    var enc1, enc2, enc3, enc4;
+    var i = 0;
+
+    input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+
+    while (i < input.length) {
+
+      enc1 = this._keyStr.indexOf(input.charAt(i++));
+      enc2 = this._keyStr.indexOf(input.charAt(i++));
+      enc3 = this._keyStr.indexOf(input.charAt(i++));
+      enc4 = this._keyStr.indexOf(input.charAt(i++));
+
+      chr1 = (enc1 << 2) | (enc2 >> 4);
+      chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+      chr3 = ((enc3 & 3) << 6) | enc4;
+
+      output = output + String.fromCharCode(chr1);
+
+      if (enc3 != 64) {
+        output = output + String.fromCharCode(chr2);
+      }
+      if (enc4 != 64) {
+        output = output + String.fromCharCode(chr3);
+      }
+
+    }
+
+    output = Base64._utf8_decode(output);
+
+    return output;
+
+  },
+
+  // private method for UTF-8 encoding
+  _utf8_encode : function (string) {
+    string = string.replace(/\r\n/g,"\n");
+    var utftext = "";
+
+    for (var n = 0; n < string.length; n++) {
+
+      var c = string.charCodeAt(n);
+
+      if (c < 128) {
+        utftext += String.fromCharCode(c);
+      }
+      else if((c > 127) && (c < 2048)) {
+        utftext += String.fromCharCode((c >> 6) | 192);
+        utftext += String.fromCharCode((c & 63) | 128);
+      }
+      else {
+        utftext += String.fromCharCode((c >> 12) | 224);
+        utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+        utftext += String.fromCharCode((c & 63) | 128);
+      }
+
+    }
+
+    return utftext;
+  },
+
+  // private method for UTF-8 decoding
+  _utf8_decode : function (utftext) {
+    var string = "";
+    var i = 0;
+    var c = c1 = c2 = 0;
+
+    while ( i < utftext.length ) {
+
+      c = utftext.charCodeAt(i);
+
+      if (c < 128) {
+        string += String.fromCharCode(c);
+        i++;
+      }
+      else if((c > 191) && (c < 224)) {
+        c2 = utftext.charCodeAt(i+1);
+        string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+        i += 2;
+      }
+      else {
+        c2 = utftext.charCodeAt(i+1);
+        c3 = utftext.charCodeAt(i+2);
+        string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+        i += 3;
+      }
+
+    }
+
+    return string;
+  }
+
+}
+//***** END ENCRYPTION *****//
+
+//initializing variables
+var scData = {'em':'', 'fn':'', 'ln':'', 'zc':'', 'jt':'', 'cn':'', 'dem1':'', 'dem2':'', 'reg':'', 'ver':''};
+var urlSubstr = location.search.substring(1);
+//regEx for finding yesmail var ymrid, must contain a validly formatted email
+var ymRidExpr = /YM_RID=[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+/g
+var ymrid = urlSubstr.match(ymRidExpr) == undefined ? '' : urlSubstr.match(ymRidExpr)[0].split("=")[1];
+//grabbing and storing decoded values for global use, if exists
+var cData = getSC('ymbcd');
+if(cData!=undefined){
+    for(x in cData){
+        scData[x] = Base64.decode(cData[x]);
+    }
+}
+var emailCheck = scData.em;
+if ( ymrid.length > 1 && (cData == undefined || ( emailCheck != ymrid && scData.reg == 'false' ))) scData.em = ymrid;
+
+//returns a JS Object contianing encoded values
+function getSC(c_name) {
+var i,x,y,cookies=document.cookie.split(";");
+for (i=0;i<cookies.length;i++) {
+  x=cookies[i].substr(0,cookies[i].indexOf("="));
+  y=cookies[i].substr(cookies[i].indexOf("=")+1);
+  x=x.replace(/^\s+|\s+$/g,"");
+  if (x==c_name)
+    {
+    return eval("(" + unescape(y) + ")");
+    }
+  }
+}
+//add conditions for setting cookie to Drupal behaviors
+Drupal.behaviors.scBehavior = function(context) {
+  if ( context === document ) {
+    setSC(ymrid);
+    $(".enews-signup [name='email']").val(scData.em);
+  }
+
+}
+
+function setSC(email) {
+  var status = jQuery("body").hasClass("logged-in");
+  if ( !status ){
+      if ( email.length > 1 && (cData == undefined || ( emailCheck != email && scData.reg == 'false' ))) {
+          var ymbcd = "{'em':'"+Base64.encode(email)+"','reg':'"+Base64.encode('false')+"'}";
+          jQuery.cookie("ymbcd", ymbcd, { path: '/', expires: 365, domain: document.domain});
+          emailCheck = email;
+      }
+  }
+  else {
+      if ( cData == undefined || scData.reg == 'false' ) {
+          jQuery.post('/user/callback', "anon=false");
+      }
+  }
+}
+
+;/**/
+Drupal.behaviors.profile = function (context) {
+  if(typeof Drupal.settings.is_expert == "undefined"){
+    $('.profile-page .profile:not(processed)').each(function(el){
+      var $this = $(this),
+          max_height = $this.height(),
+          this_height = $('.profile-header', el).outerHeight();
+
+      if (this_height > max_height) {
+        $this.css({'height':max_height, 'max-height': 'none'});
+        $this.append('<div class="more"><span></span><a href="">more about me</a></div>');
+      };
+      $('.more a', el).toggle(function(event) {
+        $(this).text('less');
+        $this.css({'height':this_height}).addClass('open');
+      },function(){
+        $(this).text('more about me');
+        $this.css({'height':max_height}).removeClass('open');
+      });
+    }). addClass('processed');
+  };
+  $('.profile-page .tabs.primary, .profile-page .user-nav .nav').dropdownnav();
+};
+
+(function($) {
+  $.fn.dropdownnav = function(options) {
+
+    var defaults = $.extend({
+      maxNumber: 4,
+      classes: this.attr('class'),
+      moreText : 'more',
+      moreIcon : 'icon icon-plus'
+    });
+    var settings = $.extend( true, {}, defaults, options ),
+        indexedNumber = settings.maxNumber - 1;
+
+    return this.each(function() {
+      if ($(this).children().length > settings.maxNumber ) {
+        var $wrapper = $('<ul />')
+            .css({'clear':'none','float':'left','overflow':'visible'})
+            .addClass(settings.classes);
+        $(this).css({'float':'left'}).after($wrapper).addClass('processed').parent().addClass('clearfix').css({'overflow':'visible'});
+        $($wrapper).prepend('<li class="dropdown"><a href="" class="dropdown-toggle" id="dropdownnav1" data-toggle="dropdown">' + settings.moreText + ' <span class="' + settings.moreIcon + '"></a><ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownnav1"></ul></li>');
+        $(this).children('li:gt(' + indexedNumber + ')').each(function () {
+          $('.dropdown-menu').append(this);
+        });
+        $(this).children('li').slice(settings.maxNumber).remove();
+      }
+    });
+
+  }
+}(jQuery));
+;/**/

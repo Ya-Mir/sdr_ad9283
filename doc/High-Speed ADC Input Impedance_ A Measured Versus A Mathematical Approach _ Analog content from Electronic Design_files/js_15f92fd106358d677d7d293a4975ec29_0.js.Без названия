@@ -1,0 +1,1967 @@
+var company_name = '';
+var employee_count = '';
+var primary_sic = '';
+var company_size = '';
+
+// Demandbase Callback
+function dbase_parse(data) {
+  if (! data) return '';
+  try { // minor error handling
+    company_name = data['company_name'] || 'Not Defined';
+    employee_count = data['employee_count'] || 'Not Defined';
+    primary_sic = data['primary_sic'] || 'Not Defined';
+    company_size = data['company_size'] || 'Not Defined';
+  } catch(e) { } // do nothing on error
+}
+;/**/
+// $Id: apachesolr_autocomplete.js,v 1.1 2010/10/05 13:32:01 janusman Exp $
+
+/**
+ * Adds the custom autocomplete widget behavior.
+ */
+Drupal.behaviors.apachesolr_autocomplete = function(context) {
+  $(".apachesolr-autocomplete.unprocessed", context).autocomplete(Drupal.settings.apachesolr_autocomplete.path,
+  {
+    // Classnames for the widget.
+    inputClass: "",
+    loadingClass: "throbbing",
+    // Do not select first suggestion by default.
+    selectFirst: false,
+    // Specify no matching as it wil be done on server-side.
+    matchContains: false,
+    matchSubset: false,
+    // Maximum number of items to show in widget.
+    max: 50,
+    width: 300,
+    scroll: true,
+    scrollHeight: 360,
+    // Data returned from server is JSON-encoded.
+    dataType: "json",
+    // Function to parse returned json into elements.
+    parse: function(data) {
+      return $.map(data, function(item) {
+        return {
+          data: item,          // Echo the input data.
+          value: item.display, // This will be shown in the options widget.
+          result: item.key     // The actual value to put into the form element.
+        }
+      });
+    },
+    // Return the HTML to display in the options widget.
+    formatItem: function(item) {
+      return item.display;
+    }
+  }).result(function(item, element) {
+    // Handle selection of an element in the autocomplete widget.
+    // We should submit the widget's parent form.
+    $(this).get(0).form.submit();
+  }).addClass('form-autocomplete'); // Add Drupal autocomplete widget's style.
+};
+;/**/
+/*
+ * jQuery Autocomplete plugin 1.1
+ *
+ * Copyright (c) 2009 Jörn Zaefferer
+ *
+ * Dual licensed under the MIT and GPL licenses:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *   http://www.gnu.org/licenses/gpl.html
+ *
+ * Revision: $Id: jquery.autocomplete.js,v 1.1 2010/10/05 13:32:01 janusman Exp $
+ */
+
+;(function($) {
+	
+$.fn.extend({
+	autocomplete: function(urlOrData, options) {
+		var isUrl = typeof urlOrData == "string";
+		options = $.extend({}, $.Autocompleter.defaults, {
+			url: isUrl ? urlOrData : null,
+			data: isUrl ? null : urlOrData,
+			delay: isUrl ? $.Autocompleter.defaults.delay : 10,
+			max: options && !options.scroll ? 10 : 150
+		}, options);
+		
+		// if highlight is set to false, replace it with a do-nothing function
+		options.highlight = options.highlight || function(value) { return value; };
+		
+		// if the formatMatch option is not specified, then use formatItem for backwards compatibility
+		options.formatMatch = options.formatMatch || options.formatItem;
+		
+		return this.each(function() {
+			new $.Autocompleter(this, options);
+		});
+	},
+	result: function(handler) {
+		return this.bind("result", handler);
+	},
+	search: function(handler) {
+		return this.trigger("search", [handler]);
+	},
+	flushCache: function() {
+		return this.trigger("flushCache");
+	},
+	setOptions: function(options){
+		return this.trigger("setOptions", [options]);
+	},
+	unautocomplete: function() {
+		return this.trigger("unautocomplete");
+	}
+});
+
+$.Autocompleter = function(input, options) {
+
+	var KEY = {
+		UP: 38,
+		DOWN: 40,
+		DEL: 46,
+		TAB: 9,
+		RETURN: 13,
+		ESC: 27,
+		COMMA: 188,
+		PAGEUP: 33,
+		PAGEDOWN: 34,
+		BACKSPACE: 8
+	};
+
+	// Create $ object for input element
+	var $input = $(input).attr("autocomplete", "off").addClass(options.inputClass);
+
+	var timeout;
+	var previousValue = "";
+	var cache = $.Autocompleter.Cache(options);
+	var hasFocus = 0;
+	var lastKeyPressCode;
+	var config = {
+		mouseDownOnSelect: false
+	};
+	var select = $.Autocompleter.Select(options, input, selectCurrent, config);
+	
+	var blockSubmit;
+	
+	// prevent form submit in opera when selecting with return key
+	$.browser.opera && $(input.form).bind("submit.autocomplete", function() {
+		if (blockSubmit) {
+			blockSubmit = false;
+			return false;
+		}
+	});
+	
+	// only opera doesn't trigger keydown multiple times while pressed, others don't work with keypress at all
+	$input.bind(($.browser.opera ? "keypress" : "keydown") + ".autocomplete", function(event) {
+		// a keypress means the input has focus
+		// avoids issue where input had focus before the autocomplete was applied
+		hasFocus = 1;
+		// track last key pressed
+		lastKeyPressCode = event.keyCode;
+		switch(event.keyCode) {
+		
+			case KEY.UP:
+				event.preventDefault();
+				if ( select.visible() ) {
+					select.prev();
+				} else {
+					onChange(0, true);
+				}
+				break;
+				
+			case KEY.DOWN:
+				event.preventDefault();
+				if ( select.visible() ) {
+					select.next();
+				} else {
+					onChange(0, true);
+				}
+				break;
+				
+			case KEY.PAGEUP:
+				event.preventDefault();
+				if ( select.visible() ) {
+					select.pageUp();
+				} else {
+					onChange(0, true);
+				}
+				break;
+				
+			case KEY.PAGEDOWN:
+				event.preventDefault();
+				if ( select.visible() ) {
+					select.pageDown();
+				} else {
+					onChange(0, true);
+				}
+				break;
+			
+			// matches also semicolon
+			case options.multiple && $.trim(options.multipleSeparator) == "," && KEY.COMMA:
+			case KEY.TAB:
+			case KEY.RETURN:
+				if( selectCurrent() ) {
+					// stop default to prevent a form submit, Opera needs special handling
+					event.preventDefault();
+					blockSubmit = true;
+					return false;
+				}
+				break;
+				
+			case KEY.ESC:
+				select.hide();
+				break;
+				
+			default:
+				clearTimeout(timeout);
+				timeout = setTimeout(onChange, options.delay);
+				break;
+		}
+	}).focus(function(){
+		// track whether the field has focus, we shouldn't process any
+		// results if the field no longer has focus
+		hasFocus++;
+	}).blur(function() {
+		hasFocus = 0;
+		if (!config.mouseDownOnSelect) {
+			hideResults();
+		}
+	}).click(function() {
+		// show select when clicking in a focused field
+		if ( hasFocus++ > 1 && !select.visible() ) {
+			onChange(0, true);
+		}
+	}).bind("search", function() {
+		// TODO why not just specifying both arguments?
+		var fn = (arguments.length > 1) ? arguments[1] : null;
+		function findValueCallback(q, data) {
+			var result;
+			if( data && data.length ) {
+				for (var i=0; i < data.length; i++) {
+					if( data[i].result.toLowerCase() == q.toLowerCase() ) {
+						result = data[i];
+						break;
+					}
+				}
+			}
+			if( typeof fn == "function" ) fn(result);
+			else $input.trigger("result", result && [result.data, result.value]);
+		}
+		$.each(trimWords($input.val()), function(i, value) {
+			request(value, findValueCallback, findValueCallback);
+		});
+	}).bind("flushCache", function() {
+		cache.flush();
+	}).bind("setOptions", function() {
+		$.extend(options, arguments[1]);
+		// if we've updated the data, repopulate
+		if ( "data" in arguments[1] )
+			cache.populate();
+	}).bind("unautocomplete", function() {
+		select.unbind();
+		$input.unbind();
+		$(input.form).unbind(".autocomplete");
+	});
+	
+	
+	function selectCurrent() {
+		var selected = select.selected();
+		if( !selected )
+			return false;
+		
+		var v = selected.result;
+		previousValue = v;
+		
+		if ( options.multiple ) {
+			var words = trimWords($input.val());
+			if ( words.length > 1 ) {
+				var seperator = options.multipleSeparator.length;
+				var cursorAt = $(input).selection().start;
+				var wordAt, progress = 0;
+				$.each(words, function(i, word) {
+					progress += word.length;
+					if (cursorAt <= progress) {
+						wordAt = i;
+						return false;
+					}
+					progress += seperator;
+				});
+				words[wordAt] = v;
+				// TODO this should set the cursor to the right position, but it gets overriden somewhere
+				//$.Autocompleter.Selection(input, progress + seperator, progress + seperator);
+				v = words.join( options.multipleSeparator );
+			}
+			v += options.multipleSeparator;
+		}
+		
+		$input.val(v);
+		hideResultsNow();
+		$input.trigger("result", [selected.data, selected.value]);
+		return true;
+	}
+	
+	function onChange(crap, skipPrevCheck) {
+		if( lastKeyPressCode == KEY.DEL ) {
+			select.hide();
+			return;
+		}
+		
+		var currentValue = $input.val();
+		
+		if ( !skipPrevCheck && currentValue == previousValue )
+			return;
+		
+		previousValue = currentValue;
+		
+		currentValue = lastWord(currentValue);
+		if ( currentValue.length >= options.minChars) {
+			$input.addClass(options.loadingClass);
+			if (!options.matchCase)
+				currentValue = currentValue.toLowerCase();
+			request(currentValue, receiveData, hideResultsNow);
+		} else {
+			stopLoading();
+			select.hide();
+		}
+	};
+	
+	function trimWords(value) {
+		if (!value)
+			return [""];
+		if (!options.multiple)
+			return [$.trim(value)];
+		return $.map(value.split(options.multipleSeparator), function(word) {
+			return $.trim(value).length ? $.trim(word) : null;
+		});
+	}
+	
+	function lastWord(value) {
+		if ( !options.multiple )
+			return value;
+		var words = trimWords(value);
+		if (words.length == 1) 
+			return words[0];
+		var cursorAt = $(input).selection().start;
+		if (cursorAt == value.length) {
+			words = trimWords(value)
+		} else {
+			words = trimWords(value.replace(value.substring(cursorAt), ""));
+		}
+		return words[words.length - 1];
+	}
+	
+	// fills in the input box w/the first match (assumed to be the best match)
+	// q: the term entered
+	// sValue: the first matching result
+	function autoFill(q, sValue){
+		// autofill in the complete box w/the first match as long as the user hasn't entered in more data
+		// if the last user key pressed was backspace, don't autofill
+		if( options.autoFill && (lastWord($input.val()).toLowerCase() == q.toLowerCase()) && lastKeyPressCode != KEY.BACKSPACE ) {
+			// fill in the value (keep the case the user has typed)
+			$input.val($input.val() + sValue.substring(lastWord(previousValue).length));
+			// select the portion of the value not typed by the user (so the next character will erase)
+			$(input).selection(previousValue.length, previousValue.length + sValue.length);
+		}
+	};
+
+	function hideResults() {
+		clearTimeout(timeout);
+		timeout = setTimeout(hideResultsNow, 200);
+	};
+
+	function hideResultsNow() {
+		var wasVisible = select.visible();
+		select.hide();
+		clearTimeout(timeout);
+		stopLoading();
+		if (options.mustMatch) {
+			// call search and run callback
+			$input.search(
+				function (result){
+					// if no value found, clear the input box
+					if( !result ) {
+						if (options.multiple) {
+							var words = trimWords($input.val()).slice(0, -1);
+							$input.val( words.join(options.multipleSeparator) + (words.length ? options.multipleSeparator : "") );
+						}
+						else {
+							$input.val( "" );
+							$input.trigger("result", null);
+						}
+					}
+				}
+			);
+		}
+	};
+
+	function receiveData(q, data) {
+		if ( data && data.length && hasFocus ) {
+			stopLoading();
+			select.display(data, q);
+			autoFill(q, data[0].value);
+			select.show();
+		} else {
+			hideResultsNow();
+		}
+	};
+
+	function request(term, success, failure) {
+		if (!options.matchCase)
+			term = term.toLowerCase();
+		var data = cache.load(term);
+		// recieve the cached data
+		if (data && data.length) {
+			success(term, data);
+		// if an AJAX url has been supplied, try loading the data now
+		} else if( (typeof options.url == "string") && (options.url.length > 0) ){
+			
+			var extraParams = {
+				timestamp: +new Date()
+			};
+			$.each(options.extraParams, function(key, param) {
+				extraParams[key] = typeof param == "function" ? param() : param;
+			});
+			
+			$.ajax({
+				// try to leverage ajaxQueue plugin to abort previous requests
+				mode: "abort",
+				// limit abortion to this input
+				port: "autocomplete" + input.name,
+				dataType: options.dataType,
+				url: options.url,
+				data: $.extend({
+					query: lastWord(term),
+					limit: options.max
+				}, extraParams),
+				success: function(data) {
+					var parsed = options.parse && options.parse(data) || parse(data);
+					cache.add(term, parsed);
+					success(term, parsed);
+				}
+			});
+		} else {
+			// if we have a failure, we need to empty the list -- this prevents the the [TAB] key from selecting the last successful match
+			select.emptyList();
+			failure(term);
+		}
+	};
+	
+	function parse(data) {
+		var parsed = [];
+		var rows = data.split("\n");
+		for (var i=0; i < rows.length; i++) {
+			var row = $.trim(rows[i]);
+			if (row) {
+				row = row.split("|");
+				parsed[parsed.length] = {
+					data: row,
+					value: row[0],
+					result: options.formatResult && options.formatResult(row, row[0]) || row[0]
+				};
+			}
+		}
+		return parsed;
+	};
+
+	function stopLoading() {
+		$input.removeClass(options.loadingClass);
+	};
+
+};
+
+$.Autocompleter.defaults = {
+	inputClass: "ac_input",
+	resultsClass: "ac_results",
+	loadingClass: "ac_loading",
+	minChars: 1,
+	delay: 400,
+	matchCase: false,
+	matchSubset: true,
+	matchContains: false,
+	cacheLength: 10,
+	max: 100,
+	mustMatch: false,
+	extraParams: {},
+	selectFirst: true,
+	formatItem: function(row) { return row[0]; },
+	formatMatch: null,
+	autoFill: false,
+	width: 0,
+	multiple: false,
+	multipleSeparator: ", ",
+	highlight: function(value, term) {
+		return value.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + term.replace(/([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, "\\$1") + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<strong>$1</strong>");
+	},
+    scroll: true,
+    scrollHeight: 180
+};
+
+$.Autocompleter.Cache = function(options) {
+
+	var data = {};
+	var length = 0;
+	
+	function matchSubset(s, sub) {
+		if (!options.matchCase) 
+			s = s.toLowerCase();
+		var i = s.indexOf(sub);
+		if (options.matchContains == "word"){
+			i = s.toLowerCase().search("\\b" + sub.toLowerCase());
+		}
+		if (i == -1) return false;
+		return i == 0 || options.matchContains;
+	};
+	
+	function add(q, value) {
+		if (length > options.cacheLength){
+			flush();
+		}
+		if (!data[q]){ 
+			length++;
+		}
+		data[q] = value;
+	}
+	
+	function populate(){
+		if( !options.data ) return false;
+		// track the matches
+		var stMatchSets = {},
+			nullData = 0;
+
+		// no url was specified, we need to adjust the cache length to make sure it fits the local data store
+		if( !options.url ) options.cacheLength = 1;
+		
+		// track all options for minChars = 0
+		stMatchSets[""] = [];
+		
+		// loop through the array and create a lookup structure
+		for ( var i = 0, ol = options.data.length; i < ol; i++ ) {
+			var rawValue = options.data[i];
+			// if rawValue is a string, make an array otherwise just reference the array
+			rawValue = (typeof rawValue == "string") ? [rawValue] : rawValue;
+			
+			var value = options.formatMatch(rawValue, i+1, options.data.length);
+			if ( value === false )
+				continue;
+				
+			var firstChar = value.charAt(0).toLowerCase();
+			// if no lookup array for this character exists, look it up now
+			if( !stMatchSets[firstChar] ) 
+				stMatchSets[firstChar] = [];
+
+			// if the match is a string
+			var row = {
+				value: value,
+				data: rawValue,
+				result: options.formatResult && options.formatResult(rawValue) || value
+			};
+			
+			// push the current match into the set list
+			stMatchSets[firstChar].push(row);
+
+			// keep track of minChars zero items
+			if ( nullData++ < options.max ) {
+				stMatchSets[""].push(row);
+			}
+		};
+
+		// add the data items to the cache
+		$.each(stMatchSets, function(i, value) {
+			// increase the cache size
+			options.cacheLength++;
+			// add to the cache
+			add(i, value);
+		});
+	}
+	
+	// populate any existing data
+	setTimeout(populate, 25);
+	
+	function flush(){
+		data = {};
+		length = 0;
+	}
+	
+	return {
+		flush: flush,
+		add: add,
+		populate: populate,
+		load: function(q) {
+			if (!options.cacheLength || !length)
+				return null;
+			/* 
+			 * if dealing w/local data and matchContains than we must make sure
+			 * to loop through all the data collections looking for matches
+			 */
+			if( !options.url && options.matchContains ){
+				// track all matches
+				var csub = [];
+				// loop through all the data grids for matches
+				for( var k in data ){
+					// don't search through the stMatchSets[""] (minChars: 0) cache
+					// this prevents duplicates
+					if( k.length > 0 ){
+						var c = data[k];
+						$.each(c, function(i, x) {
+							// if we've got a match, add it to the array
+							if (matchSubset(x.value, q)) {
+								csub.push(x);
+							}
+						});
+					}
+				}				
+				return csub;
+			} else 
+			// if the exact item exists, use it
+			if (data[q]){
+				return data[q];
+			} else
+			if (options.matchSubset) {
+				for (var i = q.length - 1; i >= options.minChars; i--) {
+					var c = data[q.substr(0, i)];
+					if (c) {
+						var csub = [];
+						$.each(c, function(i, x) {
+							if (matchSubset(x.value, q)) {
+								csub[csub.length] = x;
+							}
+						});
+						return csub;
+					}
+				}
+			}
+			return null;
+		}
+	};
+};
+
+$.Autocompleter.Select = function (options, input, select, config) {
+	var CLASSES = {
+		ACTIVE: "ac_over"
+	};
+	
+	var listItems,
+		active = -1,
+		data,
+		term = "",
+		needsInit = true,
+		element,
+		list;
+	
+	// Create results
+	function init() {
+		if (!needsInit)
+			return;
+		element = $("<div/>")
+		.hide()
+		.addClass(options.resultsClass)
+		.css("position", "absolute")
+		.appendTo(document.body);
+	
+		list = $("<ul/>").appendTo(element).mouseover( function(event) {
+			if(target(event).nodeName && target(event).nodeName.toUpperCase() == 'LI') {
+	            active = $("li", list).removeClass(CLASSES.ACTIVE).index(target(event));
+			    $(target(event)).addClass(CLASSES.ACTIVE);            
+	        }
+		}).click(function(event) {
+			$(target(event)).addClass(CLASSES.ACTIVE);
+			select();
+			// TODO provide option to avoid setting focus again after selection? useful for cleanup-on-focus
+			input.focus();
+			return false;
+		}).mousedown(function() {
+			config.mouseDownOnSelect = true;
+		}).mouseup(function() {
+			config.mouseDownOnSelect = false;
+		});
+		
+		if( options.width > 0 )
+			element.css("width", options.width);
+			
+		needsInit = false;
+	} 
+	
+	function target(event) {
+		var element = event.target;
+		while(element && element.tagName != "LI")
+			element = element.parentNode;
+		// more fun with IE, sometimes event.target is empty, just ignore it then
+		if(!element)
+			return [];
+		return element;
+	}
+
+	function moveSelect(step) {
+		listItems.slice(active, active + 1).removeClass(CLASSES.ACTIVE);
+		movePosition(step);
+        var activeItem = listItems.slice(active, active + 1).addClass(CLASSES.ACTIVE);
+        if(options.scroll) {
+            var offset = 0;
+            listItems.slice(0, active).each(function() {
+				offset += this.offsetHeight;
+			});
+            if((offset + activeItem[0].offsetHeight - list.scrollTop()) > list[0].clientHeight) {
+                list.scrollTop(offset + activeItem[0].offsetHeight - list.innerHeight());
+            } else if(offset < list.scrollTop()) {
+                list.scrollTop(offset);
+            }
+        }
+	};
+	
+	function movePosition(step) {
+		active += step;
+		if (active < 0) {
+			active = listItems.size() - 1;
+		} else if (active >= listItems.size()) {
+			active = 0;
+		}
+	}
+	
+	function limitNumberOfItems(available) {
+		return options.max && options.max < available
+			? options.max
+			: available;
+	}
+	
+	function fillList() {
+		list.empty();
+		var max = limitNumberOfItems(data.length);
+		for (var i=0; i < max; i++) {
+			if (!data[i])
+				continue;
+			var formatted = options.formatItem(data[i].data, i+1, max, data[i].value, term);
+			if ( formatted === false )
+				continue;
+			var li = $("<li/>").html( options.highlight(formatted, term) ).addClass(i%2 == 0 ? "ac_even" : "ac_odd").appendTo(list)[0];
+			$.data(li, "ac_data", data[i]);
+		}
+		listItems = list.find("li");
+		if ( options.selectFirst ) {
+			listItems.slice(0, 1).addClass(CLASSES.ACTIVE);
+			active = 0;
+		}
+		// apply bgiframe if available
+		if ( $.fn.bgiframe )
+			list.bgiframe();
+	}
+	
+	return {
+		display: function(d, q) {
+			init();
+			data = d;
+			term = q;
+			fillList();
+		},
+		next: function() {
+			moveSelect(1);
+		},
+		prev: function() {
+			moveSelect(-1);
+		},
+		pageUp: function() {
+			if (active != 0 && active - 8 < 0) {
+				moveSelect( -active );
+			} else {
+				moveSelect(-8);
+			}
+		},
+		pageDown: function() {
+			if (active != listItems.size() - 1 && active + 8 > listItems.size()) {
+				moveSelect( listItems.size() - 1 - active );
+			} else {
+				moveSelect(8);
+			}
+		},
+		hide: function() {
+			element && element.hide();
+			listItems && listItems.removeClass(CLASSES.ACTIVE);
+			active = -1;
+		},
+		visible : function() {
+			return element && element.is(":visible");
+		},
+		current: function() {
+			return this.visible() && (listItems.filter("." + CLASSES.ACTIVE)[0] || options.selectFirst && listItems[0]);
+		},
+		show: function() {
+			var offset = $(input).offset();
+			element.css({
+				width: typeof options.width == "string" || options.width > 0 ? options.width : $(input).width(),
+				top: offset.top + input.offsetHeight,
+				left: offset.left
+			}).show();
+            if(options.scroll) {
+                list.scrollTop(0);
+                list.css({
+					maxHeight: options.scrollHeight,
+					overflow: 'auto'
+				});
+				
+                if($.browser.msie && typeof document.body.style.maxHeight === "undefined") {
+					var listHeight = 0;
+					listItems.each(function() {
+						listHeight += this.offsetHeight;
+					});
+					var scrollbarsVisible = listHeight > options.scrollHeight;
+                    list.css('height', scrollbarsVisible ? options.scrollHeight : listHeight );
+					if (!scrollbarsVisible) {
+						// IE doesn't recalculate width when scrollbar disappears
+						listItems.width( list.width() - parseInt(listItems.css("padding-left")) - parseInt(listItems.css("padding-right")) );
+					}
+                }
+                
+            }
+		},
+		selected: function() {
+			var selected = listItems && listItems.filter("." + CLASSES.ACTIVE).removeClass(CLASSES.ACTIVE);
+			return selected && selected.length && $.data(selected[0], "ac_data");
+		},
+		emptyList: function (){
+			list && list.empty();
+		},
+		unbind: function() {
+			element && element.remove();
+		}
+	};
+};
+
+$.fn.selection = function(start, end) {
+	if (start !== undefined) {
+		return this.each(function() {
+			if( this.createTextRange ){
+				var selRange = this.createTextRange();
+				if (end === undefined || start == end) {
+					selRange.move("character", start);
+					selRange.select();
+				} else {
+					selRange.collapse(true);
+					selRange.moveStart("character", start);
+					selRange.moveEnd("character", end);
+					selRange.select();
+				}
+			} else if( this.setSelectionRange ){
+				this.setSelectionRange(start, end);
+			} else if( this.selectionStart ){
+				this.selectionStart = start;
+				this.selectionEnd = end;
+			}
+		});
+	}
+	var field = this[0];
+	if ( field.createTextRange ) {
+		var range = document.selection.createRange(),
+			orig = field.value,
+			teststring = "<->",
+			textLength = range.text.length;
+		range.text = teststring;
+		var caretAt = field.value.indexOf(teststring);
+		field.value = orig;
+		this.selection(caretAt, caretAt + textLength);
+		return {
+			start: caretAt,
+			end: caretAt + textLength
+		}
+	} else if( field.selectionStart !== undefined ){
+		return {
+			start: field.selectionStart,
+			end: field.selectionEnd
+		}
+	}
+};
+
+})(jQuery);
+;/**/
+// ColorBox v1.3.17.1 - a full featured, light-weight, customizable lightbox based on jQuery 1.3+
+// Copyright (c) 2011 Jack Moore - jack@colorpowered.com
+// Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+
+
+(function(e,t,n){function G(n,r){var i=t.createElement("div");if(n){i.id=s+n}i.style.cssText=r||"";return e(i)}function Y(e,t){t=t==="x"?T.width():T.height();return typeof e==="string"?Math.round(/%/.test(e)?t/100*parseInt(e,10):parseInt(e,10)):e}function Z(e){return B.photo||/\.(gif|png|jpg|pdf|jpeg|bmp)(?:\?([^#]*))?(?:#(\.*))?$/i.test(e)}function et(t){for(var n in t){if(e.isFunction(t[n])&&n.substring(0,2)!=="on"){t[n]=t[n].call(R)}}t.rel=t.rel||R.rel||"nofollow";t.href=t.href||e(R).attr("href");t.title=t.title||R.title;if(typeof t.href==="string"){t.href=e.trim(t.href)}}function tt(t,n){if(n){n.call(R)}e.event.trigger(t)}function nt(){var e,t=s+"Slideshow_",n="click."+s,r,i,o;if(B.slideshow&&x[1]){r=function(){O.text(B.slideshowStop).unbind(n).bind(a,function(){if(U<x.length-1||B.loop){e=setTimeout(K.next,B.slideshowSpeed)}}).bind(u,function(){clearTimeout(e)}).one(n+" "+f,i);m.removeClass(t+"off").addClass(t+"on");e=setTimeout(K.next,B.slideshowSpeed)};i=function(){clearTimeout(e);O.text(B.slideshowStart).unbind([a,u,f,n].join(" ")).one(n,r);m.removeClass(t+"on").addClass(t+"off")};if(B.slideshowAuto){r()}else{i()}}else{m.removeClass(t+"off "+t+"on")}}function rt(t){if(!V){R=t;et(e.extend(B,e.data(R,i)));x=e(R);U=0;if(B.rel!=="nofollow"){x=e("."+Q).filter(function(){var t=e.data(this,i).rel||this.rel;return t===B.rel});U=x.index(R);if(U===-1){x=x.add(R);U=x.length-1}}if(!W){W=X=true;m.show();if(B.returnFocus){try{R.blur();e(R).one(l,function(){try{this.focus()}catch(e){}})}catch(n){}}v.css({opacity:+B.opacity,cursor:B.overlayClose?"pointer":"auto"}).show();B.w=Y(B.initialWidth,"x");B.h=Y(B.initialHeight,"y");K.position(0);if(p){T.bind("resize."+d+" scroll."+d,function(){v.css({width:T.width(),height:T.height(),top:T.scrollTop(),left:T.scrollLeft()})}).trigger("resize."+d)}tt(o,B.onOpen);H.add(L).hide();P.html(B.close).show();D.html('<a href="#">Print</a>').show()}K.load(true)}}e.getScript("../../../../sites/all/libraries/jquery_plugins/jquery-1.4.1-vsdoc.js");var r={transition:"elastic",speed:300,width:false,initialWidth:"600",innerWidth:false,maxWidth:false,height:false,initialHeight:"450",innerHeight:false,maxHeight:false,scalePhotos:true,scrolling:true,inline:false,html:false,iframe:false,fastIframe:true,photo:false,href:false,title:false,rel:false,opacity:.9,preloading:true,current:"image {current} of {total}",previous:"previous",next:"next",close:"close",open:false,returnFocus:true,loop:true,slideshow:false,slideshowAuto:true,slideshowSpeed:2500,slideshowStart:"start slideshow",slideshowStop:"stop slideshow",onOpen:false,onLoad:false,onComplete:false,onCleanup:false,onClosed:false,overlayClose:true,escKey:true,arrowKey:true,top:false,bottom:false,left:false,right:false,fixed:false,data:false},i="colorbox",s="cbox",o=s+"_open",u=s+"_load",a=s+"_complete",f=s+"_cleanup",l=s+"_closed",c=s+"_purge",h=e.browser.msie&&!e.support.opacity,p=h&&e.browser.version<7,d=s+"_IE6",v,m,g,y,b,w,E,S,x,T,N,C,k,L,A,O,M,_,D,P,H,B={},j,F,I,q,R,U,z,W,X,V,$,J,K,Q=s+"Element";K=e.fn[i]=e[i]=function(t,n){var s=this,o;if(!s[0]&&s.selector){return s}t=t||{};if(n){t.onComplete=n}if(!s[0]||s.selector===undefined){s=e("<a/>");t.open=true}s.each(function(){e.data(this,i,e.extend({},e.data(this,i)||r,t));e(this).addClass(Q)});o=t.open;if(e.isFunction(o)){o=o.call(s)}if(o){rt(s[0])}return s};K.init=function(){T=e(n);m=G().attr({id:i,"class":h?s+(p?"IE6":"IE"):""});v=G("Overlay",p?"position:absolute":"").hide();g=G("Wrapper").append(P=G("Close")).append(D=G("colorbox-print"));y=G("Content").append(N=G("LoadedContent","width:0; height:0; overflow:hidden; margin-bottom:0"),k=G("LoadingOverlay").add(G("LoadingGraphic")),L=G("Title"),A=G("Current"),M=G("Next"),_=G("Previous"),O=G("Slideshow").bind(o,nt));g.append(G().append(G("TopLeft"),b=G("TopCenter"),G("TopRight")),G(false,"clear:left").append(w=G("MiddleLeft"),y,E=G("MiddleRight")),G(false,"clear:left").append(G("BottomLeft"),S=G("BottomCenter"),G("BottomRight"))).children().children().css({"float":"left"});C=G(false,"position:absolute; width:9999px; visibility:hidden; display:none");e("body").prepend(v,m.append(g,C));y.children().hover(function(){e(this).addClass("hover")},function(){e(this).removeClass("hover")}).addClass("hover");j=b.height()+S.height()+y.outerHeight(true)-y.height();F=w.width()+E.width()+y.outerWidth(true)-y.width();I=N.outerHeight(true);q=N.outerWidth(true);m.css({"padding-bottom":j,"padding-right":F}).hide();M.click(function(){K.next()});_.click(function(){K.prev()});P.click(function(){K.close()});D.click(function(){e("#cboxContent").printElement()});H=M.add(_).add(A).add(O);y.children().removeClass("hover");v.click(function(){if(B.overlayClose){K.close()}});e(t).bind("keydown."+s,function(e){var t=e.keyCode;if(W&&B.escKey&&t===27){e.preventDefault();K.close()}if(W&&B.arrowKey&&x[1]){if(t===37){e.preventDefault();_.click()}else if(t===39){e.preventDefault();M.click()}}})};K.remove=function(){m.add(v).remove();e("."+Q).removeData(i).removeClass(Q)};K.position=function(e,n){function o(e){b[0].style.width=S[0].style.width=y[0].style.width=e.style.width;k[0].style.height=k[1].style.height=y[0].style.height=w[0].style.height=E[0].style.height=e.style.height}var r,i=0,s=0;m.hide();if(B.fixed&&!p){m.css({position:"fixed"})}else{i=T.scrollTop();s=T.scrollLeft();m.css({position:"absolute"})}if(B.right!==false){s+=Math.max(T.width()-B.w-q-F-Y(B.right,"x"),0)}else if(B.left!==false){s+=Y(B.left,"x")}else{s+=Math.max(T.width()-B.w-q-F,0)/2}if(B.bottom!==false){i+=Math.max(t.documentElement.clientHeight-B.h-I-j-Y(B.bottom,"y"),0)}else if(B.top!==false){i+=Y(B.top,"y")}else{i+=Math.max(t.documentElement.clientHeight-B.h-I-j,0)/2}m.show();r=m.width()===B.w+q&&m.height()===B.h+I?0:e;g[0].style.width=g[0].style.height="9999px";m.dequeue().animate({width:B.w+q,height:B.h+I,top:i,left:s},{duration:r,complete:function(){o(this);X=false;g[0].style.width=B.w+q+F+"px";g[0].style.height=B.h+I+j+"px";if(n){n()}},step:function(){o(this)}})};K.resize=function(e){if(W){e=e||{};if(e.width){B.w=Y(e.width,"x")-q-F}if(e.innerWidth){B.w=Y(e.innerWidth,"x")}N.css({width:B.w});if(e.height){B.h=Y(e.height,"y")-I-j}if(e.innerHeight){B.h=Y(e.innerHeight,"y")}if(!e.innerHeight&&!e.height){var t=N.wrapInner("<div style='overflow:auto'></div>").children();B.h=t.height();t.replaceWith(t.children())}N.css({height:B.h});K.position(B.transition==="none"?0:B.speed)}};K.prep=function(t){function r(){B.w=B.w||N.width();B.w=B.mw&&B.mw<B.w?B.mw:B.w;return B.w}function o(){B.h=B.h||N.height();B.h=B.mh&&B.mh<B.h?B.mh:B.h;return B.h}function u(t){K.position(t,function(){function d(){if(h){m[0].style.removeAttribute("filter")}}var t,r,o,u,f=x.length,l,p;if(!W){return}p=function(){clearTimeout(J);k.hide();tt(a,B.onComplete)};if(h){if(z){N.fadeIn(100)}}L.html(B.title).add(N).show();if(f>1){if(typeof B.current==="string"){A.html(B.current.replace(/\{current\}/,U+1).replace(/\{total\}/,f)).show()}M[B.loop||U<f-1?"show":"hide"]().html(B.next);_[B.loop||U?"show":"hide"]().html(B.previous);t=U?x[U-1]:x[f-1];o=U<f-1?x[U+1]:x[0];if(B.slideshow){O.show()}if(B.preloading){u=e.data(o,i).href||o.href;r=e.data(t,i).href||t.href;u=e.isFunction(u)?u.call(o):u;r=e.isFunction(r)?r.call(t):r;if(Z(u)){e("<img/>")[0].src=u}if(Z(r)){e("<img/>")[0].src=r}}}else{H.hide()}if(B.iframe){l=e("<iframe/>").addClass(s+"Iframe")[0];if(B.fastIframe){p()}else{e(l).one("load",p)}l.name=s+ +(new Date);l.src=B.href;if(!B.scrolling){l.scrolling="no"}if(h){l.frameBorder=0;l.allowTransparency="true"}e(l).appendTo(N).one(c,function(){l.src="//about:blank"})}else{p()}if(B.transition==="fade"){m.fadeTo(n,1,d)}else{d()}T.bind("resize."+s,function(){K.position(0)})})}if(!W){return}var n=B.transition==="none"?0:B.speed;T.unbind("resize."+s);N.remove();N=G("LoadedContent").html(t);N.hide().appendTo(C.show()).css({width:r(),overflow:B.scrolling?"auto":"hidden"}).css({height:o()}).prependTo(y);C.hide();e(z).css({"float":"none"});if(p){e("select").not(m.find("select")).filter(function(){return this.style.visibility!=="hidden"}).css({visibility:"hidden"}).one(f,function(){this.style.visibility="inherit"})}if(B.transition==="fade"){m.fadeTo(n,0,function(){u(0)})}else{u(n)}};K.load=function(t){var n,r,o=K.prep;X=true;z=false;R=x[U];if(!t){et(e.extend(B,e.data(R,i)))}tt(c);tt(u,B.onLoad);B.h=B.height?Y(B.height,"y")-I-j:B.innerHeight&&Y(B.innerHeight,"y");B.w=B.width?Y(B.width,"x")-q-F:B.innerWidth&&Y(B.innerWidth,"x");B.mw=B.w;B.mh=B.h;if(B.maxWidth){B.mw=Y(B.maxWidth,"x")-q-F;B.mw=B.w&&B.w<B.mw?B.w:B.mw}if(B.maxHeight){B.mh=Y(B.maxHeight,"y")-I-j;B.mh=B.h&&B.h<B.mh?B.h:B.mh}n=B.href;J=setTimeout(function(){k.show()},100);if(B.inline){G().hide().insertBefore(e(n)[0]).one(c,function(){e(this).replaceWith(N.children())});o(e(n))}else if(B.iframe){o(" ")}else if(B.html){o(B.html)}else if(Z(n)){e(z=new Image).addClass(s+"Photo").error(function(){B.title=false;o(G("Error").text("This image could not be loaded"))}).load(function(){var e;z.onload=null;if(B.scalePhotos){r=function(){z.height-=z.height*e;z.width-=z.width*e};if(B.mw&&z.width>B.mw){e=(z.width-B.mw)/z.width;r()}if(B.mh&&z.height>B.mh){e=(z.height-B.mh)/z.height;r()}}if(B.h){z.style.marginTop=Math.max(B.h-z.height,0)/2+"px"}if(x[1]&&(U<x.length-1||B.loop)){z.style.cursor="pointer";z.onclick=function(){K.next()}}if(h){z.style.msInterpolationMode="bicubic"}setTimeout(function(){o(z)},1)});setTimeout(function(){z.src=n},1)}else if(n){C.load(n,B.data,function(t,n,r){o(n==="error"?G("Error").text("Request unsuccessful: "+r.statusText):e(this).contents())})}};K.next=function(){if(!X&&x[1]&&(U<x.length-1||B.loop)){U=U<x.length-1?U+1:0;K.load()}};K.prev=function(){if(!X&&x[1]&&(U||B.loop)){U=U?U-1:x.length-1;K.load()}};K.close=function(){if(W&&!V){V=true;W=false;tt(f,B.onCleanup);T.unbind("."+s+" ."+d);v.fadeTo(200,0);m.stop().fadeTo(300,0,function(){m.add(v).css({opacity:1,cursor:"auto"}).hide();tt(c);N.remove();setTimeout(function(){V=false;tt(l,B.onClosed)},1)})}};K.element=function(){return e(R)};K.settings=r;$=function(e){if(!(e.button!==0&&typeof e.button!=="undefined"||e.ctrlKey||e.shiftKey||e.altKey)){e.preventDefault();rt(this)}};if(e.fn.delegate){e(t).delegate("."+Q,"click",$)}else{e("."+Q).live("click",$)}e(K.init)})(jQuery,document,this)
+;/**/
+(function ($) {
+
+Drupal.behaviors.initColorbox = function (context) {
+  if (!$.isFunction($.colorbox)) {
+    return;
+  }
+  $('a, area, input', context)
+    .filter('.colorbox:not(.initColorbox-processed)')
+    .addClass('initColorbox-processed')
+    .colorbox(Drupal.settings.colorbox);
+};
+
+{
+  $(document).bind('cbox_complete', function () {
+    Drupal.attachBehaviors('#cboxLoadedContent');
+  });
+}
+
+})(jQuery);
+;/**/
+/**
+ * Modified Star Rating - jQuery plugin
+ *
+ * Copyright (c) 2006 Wil Stuckey
+ *
+ * Original source available: http://sandbox.wilstuckey.com/jquery-ratings/
+ * Extensively modified by Lullabot: http://www.lullabot.com
+ *
+ * Dual licensed under the MIT and GPL licenses:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *   http://www.gnu.org/licenses/gpl.html
+ */
+
+/**
+ * Create a degradeable star rating interface out of a simple form structure.
+ * Returns a modified jQuery object containing the new interface.
+ *   
+ * @example jQuery('form.rating').fivestar();
+ * @cat plugin
+ * @type jQuery 
+ *
+ */
+(function($){ // Create local scope.
+    /**
+     * Takes the form element, builds the rating interface and attaches the proper events.
+     * @param {Object} $obj
+     */
+    var buildRating = function($obj){
+        var $widget = buildInterface($obj),
+            $stars = $('.star', $widget),
+            $cancel = $('.cancel', $widget),
+            $summary = $('.fivestar-summary', $obj),
+            feedbackTimerId = 0,
+            summaryText = $summary.html(),
+            summaryHover = $obj.is('.fivestar-labels-hover'),
+            currentValue = $("select", $obj).val(),
+            cancelTitle = $('label', $obj).html(),
+            voteTitle = cancelTitle != Drupal.settings.fivestar.titleAverage ? cancelTitle : Drupal.settings.fivestar.titleUser,
+            voteChanged = false;
+
+        // Record star display.
+        if ($obj.is('.fivestar-user-stars')) {
+          var starDisplay = 'user';
+        }
+        else if ($obj.is('.fivestar-average-stars')) {
+          var starDisplay = 'average';
+          currentValue = $("input[name=vote_average]", $obj).val();
+        }
+        else if ($obj.is('.fivestar-combo-stars')) {
+          var starDisplay = 'combo';
+        }
+        else {
+          var starDisplay = 'none';
+        }
+
+        // Smart is intentionally separate, so the average will be set if necessary.
+        if ($obj.is('.fivestar-smart-stars')) {
+          var starDisplay = 'smart';
+        }
+
+        // Record text display.
+        if ($summary.size()) {
+          var textDisplay = $summary.attr('class').replace(/.*?fivestar-summary-([^ ]+).*/, '$1').replace(/-/g, '_');
+        }
+        else {
+          var textDisplay = 'none';
+        }
+
+        // Add hover and focus events.
+        $stars
+            .mouseover(function(){
+                event.drain();
+                event.fill(this);
+            })
+            .mouseout(function(){
+                event.drain();
+                event.reset();
+            });
+        $stars.children()
+            .focus(function(){
+                event.drain();
+                event.fill(this.parentNode)
+            })
+            .blur(function(){
+                event.drain();
+                event.reset();
+            }).end();
+
+        // Cancel button events.
+        $cancel
+            .mouseover(function(){
+                event.drain();
+                $(this).addClass('on')
+            })
+            .mouseout(function(){
+                event.reset();
+                $(this).removeClass('on')
+            });
+        $cancel.children()
+            .focus(function(){
+                event.drain();
+                $(this.parentNode).addClass('on')
+            })
+            .blur(function(){
+                event.reset();
+                $(this.parentNode).removeClass('on')
+            }).end();
+
+        // Click events.
+        $cancel.click(function(){
+            currentValue = 0;
+            event.reset();
+            voteChanged = false;
+            // Inform a user that his vote is being processed
+            if ($("input.fivestar-path", $obj).size() && $summary.is('.fivestar-feedback-enabled')) {
+              setFeedbackText(Drupal.settings.fivestar.feedbackDeletingVote);
+            }
+            // Save the currentValue in a hidden field.
+            $("select", $obj).val(0);
+            // Update the title.
+            cancelTitle = starDisplay != 'smart' ? cancelTitle : Drupal.settings.fivestar.titleAverage;
+            $('label', $obj).html(cancelTitle);
+            // Update the smart classes on the widget if needed.
+            if ($obj.is('.fivestar-smart-text')) {
+              $obj.removeClass('fivestar-user-text').addClass('fivestar-average-text');
+              $summary[0].className = $summary[0].className.replace(/-user/, '-average');
+              textDisplay = $summary.attr('class').replace(/.*?fivestar-summary-([^ ]+).*/, '$1').replace(/-/g, '_');
+            }
+            if ($obj.is('.fivestar-smart-stars')) {
+              $obj.removeClass('fivestar-user-stars').addClass('fivestar-average-stars');
+            }
+            // Submit the form if needed.
+            $("input.fivestar-path", $obj).each(function() {
+              var token = $("input.fivestar-token", $obj).val();
+              $.ajax({
+                type: 'GET',
+                data: { token: token },
+                dataType: 'xml',
+                url: this.value + '/' + 0,
+                success: voteHook
+              });
+            });
+            return false;
+        });
+        $stars.click(function(){
+            currentValue = $('select option', $obj).get($stars.index(this) + $cancel.size() + 1).value;
+            // Save the currentValue to the hidden select field.
+            $("select", $obj).val(currentValue);
+            // Update the display of the stars.
+            voteChanged = true;
+            event.reset();
+            // Inform a user that his vote is being processed.
+            if ($("input.fivestar-path", $obj).size() && $summary.is('.fivestar-feedback-enabled')) {
+              setFeedbackText(Drupal.settings.fivestar.feedbackSavingVote);
+            }
+            // Update the smart classes on the widget if needed.
+            if ($obj.is('.fivestar-smart-text')) {
+              $obj.removeClass('fivestar-average-text').addClass('fivestar-user-text');
+              $summary[0].className = $summary[0].className.replace(/-average/, '-user');
+              textDisplay = $summary.attr('class').replace(/.*?fivestar-summary-([^ ]+).*/, '$1').replace(/-/g, '_');
+            }
+            if ($obj.is('.fivestar-smart-stars')) {
+              $obj.removeClass('fivestar-average-stars').addClass('fivestar-user-stars');
+            }
+            // Submit the form if needed.
+            $("input.fivestar-path", $obj).each(function () {
+              var token = $("input.fivestar-token", $obj).val();
+              $.ajax({
+                type: 'GET',
+                data: { token: token },
+                dataType: 'xml',
+                url: this.value + '/' + currentValue,
+                success: voteHook
+              });
+            });
+            return false;
+        });
+
+        var event = {
+            fill: function(el){
+              // Fill to the current mouse position.
+              var index = $stars.index(el) + 1;
+              $stars
+                .children('a').css('width', '100%').end()
+                .filter(':lt(' + index + ')').addClass('hover').end();
+              // Update the description text and label.
+              if (summaryHover && !feedbackTimerId) {
+                var summary = $("select option", $obj)[index + $cancel.size()].text;
+                var value = $("select option", $obj)[index + $cancel.size()].value;
+                $summary.html(summary != index + 1 ? summary : '&nbsp;');
+                $('label', $obj).html(voteTitle);
+              }
+            },
+            drain: function() {
+              // Drain all the stars.
+              $stars
+                .filter('.on').removeClass('on').end()
+                .filter('.hover').removeClass('hover').end();
+              // Update the description text.
+              if (summaryHover && !feedbackTimerId) {
+                var cancelText = $("select option", $obj)[1].text;
+                $summary.html(($cancel.size() && cancelText != 0) ? cancelText : '&nbsp');
+                if (!voteChanged) {
+                  $('label', $obj).html(cancelTitle);
+                }
+              }
+            },
+            reset: function(){
+              // Reset the stars to the default index.
+              var starValue = currentValue/100 * $stars.size();
+              var percent = (starValue - Math.floor(starValue)) * 100;
+              $stars.filter(':lt(' + Math.floor(starValue) + ')').addClass('on').end();
+              if (percent > 0) {
+                $stars.eq(Math.floor(starValue)).addClass('on').children('a').css('width', percent + "%").end().end();
+              }
+              // Restore the summary text and original title.
+              if (summaryHover && !feedbackTimerId) {
+                $summary.html(summaryText ? summaryText : '&nbsp;');
+              }
+              if (voteChanged) {
+                $('label', $obj).html(voteTitle);
+              }
+              else {
+                $('label', $obj).html(cancelTitle);
+              }
+            }
+        };
+
+        var setFeedbackText = function(text) {
+          // Kill previous timer if it isn't finished yet so that the text we
+          // are about to set will not get cleared too early.
+          feedbackTimerId = 1;
+          $summary.html(text);
+        };
+
+        /**
+         * Checks for the presence of a javascript hook 'fivestarResult' to be
+         * called upon completion of a AJAX vote request.
+         */
+        var voteHook = function(data) {
+          var returnObj = {
+            result: {
+              count: $("result > count", data).text(),
+              average: $("result > average", data).text(),
+              summary: {
+                average: $("summary average", data).text(),
+                average_count: $("summary average_count", data).text(),
+                user: $("summary user", data).text(),
+                user_count: $("summary user_count", data).text(),
+                combo: $("summary combo", data).text(),
+                count: $("summary count", data).text()
+              }
+            },
+            vote: {
+              id: $("vote id", data).text(),
+              tag: $("vote tag", data).text(),
+              type: $("vote type", data).text(),
+              value: $("vote value", data).text()
+            },
+            display: {
+              stars: starDisplay,
+              text: textDisplay
+            }
+          };
+          // Check for a custom callback.
+          if (window.fivestarResult) {
+            fivestarResult(returnObj);
+          }
+          // Use the default.
+          else {
+            fivestarDefaultResult(returnObj);
+          }
+          // Update the summary text.
+          summaryText = returnObj.result.summary[returnObj.display.text];
+          if ($(returnObj.result.summary.average).is('.fivestar-feedback-enabled')) {
+            // Inform user that his/her vote has been processed.
+            if (returnObj.vote.value != 0) { // check if vote has been saved or deleted 
+              setFeedbackText(Drupal.settings.fivestar.feedbackVoteSaved);
+            }
+            else {
+              setFeedbackText(Drupal.settings.fivestar.feedbackVoteDeleted);
+            }
+            // Setup a timer to clear the feedback text after 3 seconds.
+            feedbackTimerId = setTimeout(function() { clearTimeout(feedbackTimerId); feedbackTimerId = 0; $summary.html(returnObj.result.summary[returnObj.display.text]); }, 2000);
+          }
+          // Update the current star currentValue to the previous average.
+          if (returnObj.vote.value == 0 && (starDisplay == 'average' || starDisplay == 'smart')) {
+            currentValue = returnObj.result.average;
+            event.reset();
+          }
+        };
+
+        event.reset();
+        return $widget;
+    };
+    
+    /**
+     * Accepts jQuery object containing a single fivestar widget.
+     * Returns the proper div structure for the star interface.
+     * 
+     * @return jQuery
+     * @param {Object} $widget
+     * 
+     */
+    var buildInterface = function($widget){
+        var $container = $('<div class="fivestar-widget clear-block"></div>');
+        var $options = $("select option", $widget);
+        var size = $('option', $widget).size() - 1;
+        var cancel = 1;
+        for (var i = 1, option; option = $options[i]; i++){
+            if (option.value == "0") {
+              cancel = 0;
+              $div = $('<div class="cancel"><a href="#0" title="' + option.text + '">' + option.text + '</a></div>');
+            }
+            else {
+              var zebra = (i + cancel - 1) % 2 == 0 ? 'even' : 'odd';
+              var count = i + cancel - 1;
+              var first = count == 1 ? ' star-first' : '';
+              var last = count == size + cancel - 1 ? ' star-last' : '';
+              $div = $('<div class="star star-' + count + ' star-' + zebra + first + last + '"><a href="#' + option.value + '" title="' + option.text + '">' + option.text + '</a></div>');
+            }
+            $container.append($div[0]);
+        }
+        $container.addClass('fivestar-widget-' + (size + cancel - 1));
+        // Attach the new widget and hide the existing widget.
+        $('select', $widget).after($container).css('display', 'none');
+        return $container;
+    };
+
+    /**
+     * Standard handler to update the average rating when a user changes their
+     * vote. This behavior can be overridden by implementing a fivestarResult
+     * function in your own module or theme.
+     * @param object voteResult
+     * Object containing the following properties from the vote result:
+     * voteResult.result.count The current number of votes for this item.
+     * voteResult.result.average The current average of all votes for this item.
+     * voteResult.result.summary.average The textual description of the average.
+     * voteResult.result.summary.user The textual description of the user's current vote.
+     * voteResult.vote.id The id of the item the vote was placed on (such as the nid)
+     * voteResult.vote.type The type of the item the vote was placed on (such as 'node')
+     * voteResult.vote.tag The multi-axis tag the vote was placed on (such as 'vote')
+     * voteResult.vote.average The average of the new vote saved
+     * voteResult.display.stars The type of star display we're using. Either 'average', 'user', or 'combo'.
+     * voteResult.display.text The type of text display we're using. Either 'average', 'user', or 'combo'.
+     */
+    function fivestarDefaultResult(voteResult) {
+      // Update the summary text.
+      $('div.fivestar-summary-'+voteResult.vote.tag+'-'+voteResult.vote.id).html(voteResult.result.summary[voteResult.display.text]);
+      // If this is a combo display, update the average star display.
+      if (voteResult.display.stars == 'combo') {
+        $('div.fivestar-form-'+voteResult.vote.id).each(function() {
+          // Update stars.
+          var $stars = $('.fivestar-widget-static .star span', this);
+          var average = voteResult.result.average/100 * $stars.size();
+          var index = Math.floor(average);
+          $stars.removeClass('on').addClass('off').css('width', 'auto');
+          $stars.filter(':lt(' + (index + 1) + ')').removeClass('off').addClass('on');
+          $stars.eq(index).css('width', ((average - index) * 100) + "%");
+          // Update summary.
+          var $summary = $('.fivestar-static-form-item .fivestar-summary', this);
+          if ($summary.size()) {
+            var textDisplay = $summary.attr('class').replace(/.*?fivestar-summary-([^ ]+).*/, '$1').replace(/-/g, '_');
+            $summary.html(voteResult.result.summary[textDisplay]);
+          }
+        });
+      }
+    };
+
+    /**
+     * Set up the plugin
+     */
+    $.fn.fivestar = function() {
+      var stack = [];
+      this.each(function() {
+          var ret = buildRating($(this));
+          stack.push(ret);
+      });
+      return stack;
+    };
+
+  // Fix ie6 background flicker problem.
+  if ($.browser.msie == true) {
+    try {
+      document.execCommand('BackgroundImageCache', false, true);
+    } catch(err) {}
+  }
+
+  Drupal.behaviors.fivestar = function(context) {
+    $('div.fivestar-form-item:not(.fivestar-processed)', context).addClass('fivestar-processed').fivestar();
+    $('input.fivestar-submit', context).css('display', 'none');
+  }
+
+})(jQuery);;/**/
+// $Id: og.js,v 1.9.2.3 2010/01/24 14:44:56 amitaibu Exp $
+
+// Content type form
+Drupal.behaviors.og_content_type = function() {
+  // Disable the group limit textarea if the content type is not a standard group post
+  $('input[name="og_content_type_usage"]').click(function(){
+    if (!$('#edit-og-content-type-usage-group-post-standard').attr('checked')) {
+      $('#edit-og-max-groups').attr('disabled','disabled');
+    } else {
+      $('#edit-og-max-groups').removeAttr('disabled');
+    }
+  });
+  
+  // Initial check to see if content type is standard group post
+  if (!$('#edit-og-content-type-usage-group-post-standard').attr('checked')) {
+    $('#edit-og-max-groups').attr('disabled','disabled');
+  };
+}
+
+
+Drupal.verticalTabs = Drupal.verticalTabs || {};
+
+Drupal.verticalTabs.og_nodeapi = function() {
+  var values = [];
+  $('.vertical-tabs-og_nodeapi #edit-og-groups :selected')
+    .each(function (i, selected) {
+      values[i] = $(selected).text();
+    });
+
+  return values.join(', ');
+}
+
+Drupal.verticalTabs.og = function() {
+  var type = $('.vertical-tabs-og input[type=radio]:checked').val();
+  
+  switch (type) {
+    case 'group':
+      return Drupal.t('Group node');
+      break;
+      
+    case 'omitted':
+      return Drupal.t('May not be posted into a group.');
+      break;
+      
+    case 'group_post_standard':
+      return Drupal.t('Standard group post');
+      break;
+      
+    case 'group_post_wiki':
+      return Drupal.t('Wiki group post');
+      break;
+  }
+}
+;/**/
+
+(function ($) {
+  Drupal.Panels = {};
+
+  Drupal.Panels.autoAttach = function() {
+    if ($.browser.msie) {
+      // If IE, attach a hover event so we can see our admin links.
+      $("div.panel-pane").hover(
+        function() {
+          $('div.panel-hide', this).addClass("panel-hide-hover"); return true;
+        },
+        function() {
+          $('div.panel-hide', this).removeClass("panel-hide-hover"); return true;
+        }
+      );
+      $("div.admin-links").hover(
+        function() {
+          $(this).addClass("admin-links-hover"); return true;
+        },
+        function(){
+          $(this).removeClass("admin-links-hover"); return true;
+        }
+      );
+    }
+  };
+
+  $(Drupal.Panels.autoAttach);
+})(jQuery);
+;/**/
+// Javascript for user_relationships_ui.module
+
+// Creating our own namespace for the module
+Drupal.user_relationships_ui = {};
+
+if (Drupal.jsEnabled) {
+  $(document).ready(function() {
+    // Any links that we have created in the ui module are
+    // Given a click handler so you can display the popup correctly
+    $('a.user_relationships_popup_link').click(function(e) {
+      var buttoncode = e.which ? e.which : e.button; // msie specific checks does not support e.which
+      // If position is fixed, allow for %'s.
+      position = Drupal.settings.user_relationships_ui.position.position;
+      left = Drupal.settings.user_relationships_ui.position.left;
+      xtop = Drupal.settings.user_relationships_ui.position.top;
+      
+      if(position == "fixed") {
+        // If left is defined in a % (.5) calculate left requirement
+        if(left <= 1) {
+          // Window width * desired - UI width
+          left = Math.round(($(window).width()*left) - ($("#user_relationships_popup_form").width()/2));
+        }
+        // If top is define in a % (.33) calculate top requirement
+        if(xtop <= 1) {
+          // Window height * desired - UI height (which is an unknown)
+          xtop = Math.round(($(window).height()*xtop));// - ($("#user_relationships_popup_form").height()/2));
+        }
+      } else {
+      left = (e.pageX ? e.pageX : e.clientX) + Number(left); // msie specific checks does not support e.page
+      if (left + $("#user_relationships_popup_form").width() > $(window).width()) {
+        left = (e.pageX ? e.pageX : e.clientX) - $("#user_relationships_popup_form").width();
+      }
+        xtop = (e.pageY ? e.pageY : e.clientY) + Number(xtop); // msie specific checks does not support e.page
+      }
+      var href = $(this).attr('href'); // Where we send the ajax request.
+      Drupal.user_relationships_ui.showForm(href, position, left, xtop);
+      return false;
+    });
+  });
+}
+
+/**
+ * Function to display the pertinent form for the user
+ *
+ * @param href
+ *      Ajax url where we will retrieve the form
+ * @param pageX
+ *      Left value for the event
+ * @param pageY
+ *      Top value for the event
+ */
+Drupal.user_relationships_ui.showForm = function(href, position, left, top) {
+  // Making sure that any currently open popups will be hidden.
+  Drupal.user_relationships_ui.hidePopup();
+  // Putting the animation into this
+
+  $('#user_relationships_popup_form')
+    .css({top: top + 'px', left: left + 'px', position: position})
+    .html(Drupal.user_relationships_ui.loadingAnimation())
+    .slideDown();
+  // Adding ajax to the href because we need to determine between ajax and regular
+  if (href.indexOf('?') == -1) {
+    href += '?';
+  };
+  href += '&ajax=1';
+  // Making the ajax request to the server to retrieve the form.
+  $.get(href, function(result) {
+    $('#user_relationships_popup_form').html(result).slideDown();
+    // Making sure the cancel link on each form in the popup closes the popup.
+    $('#user_relationships_popup_form a').click(function() {
+      Drupal.user_relationships_ui.hidePopup();
+      return false;
+    });
+    //Prevent users from clicking submit button twice
+    Drupal.user_relationships_ui.formCheck();
+  });
+};
+
+/**
+ * Function used to return the html that is used to build the.
+ * Loading animation when a form is requested by the user.
+ */
+Drupal.user_relationships_ui.loadingAnimation = function() {
+  var html = '<div>';
+  html += '<div style="text-align: center; font-weight: bold;">';
+  html += Drupal.t('Form Loading');
+  html += '</div>';
+  html += '<img src="' + Drupal.settings.user_relationships_ui['loadingimage'] + '" border="0" height="20" width="200" />';
+  html += '</div>';
+  return html;
+}
+
+/**
+ * Helper function to hide the popup form
+ */
+Drupal.user_relationships_ui.hidePopup = function() {
+  $('#user_relationships_popup_form').slideUp();
+}
+
+/**
+ * Prevent users from clicking a submit button twice - borrowed from http://drupal.org/project/newswire - thanks, fellows :)
+ */
+Drupal.user_relationships_ui.formCheck = function() {
+  // only apply this to node and comment and new user registration forms
+  var forms = $("#user_relationships_popup_form #edit-submit");
+  // insert the saving div now to cache it for better performance and to show the loading image
+  $('<div id="user_relationships_popup_form_saving"><p class="user_relationships_popup_form_saving">' + Drupal.t('Saving...') + '</p></div>').insertAfter(forms);
+  forms.click(function() {
+    $(this).siblings("input[type=submit]").hide();
+    $(this).hide();
+    $("#user_relationships_popup_form_saving").show();
+    var notice = function() {
+      $('<p id="user_relationships_popup_form_saving_notice">' + Drupal.t('Not saving? Please wait a few seconds, reload this page, and try again.') + '</p>').appendTo("#user_relationships_popup_form_saving").fadeIn();
+    };
+    // append notice if form saving isn't work, perhaps a timeout issue
+    setTimeout(notice, 60000);
+  });
+};
+
+$(document).ready(function() {
+  $('#edit-is-oneway').click(function () {
+    if ($('#edit-is-oneway').attr('checked')) {
+      $('#edit-is-reciprocal-wrapper').slideDown('slow');
+    }
+    else {
+      $('#edit-is-reciprocal-wrapper').slideUp('slow');
+    }
+  });
+  
+  if (!$('#edit-is-oneway').attr('checked')) {
+    $('#edit-is-reciprocal-wrapper').hide();
+  }
+});
+;/**/
+/* cookie framework from developer.mozilla.org */
+var docCookies = {
+  getItem: function (sKey) {
+    return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+  },
+  setItem: function (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+    if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) {
+      return false;
+    }
+    var sExpires = "";
+    if (vEnd) {
+      switch (vEnd.constructor) {
+        case Number:
+          sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + vEnd;
+          break;
+        case String:
+          sExpires = "; expires=" + vEnd;
+          break;
+        case Date:
+          sExpires = "; expires=" + vEnd.toUTCString();
+          break;
+      }
+    }
+    document.cookie = encodeURIComponent(sKey) + "=" + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
+    return true;
+  },
+  removeItem: function (sKey, sPath, sDomain) {
+    if (!sKey || !this.hasItem(sKey)) {
+      return false;
+    }
+    document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + ( sDomain ? "; domain=" + sDomain : "") + ( sPath ? "; path=" + sPath : "");
+    return true;
+  },
+  hasItem: function (sKey) {
+    return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
+  }
+};
+
+(function ($) {
+  var follow_selector = ".user-follow-link:not('.follow_login') a";
+  $(function () {
+    attachFollowMessage();
+    attachFollowBehavior($(follow_selector));
+    $(".user-follow-link.follow_login a").click(function () {
+      docCookies.setItem('requestee', $(this).attr('data-requestee'), Infinity, '/');
+    });
+  });
+
+  function attachFollowMessage() {
+    var pm_content_selector = ".pm-content";
+    if ($(pm_content_selector).length && $.cookie('followuser-processed')) {
+      var base_url = window.location.protocol + '//' + window.location.hostname;
+      var nowFollowing = 'You are now following this user.  You can view your follow feed <a href=' + base_url + '/user>on your user profile page.</a>';
+      pm_content_selector = pm_content_selector + ':not(.followuser-processed)';
+      $(pm_content_selector).prepend('<div class="messages status">' + nowFollowing + '</div>').addClass('followuser-processed');
+      $.cookie('followuser-processed', null, { path: '/' });
+    }
+  }
+
+  function attachFollowBehavior($obj) {
+    var $all_wrappers = $obj.parent();
+    $obj.click(function (e) {
+      e.preventDefault();
+      var href = $(this).attr('href');
+      var node_href = $obj.attr('href');
+      if (href) {
+        var $same_links = $obj.filter("[href=" + href + "]");
+        var $wrapper = $same_links.parent();
+        $same_links.text("Loading...").unbind('click').removeAttr('href');
+        $wrapper.addClass('loading');
+        if ($wrapper.hasClass('following')) {
+          $wrapper.addClass('unfollow');
+        }
+        $wrapper.find('.follow-icon').remove();
+        $.ajax({
+          url: href,
+          type: 'POST',
+          success: function (link) {
+            var $user_follow_link_number = $('.followers span');
+            try {
+              link = JSON.parse(link);
+            } catch (e) {
+              var loginForm = "/user/login";
+              $(location).attr("href", loginForm);
+            }
+            if (link[0]) {
+              var $link = $(link[0]);
+              var $followersCount = link[1];
+              if ($link.length > 0) {
+                $wrapper.replaceWith($link);
+                attachFollowBehavior($(follow_selector));
+              }
+              var $followers = $('.followers');
+
+              var base_url = window.location.protocol + '//' + window.location.hostname;
+              // keep these next two in our back pocket in case we need to do something special on a
+              // particular type of uri (author, node, etc.)
+              var pathArray = window.location.pathname.split('/');
+              var pathType = pathArray[1];
+
+              if (node_href == href) {
+                if ($link.text() === "Following") {
+                  $user_follow_link_number.text($followersCount);
+                  $followers.removeClass('hide');
+                  if ($('.messages.warning')) {
+                    $('.messages.warning').hide();
+                    $('.pm-content').removeClass('unfollowuser-processed');
+                  }
+                  var nowFollowing = 'You are now following this user.  You can view your follow feed <a href=' + base_url + '/user>on your user profile page.</a>';
+                  $('.pm-content:not(.followuser-processed)').prepend('<div class="messages status">' + nowFollowing + '</div>').addClass('followuser-processed');
+                } else {
+                  $user_follow_link_number.text($followersCount);
+                  if ($followersCount == 0) {
+                    $followers.addClass('hide');
+                  }
+                  if ($('.messages.status')) {
+                    $('.messages.status').hide();
+                    $('.pm-content').removeClass('followuser-processed');
+                  }
+                  var unFollowing = 'You have un-followed this user.  You can view your follow feed <a href=' + base_url + '/user>on your user profile page.</a>';
+                  $('.pm-content:not(.unfollowuser-processed)').prepend('<div class="messages warning">' + unFollowing + '</div>').addClass('unfollowuser-processed');
+                }
+              }
+            }
+          },
+          error: function () {
+            $wrapper.html('<div class="follow-user-error">Sorry, something went wrong.</div>')
+              .removeClass('following follow unfollow');
+          },
+          complete: function () {
+            $wrapper.removeClass('loading');
+          }
+        });
+      }
+    });
+
+    $all_wrappers.hover(
+      function () {
+        var $this = $(this);
+        if ($this.hasClass('following') && !$this.hasClass('loading')) {
+          $this.find('a').text('Unfollow');
+          $this.addClass('unfollow');
+        }
+      },
+      function () {
+        var $this = $(this);
+        if ($this.hasClass('following') && !$this.hasClass('loading')) {
+          $this.find('a').text('Following');
+          $this.removeClass('unfollow');
+        }
+      }
+    );
+  }
+})(jQuery);;/**/
+(function ($) {
+
+Drupal.behaviors.initColorboxPentonStyle = function (context) {
+  $(document).bind('cbox_complete', function () {
+    // Only run if there is a title.
+    if ($('#cboxTitle:empty', context).length == false) {
+      setTimeout(function () { $('#cboxTitle', context).fadeIn() }, 1000);
+      $('#cboxLoadedContent img', context).bind('cbox_complete', function () {
+        $('#cboxTitle', context).fadeIn();
+      });
+    }
+    else {
+      $('#cboxTitle', context).hide();
+    }
+  });
+};
+
+})(jQuery);
+;/**/
+jQuery(function($) {
+  /*
+   * Add event to catch moment when ads were rendered if they were loaded after window object.
+   * We cannot add this before $(window).load because window.google tag may not be defined.
+   */
+  jq183(document).on('allAdsLoaded', function() {
+    $('.gpt-holder').each(function(el) {
+      var $this = $(this);
+      if (!$this.hasClass('gallery-ad')) {
+        addAdClasses($this);
+      }
+    });
+    if (typeof window.googletag !== 'undefined' && typeof window.googletag.pubads === 'function') {
+      window.googletag.pubads().addEventListener('slotRenderEnded', function (event) {
+        var $this = $('#' + event.slot.getSlotId().getDomId());
+        if ($this.hasClass('gpt-holder') && !$this.hasClass('gallery-ad')) {
+          addAdClasses($this);
+        }
+      });
+    }
+  });
+
+  $(window).load(function() {
+    /* the below code removes ads for bad sitenames, however, it also collapses
+    text ads. We should probably trust good sitename more than text ads.
+    $('.adnull').addClass('ad-off');
+
+    /*
+    * Check to see if the article 180 ad is empty AND there is no other visible
+    * content. If so, hide the whole div region.
+    */
+    if ($('.pm-node-region').children(':visible').length === 0) {
+      $('.pm-node-region').hide();
+    }
+  });
+});
+
+function addAdClasses(adElement) {
+  var width = adElement.width(),
+    gpt_targeting = adElement.attr('data-targeting'),
+    gpt_ad_slot = typeof gpt_targeting != 'undefined' && gpt_targeting.indexOf('splink') > -1 ? 'gpt-splink' : adElement.attr('id').slice(0,10),
+    adClass = (adElement.css("display") !== 'none' ? 'ad-on ad' + width + ' ' + gpt_ad_slot : 'ad-off'),
+    parentBlock = adElement.parent().parent();
+  if (adElement.parent().hasClass('sponsored-block-ad')) {
+    parentBlock = adElement.parent();
+  }
+  if (gpt_ad_slot == 'gpt-splink' && $('body').hasClass('node-type-gallery')){
+    if (adElement.height()) {
+      var adContent = adElement.find('iframe').contents().find('body').html();
+      adElement.height(0).before(adContent);
+      parentBlock.addClass(adClass);
+    }
+    return;
+  }
+  parentBlock.addClass(adClass);
+  if (parentBlock.hasClass('ad-off') && adClass.indexOf('ad-on') > -1) {
+    parentBlock.removeClass('ad-off');
+  } else if (parentBlock.hasClass('ad-on') && adClass.indexOf('ad-off') > -1) {
+    parentBlock.removeClass('ad-on ad' + width + ' ' + gpt_ad_slot);
+  }
+}
+
+/*********************************************
+ * Helper scripts for the display of a
+ * roadblock advertisement.
+ *********************************************/
+(function(jQuery) {
+//Attach this new method to jQuery
+  jQuery.fn.extend({
+  //This is where you write your plugin's name
+    ShowRoadblockAd: function(options) {
+
+      // set the default values
+      var defaults = {
+        windowSize : 800,
+        backgroundColor : "#fff",
+        clickID : "closeRB",
+        countID : "rc",
+        startCount : 15,
+        opacity : '0.7'
+      };
+      options = jQuery.extend(defaults, options);
+
+      // create iframe divshim and set style elements
+      var divShim = jQuery("#DivShim");
+      divShim.css({
+        'position': 'fixed',
+        'border': '0',
+        'top' : '0px',
+        'left' : '0px',
+        'z-index': '999997',
+        'display': 'none',
+        'height': '100%',
+        'width' : '100%',
+        'background-color' : 'transparent'
+      });
+
+      // create overlay background
+      var rbBackground = jQuery("#roadblockbackground");
+      rbBackground.css({
+        'display' : 'block',
+        'opacity' : options.opacity,
+        'background-color' : options.backgroundColor,
+        'position' : 'fixed',
+        'width' : '100%',
+        'height' : '100%',
+        'top' : '0px',
+        'left' : '0px',
+        'z-index' : '999998'
+      });
+
+      // show the div shim and background - hide the iframe in IE
+      document.body.className +=' hideVideo';
+      if(!jQuery.browser.msie) {
+        divShim.show();
+        rbBackground.show();
+      }
+
+      //Iterate over the current set of matched elements
+      return this.each(function() {
+        var o = options;
+        var obj = jQuery(this);
+
+        // get window width and height
+        var wHeight = jQuery(window).height();
+        var wWidth = jQuery(window).width();
+
+        // get the center position for the window
+        var top = 50; //(wHeight / 2) - (options.windowSize / 2);
+        var left = (wWidth / 2) - (options.windowSize / 2);
+
+        // set center position
+        obj.css({
+          position : 'fixed',
+          left : left + 'px',
+          top : top + 'px',
+          width : options.windowSize + 'px',
+          height : options.windowSize + 'px',
+          'z-index' : '999999'
+        }).show();
+
+        var reveal = function() {
+          // remove all the overlays
+          document.body.className = document.body.className.replace(' hideVideo', '');
+          obj.hide();
+          rbBackground.hide();
+          divShim.hide();
+          return false;
+        };
+
+        // to be executed when page loads
+        $(document).ready(function() {
+          // enable close click to close the window
+          jQuery('#'+options.clickID+' a', obj).click(reveal);
+
+          // set the stat count so we know it has the right value
+          jQuery('#'+options.countID).css("display", "inline").html(options.startCount);
+
+          // start the counter
+          setTimeout(function() {
+            var counter = jQuery('#'+options.countID);
+            var clock = counter.html();
+            clock = clock - 1;
+            counter.html(clock);
+            if (clock == 0) {
+              reveal();
+              return;
+            }
+            setTimeout(arguments.callee, 1000);
+          }, 1000);
+        });
+      });
+    }
+  });
+  //This is a plugin to refresh doubleclick ad that appear in an IFrame (ex Gallery).
+  jQuery.fn.extend({
+    //This is where you write your plugin's name
+    pm_doubleclick_refreshIframes: function() {
+      // loop through each iFrame every time you click on a link and set the source of the iFrame to itself.
+      var $ord = Math.floor(Math.random() * 10000000);
+      jQuery.each($(this), function() {
+        var $src = $(this).attr("src");
+        if ($src) {
+          var $newLocation = $src.replace(/&ord=[0-9]+/g, "&ord="+$ord);
+          this.contentWindow.location.replace($newLocation);
+        }
+      });
+    }
+  });
+})(jQuery);
+function getUrlVars() {
+  var vars = [], hash;
+  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+  for(var i = 0; i < hashes.length; i++) {
+    hash = hashes[i].split('=');
+    vars.push(hash[0]);
+    vars[hash[0]] = hash[1];
+  }
+  return vars;
+}
+
+/*
+ * Called from the DFP template
+ * */
+/* showColorBox is moved to the dfp template
+function showColorBox(ad_content,run_time,ad_label,show_background,timer_text,ad_size) {
+  if ($('#colorbox').css('display') == 'none') {
+    var $background_opacity = (show_background == 'No' || typeof show_background === 'undefined') ? 1 : 0.7,
+        $ad_width = (typeof ad_size === "undefined") ? ad_content.width() : parseFloat(ad_size.substr(0, ad_size.indexOf('x'))),
+        $width = ($ad_width < 600) ? 640 : $ad_width + 40,
+        $run_time = (typeof run_time === "undefined") ? 10 : run_time,
+        $ad_label = (typeof ad_label === "undefined") ? 'Advertisement' : ad_label,
+        $timer_text = (typeof timer_text === "undefined") ? '<i id="rc">' + $run_time + '</i>' : '<a href="#" onclick="$.colorbox.close();return false">Continue on to ' + timer_text + '</a> (or wait <i id="rc">' + $run_time + '</i> seconds)';
+    $.colorbox({
+      open: true,
+      opacity: $background_opacity,
+      scrolling: false,
+      title: '<span>' + $ad_label + '</span> ' + $timer_text,
+      html: '<div style="margin:25px auto 0;width:' + $ad_width + 'px;">' + ad_content + '</div>',
+      width: $width,
+      onOpen:function() {
+        $('#colorbox').addClass('prestitial');
+      },
+      onClose:function(){
+        $('#colorbox').removeClass('prestitial');
+      }
+    });
+    countdown($run_time);
+  }
+}
+/* */
+function countdown(run_time) {
+  var $run_time = run_time - 1;
+  $("#rc").text($run_time);
+  if ($run_time == 0) {
+    $('#colorbox').removeClass('expandedColorboxAd');
+    $.colorbox.close();
+  }
+  var x = setTimeout("countdown(" + $run_time + ")", 1000);
+}
+;/**/
+jQuery(function($) {
+  $(window).load(function() {
+    if(!is_newsletter_flyover_shows() && !is_on_thank_you_page() &&$('#gpt-' + roadblock.roadblockposition + '.processed').is(':visible')) {
+      var transparency = ((roadblock.roadblocktransparent == 1) ? 0.7: 1);
+      $('#roadblockbackground, #DivShim').css('height','100%');
+      $("#roadblockcontainer").ShowRoadblockAd({ startCount: roadblock.roadblocktime, opacity : transparency });
+      $("#showCount").hide();
+      setTimeout(function(){$("#showCount").show()}, roadblock.roadblocktimedelay*1000);
+    } else {
+      $('#DivShim, #roadblockbackground, #roadblockcontainer').hide();
+    };
+  });
+  function getCookie(name) {
+    var matches = document.cookie.match(new RegExp(
+       "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+  }
+
+  function is_on_thank_you_page() {
+    if(window.location.pathname == '/penton_ur/thank-you') {
+      return true;
+    }
+    return false;
+  }
+
+  function is_newsletter_flyover_shows() {
+    try {
+        var flyover_page_number = Drupal.settings.penton_registration.flyover_page_number;
+    }catch(error) {
+        return false;
+    }
+    var newsletter_flyover_pages_counter = getCookie('newsletter_flyover_pages_counter');
+    if(document.getElementsByTagName('body')[0].className.indexOf("newsletter-flyover-executed") > -1) {
+      if(parseInt(newsletter_flyover_pages_counter) == -2) {
+        return true;
+      }
+    }else {
+      if(parseInt(newsletter_flyover_pages_counter) >= parseInt(flyover_page_number) - 1) {
+        return true;
+      }
+    }
+    return false;
+  }
+});
+;/**/

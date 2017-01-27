@@ -1,0 +1,25 @@
+/*
+ * Legal Statement Acceptance: Form Submit 
+ * Penton
+ * Country Required
+ * Version: 1.0
+ */
+
+function checkForCanadian() {
+    
+		var legalCheckbox = new LiveValidation('legalCheckbox'); legalCheckbox.add( Validate.Acceptance, {failureMessage: "You must agree to Penton's Terms of Service." } );
+			
+		if ($("[name=country]").val() == "CA") {
+			$("#legalCheckboxVisiblity").removeClass("hide").addClass("show");		
+			legalCheckbox.enable() 
+		}		
+		
+		else {			
+			$("#legalCheckboxVisiblity").removeClass("show").addClass("hide");	
+			legalCheckbox.disable() 
+		}	
+	
+}
+
+$(document).ready(checkForCanadian); 
+$("[name=country]").change(checkForCanadian); 

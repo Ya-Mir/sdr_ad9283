@@ -1,0 +1,1715 @@
+
+Drupal.googleanalytics = {};
+
+$(document).ready(function() {
+
+  // Attach mousedown, keyup, touchstart events to document only and catch
+  // clicks on all elements.
+  $(document.body).bind("mousedown keyup touchstart", function(event) {
+
+    // Catch only the first parent link of a clicked element.
+    $(event.target).parents("a:first,area:first").andSelf().filter("a,area").each(function() {
+
+      // Is the clicked URL internal?
+      if (Drupal.googleanalytics.isInternal(this.href)) {
+        // Skip 'click' tracking, if custom tracking events are bound.
+        if ($(this).is('.colorbox')) {
+          // Do nothing here. The custom event will handle all tracking.
+          //console.info("Click on .colorbox item has been detected.");
+        }
+        // Is download tracking activated and the file extension configured for download tracking?
+        else if (Drupal.settings.googleanalytics.trackDownload && Drupal.googleanalytics.isDownload(this.href)) {
+          // Download link clicked.
+          ga("send", "event", "Downloads", Drupal.googleanalytics.getDownloadExtension(this.href).toUpperCase(), Drupal.googleanalytics.getPageUrl(this.href));
+        }
+        else if (Drupal.googleanalytics.isInternalSpecial(this.href)) {
+          // Keep the internal URL for Google Analytics website overlay intact.
+          ga("send", "pageview", { page: Drupal.googleanalytics.getPageUrl(this.href) });
+        }
+      }
+      else {
+        if (Drupal.settings.googleanalytics.trackMailto && $(this).is("a[href^='mailto:'],area[href^='mailto:']")) {
+          // Mailto link clicked.
+          ga("send", "event", "Mails", "Click", this.href.substring(7));
+        }
+        else if (Drupal.settings.googleanalytics.trackOutbound && this.href.match(/^\w+:\/\//i)) {
+          if (Drupal.settings.googleanalytics.trackDomainMode != 2 && !Drupal.googleanalytics.isCrossDomain(this.hostname, Drupal.settings.googleanalytics.trackCrossDomains)) {
+            // External link clicked / No top-level cross domain clicked.
+            ga("send", "event", "Outbound links", "Click", this.href);
+          }
+        }
+      }
+    });
+  });
+
+  // Track hash changes as unique pageviews, if this option has been enabled.
+  if (Drupal.settings.googleanalytics.trackUrlFragments) {
+    window.onhashchange = function() {
+      ga('send', 'pageview', location.pathname + location.search + location.hash);
+    }
+  }
+
+  // Colorbox: This event triggers when the transition has completed and the
+  // newly loaded content has been revealed.
+  $(document).bind("cbox_complete", function () {
+    var href = $.colorbox.element().attr("href");
+    if (href) {
+      ga("send", "pageview", { page: Drupal.googleanalytics.getPageUrl(href) });
+    }
+  });
+
+});
+
+/**
+ * Check whether the hostname is part of the cross domains or not.
+ *
+ * @param string hostname
+ *   The hostname of the clicked URL.
+ * @param array crossDomains
+ *   All cross domain hostnames as JS array.
+ *
+ * @return boolean
+ */
+Drupal.googleanalytics.isCrossDomain = function (hostname, crossDomains) {
+  /**
+   * jQuery < 1.6.3 bug: $.inArray crushes IE6 and Chrome if second argument is
+   * `null` or `undefined`, http://bugs.jquery.com/ticket/10076,
+   * https://github.com/jquery/jquery/commit/a839af034db2bd934e4d4fa6758a3fed8de74174
+   *
+   * @todo: Remove/Refactor in D8
+   */
+  if (!crossDomains) {
+    return false;
+  }
+  else {
+    return $.inArray(hostname, crossDomains) > -1 ? true : false;
+  }
+}
+
+/**
+ * Check whether this is a download URL or not.
+ *
+ * @param string url
+ *   The web url to check.
+ *
+ * @return boolean
+ */
+Drupal.googleanalytics.isDownload = function (url) {
+  var isDownload = new RegExp("\\.(" + Drupal.settings.googleanalytics.trackDownloadExtensions + ")([\?#].*)?$", "i");
+  return isDownload.test(url);
+}
+
+/**
+ * Check whether this is an absolute internal URL or not.
+ *
+ * @param string url
+ *   The web url to check.
+ *
+ * @return boolean
+ */
+Drupal.googleanalytics.isInternal = function (url) {
+  var isInternal = new RegExp("^(https?):\/\/" + window.location.host, "i");
+  return isInternal.test(url);
+}
+
+/**
+ * Check whether this is a special URL or not.
+ *
+ * URL types:
+ *  - gotwo.module /go/* links.
+ *
+ * @param string url
+ *   The web url to check.
+ *
+ * @return boolean
+ */
+Drupal.googleanalytics.isInternalSpecial = function (url) {
+  var isInternalSpecial = new RegExp("(\/go\/.*)$", "i");
+  return isInternalSpecial.test(url);
+}
+
+/**
+ * Extract the relative internal URL from an absolute internal URL.
+ *
+ * Examples:
+ * - http://mydomain.com/node/1 -> /node/1
+ * - http://example.com/foo/bar -> http://example.com/foo/bar
+ *
+ * @param string url
+ *   The web url to check.
+ *
+ * @return string
+ *   Internal website URL
+ */
+Drupal.googleanalytics.getPageUrl = function (url) {
+  var extractInternalUrl = new RegExp("^(https?):\/\/" + window.location.host, "i");
+  return url.replace(extractInternalUrl, '');
+}
+
+/**
+ * Extract the download file extension from the URL.
+ *
+ * @param string url
+ *   The web url to check.
+ *
+ * @return string
+ *   The file extension of the passed url. e.g. "zip", "txt"
+ */
+Drupal.googleanalytics.getDownloadExtension = function (url) {
+  var extractDownloadextension = new RegExp("\\.(" + Drupal.settings.googleanalytics.trackDownloadExtensions + ")([\?#].*)?$", "i");
+  var extension = extractDownloadextension.exec(url);
+  return (extension === null) ? '' : extension[1];
+}
+;/**/
+/**
+ * Created by root on 5/20/15.
+ */
+$(document).ready(function() {
+  $('.hidden-error-message').each(function() {
+    if(this.parentNode.className.indexOf('hidden-error-message-li') == -1) {
+      this.parentNode.className += ' hidden-error-message-li';
+    }
+  });
+});
+;/**/
+/*
+ * jQuery Form Plugin
+ * version: 2.25 (08-APR-2009)
+ * @requires jQuery v1.2.2 or later
+ * @note This has been modified for ajax.module
+ * Examples and documentation at: http://malsup.com/jquery/form/
+ * Dual licensed under the MIT and GPL licenses:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *   http://www.gnu.org/licenses/gpl.html
+ */
+eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}(';(5($){$.B.1s=5(u){2(!4.G){R(\'1b: 2M 9 2N - 2O 2P 1t\');6 4}2(S u==\'5\')u={T:u};3 v=4.14(\'1c\')||1d.2Q.2R;v=(v.2S(/^([^#]+)/)||[])[1];v=v||\'\';u=$.1n({1e:v,H:4.14(\'1u\')||\'1Q\'},u||{});3 w={};4.L(\'C-1R-1S\',[4,u,w]);2(w.1T){R(\'1b: 9 1U 1o C-1R-1S L\');6 4}2(u.1v&&u.1v(4,u)===I){R(\'1b: 9 1f 1o 1v 1V\');6 4}3 a=4.1w(u.2T);2(u.J){u.O=u.J;K(3 n 1x u.J){2(u.J[n]2U 15){K(3 k 1x u.J[n])a.D({7:n,8:u.J[n][k]})}E a.D({7:n,8:u.J[n]})}}2(u.1y&&u.1y(a,4,u)===I){R(\'1b: 9 1f 1o 1y 1V\');6 4}4.L(\'C-9-1W\',[a,4,u,w]);2(w.1T){R(\'1b: 9 1U 1o C-9-1W L\');6 4}3 q=$.1z(a);2(u.H.2V()==\'1Q\'){u.1e+=(u.1e.2W(\'?\')>=0?\'&\':\'?\')+q;u.J=F}E u.J=q;3 x=4,V=[];2(u.2X)V.D(5(){x.1X()});2(u.2Y)V.D(5(){x.1Y()});2(!u.16&&u.17){3 y=u.T||5(){};V.D(5(a){$(u.17).2Z(a).P(y,1Z)})}E 2(u.T)V.D(u.T);u.T=5(a,b){K(3 i=0,M=V.G;i<M;i++)V[i].30(u,[a,b,x])};3 z=$(\'W:31\',4).18();3 A=I;K(3 j=0;j<z.G;j++)2(z[j])A=Q;2(u.20||A){2(u.21)$.32(u.21,1A);E 1A()}E $.33(u);4.L(\'C-9-34\',[4,u]);6 4;5 1A(){3 h=x[0];2($(\':W[7=9]\',h).G){35(\'36: 37 22 38 39 3a 3b "9".\');6}3 i=$.1n({},$.23,u);3 s=$.1n(Q,{},$.1n(Q,{},$.23),i);3 j=\'3c\'+(1B 3d().3e());3 k=$(\'<20 3f="\'+j+\'" 7="\'+j+\'" 24="25:26" />\');3 l=k[0];k.3g({3h:\'3i\',27:\'-28\',29:\'-28\'});3 m={1f:0,19:F,1g:F,3j:0,3k:\'n/a\',3l:5(){},2a:5(){},3m:5(){},3n:5(){4.1f=1;k.14(\'24\',\'25:26\')}};3 g=i.2b;2(g&&!$.1C++)$.1h.L("3o");2(g)$.1h.L("3p",[m,i]);2(s.2c&&s.2c(m,s)===I){s.2b&&$.1C--;6}2(m.1f)6;3 o=0;3 p=0;3 q=h.U;2(q){3 n=q.7;2(n&&!q.1i){u.O=u.O||{};u.O[n]=q.8;2(q.H=="X"){u.O[7+\'.x\']=h.Y;u.O[7+\'.y\']=h.Z}}}1j(5(){3 t=x.14(\'17\'),a=x.14(\'1c\');h.1k(\'17\',j);2(h.2d(\'1u\')!=\'2e\')h.1k(\'1u\',\'2e\');2(h.2d(\'1c\')!=i.1e)h.1k(\'1c\',i.1e);2(!u.3q){x.14({3r:\'2f/C-J\',3s:\'2f/C-J\'})}2(i.1D)1j(5(){p=Q;11()},i.1D);3 b=[];2g{2(u.O)K(3 n 1x u.O)b.D($(\'<W H="3t" 7="\'+n+\'" 8="\'+u.O[n]+\'" />\').2h(h)[0]);k.2h(\'1l\');l.2i?l.2i(\'2j\',11):l.3u(\'2k\',11,I);h.9()}3v{h.1k(\'1c\',a);t?h.1k(\'17\',t):x.3w(\'17\');$(b).2l()}},10);3 r=0;5 11(){2(o++)6;l.2m?l.2m(\'2j\',11):l.3x(\'2k\',11,I);3 c=Q;2g{2(p)3y\'1D\';3 d,N;N=l.2n?l.2n.2o:l.2p?l.2p:l.2o;2((N.1l==F||N.1l.2q==\'\')&&!r){r=1;o--;1j(11,2r);6}m.19=N.1l?N.1l.2q:F;m.1g=N.2s?N.2s:N;m.2a=5(a){3 b={\'3z-H\':i.16};6 b[a]};2(i.16==\'3A\'||i.16==\'3B\'){3 f=N.1E(\'1F\')[0];m.19=f?f.8:m.19}E 2(i.16==\'2t\'&&!m.1g&&m.19!=F){m.1g=2u(m.19)}d=$.3C(m,i.16)}3D(e){c=I;$.3E(i,m,\'2v\',e)}2(c){i.T(d,\'T\');2(g)$.1h.L("3F",[m,i])}2(g)$.1h.L("3G",[m,i]);2(g&&!--$.1C)$.1h.L("3H");2(i.2w)i.2w(m,c?\'T\':\'2v\');1j(5(){k.2l();m.1g=F},2r)};5 2u(s,a){2(1d.2x){a=1B 2x(\'3I.3J\');a.3K=\'I\';a.3L(s)}E a=(1B 3M()).3N(s,\'1G/2t\');6(a&&a.2y&&a.2y.1p!=\'3O\')?a:F}}};$.B.3P=5(c){6 4.2z().2A(\'9.C-1q\',5(){$(4).1s(c);6 I}).P(5(){$(":9,W:X",4).2A(\'2B.C-1q\',5(e){3 a=4.C;a.U=4;2(4.H==\'X\'){2(e.2C!=12){a.Y=e.2C;a.Z=e.3Q}E 2(S $.B.2D==\'5\'){3 b=$(4).2D();a.Y=e.2E-b.29;a.Z=e.2F-b.27}E{a.Y=e.2E-4.3R;a.Z=e.2F-4.3S}}1j(5(){a.U=a.Y=a.Z=F},10)})})};$.B.2z=5(){4.2G(\'9.C-1q\');6 4.P(5(){$(":9,W:X",4).2G(\'2B.C-1q\')})};$.B.1w=5(b){3 a=[];2(4.G==0)6 a;3 c=4[0];3 d=b?c.1E(\'*\'):c.22;2(!d)6 a;K(3 i=0,M=d.G;i<M;i++){3 e=d[i];3 n=e.7;2(!n)1H;2(b&&c.U&&e.H=="X"){2(!e.1i&&c.U==e)a.D({7:n+\'.x\',8:c.Y},{7:n+\'.y\',8:c.Z});1H}3 v=$.18(e,Q);2(v&&v.1r==15){K(3 j=0,2H=v.G;j<2H;j++)a.D({7:n,8:v[j]})}E 2(v!==F&&S v!=\'12\')a.D({7:n,8:v})}2(!b&&c.U){3 f=c.1E("W");K(3 i=0,M=f.G;i<M;i++){3 g=f[i];3 n=g.7;2(n&&!g.1i&&g.H=="X"&&c.U==g)a.D({7:n+\'.x\',8:c.Y},{7:n+\'.y\',8:c.Z})}}6 a};$.B.3T=5(a){6 $.1z(4.1w(a))};$.B.3U=5(b){3 a=[];4.P(5(){3 n=4.7;2(!n)6;3 v=$.18(4,b);2(v&&v.1r==15){K(3 i=0,M=v.G;i<M;i++)a.D({7:n,8:v[i]})}E 2(v!==F&&S v!=\'12\')a.D({7:4.7,8:v})});6 $.1z(a)};$.B.18=5(a){K(3 b=[],i=0,M=4.G;i<M;i++){3 c=4[i];3 v=$.18(c,a);2(v===F||S v==\'12\'||(v.1r==15&&!v.G))1H;v.1r==15?$.3V(b,v):b.D(v)}6 b};$.18=5(b,c){3 n=b.7,t=b.H,1a=b.1p.1I();2(S c==\'12\')c=Q;2(c&&(!n||b.1i||t==\'1m\'||t==\'3W\'||(t==\'1J\'||t==\'1K\')&&!b.1L||(t==\'9\'||t==\'X\')&&b.C&&b.C.U!=b||1a==\'13\'&&b.1M==-1))6 F;2(1a==\'13\'){3 d=b.1M;2(d<0)6 F;3 a=[],1N=b.3X;3 e=(t==\'13-2I\');3 f=(e?d+1:1N.G);K(3 i=(e?d:0);i<f;i++){3 g=1N[i];2(g.1t){3 v=g.8;2(!v)v=(g.1O&&g.1O[\'8\']&&!(g.1O[\'8\'].3Y))?g.1G:g.8;2(e)6 v;a.D(v)}}6 a}6 b.8};$.B.1Y=5(){6 4.P(5(){$(\'W,13,1F\',4).2J()})};$.B.2J=$.B.3Z=5(){6 4.P(5(){3 t=4.H,1a=4.1p.1I();2(t==\'1G\'||t==\'40\'||1a==\'1F\')4.8=\'\';E 2(t==\'1J\'||t==\'1K\')4.1L=I;E 2(1a==\'13\')4.1M=-1})};$.B.1X=5(){6 4.P(5(){2(S 4.1m==\'5\'||(S 4.1m==\'41\'&&!4.1m.42))4.1m()})};$.B.43=5(b){2(b==12)b=Q;6 4.P(5(){4.1i=!b})};$.B.2K=5(b){2(b==12)b=Q;6 4.P(5(){3 t=4.H;2(t==\'1J\'||t==\'1K\')4.1L=b;E 2(4.1p.1I()==\'2L\'){3 a=$(4).44(\'13\');2(b&&a[0]&&a[0].H==\'13-2I\'){a.45(\'2L\').2K(I)}4.1t=b}})};5 R(){2($.B.1s.46&&1d.1P&&1d.1P.R)1d.1P.R(\'[47.C] \'+15.48.49.4a(1Z,\'\'))}})(4b);',62,260,'||if|var|this|function|return|name|value|submit||||||||||||||||||||||||||||fn|form|push|else|null|length|type|false|data|for|trigger|max|doc|extraData|each|true|log|typeof|success|clk|callbacks|input|image|clk_x|clk_y||cb|undefined|select|attr|Array|dataType|target|a_fieldValue|responseText|tag|ajaxSubmit|action|window|url|aborted|responseXML|event|disabled|setTimeout|setAttribute|body|reset|extend|via|tagName|plugin|constructor|a_ajaxSubmit|selected|method|beforeSerialize|a_formToArray|in|beforeSubmit|param|fileUpload|new|active|timeout|getElementsByTagName|textarea|text|continue|toLowerCase|checkbox|radio|checked|selectedIndex|ops|attributes|console|GET|pre|serialize|veto|vetoed|callback|validate|a_resetForm|a_clearForm|arguments|iframe|closeKeepAlive|elements|ajaxSettings|src|about|blank|top|1000px|left|getResponseHeader|global|beforeSend|getAttribute|POST|multipart|try|appendTo|attachEvent|onload|load|remove|detachEvent|contentWindow|document|contentDocument|innerHTML|100|XMLDocument|xml|toXml|error|complete|ActiveXObject|documentElement|a_ajaxFormUnbind|bind|click|offsetX|offset|pageX|pageY|unbind|jmax|one|a_clearFields|a_selected|option|skipping|process|no|element|location|href|match|semantic|instanceof|toUpperCase|indexOf|resetForm|clearForm|html|apply|file|get|ajax|notify|alert|Error|Form|must|not|be|named|jqFormIO|Date|getTime|id|css|position|absolute|status|statusText|getAllResponseHeaders|setRequestHeader|abort|ajaxStart|ajaxSend|skipEncodingOverride|encoding|enctype|hidden|addEventListener|finally|removeAttr|removeEventListener|throw|content|json|script|httpData|catch|handleError|ajaxSuccess|ajaxComplete|ajaxStop|Microsoft|XMLDOM|async|loadXML|DOMParser|parseFromString|parsererror|a_ajaxForm|offsetY|offsetLeft|offsetTop|a_formSerialize|a_fieldSerialize|merge|button|options|specified|a_clearInputs|password|object|nodeType|a_enable|parent|find|debug|jquery|prototype|join|call|jQuery'.split('|'),0,{}));/**/
+/**
+ * Automatic ajax validation
+ *
+ * @see http://drupal.org/project/ajax
+ * @see irc://freenode.net/#drupy
+ * @depends Drupal 6
+ * @author brendoncrawford
+ * @note This file uses a 79 character width limit.
+ * 
+ *
+ */
+
+Drupal.Ajax = new Object;
+
+Drupal.Ajax.plugins = {};
+
+Drupal.Ajax.firstRun = false;
+
+/**
+ * Init function.
+ * This is being executed by Drupal behaviours.
+ * See bottom of script.
+ * 
+ * @param {HTMLElement} context
+ * @return {Bool}
+ */
+Drupal.Ajax.init = function(context) {
+  var f, s;
+  if (f = $('.ajax-form', context)) {
+    if (!Drupal.Ajax.firstRun) {
+      Drupal.Ajax.invoke('init');
+      Drupal.Ajax.firstRun = true;
+    }
+    s = $('input[type="submit"]', f);
+    s.click(function(){
+      this.form.ajax_activator = $(this);
+      return true;
+    });
+    f.each(function(){
+      this.ajax_activator = null;
+      $(this).submit(function(){
+        if (this.ajax_activator === null) {
+          this.ajax_activator = $('#edit-submit', this);
+        }
+        if (this.ajax_activator.hasClass('ajax-trigger')) {
+          Drupal.Ajax.go($(this), this.ajax_activator);
+          return false;
+        }
+        else {
+          return true;
+        }
+      });
+      return true;
+    });
+  }
+  return true;
+};
+
+/**
+ * Invokes plugins
+ * 
+ * @param {Object} formObj
+ * @param {Object} submitter
+ */
+Drupal.Ajax.invoke = function(hook, args) {
+  var plugin, r, ret;
+  ret = true;
+  for (plugin in Drupal.Ajax.plugins) {
+    r = Drupal.Ajax.plugins[plugin](hook, args);
+    if (r === false) {
+      ret = false;
+    }
+  }
+  return ret;
+};
+
+/**
+ * Handles submission
+ * 
+ * @param {Object} submitter_
+ * @return {Bool}
+ */
+Drupal.Ajax.go = function(formObj, submitter) {
+  var submitterVal, submitterName, extraData;
+  Drupal.Ajax.invoke('submit', {submitter:submitter});
+  submitterVal = submitter.val();
+  submitterName = submitter.attr('name');
+  submitter.val(Drupal.t('Loading...'));
+  extraData = {};
+  extraData[submitterName] = submitterVal;
+  extraData['drupal_ajax'] = '1';
+  formObj.a_ajaxSubmit({
+    extraData : extraData,
+    beforeSubmit : function(data) {
+      data[data.length] = {
+        name : submitterName,
+        value : submitterVal
+      };
+      data[data.length] = {
+        name : 'drupal_ajax',
+        value : '1'
+      };
+      return true;
+    },
+    dataType : 'json',
+    error: function (XMLHttpRequest, textStatus, errorThrown) {
+      window.alert(Drupal.t('ajax.module: An unknown error has occurred.'));
+      if (window.console) {
+        console.log('error', arguments);
+      }
+      return true;
+    },
+    success: function(data){
+      submitter.val(submitterVal);
+      Drupal.Ajax.response(submitter, formObj, data);
+      return true;
+    }
+  });
+  return false;
+};
+
+/**
+ * Handles messaging
+ * 
+ * @param {Object} formObj
+ * @param {Object} submitter
+ * @param {Object} data
+ * @param {Object} options
+ * @return {Bool}
+ */
+Drupal.Ajax.message = function(formObj, submitter, data, options) {
+  var args;
+  data.local = {
+    submitter : submitter,
+    form : formObj
+  };
+  if (Drupal.Ajax.invoke('message', data)) {
+    Drupal.Ajax.writeMessage(data.local.form, data.local.submitter, options);
+    Drupal.Ajax.invoke('afterMessage', data);
+  }
+  return true;
+};
+
+/**
+ * Writes message
+ * 
+ * @param {Object} formObj
+ * @param {Object} submitter
+ * @param {Object} options
+ * @return {Bool}
+ */
+Drupal.Ajax.writeMessage = function(formObj, submitter, options) {
+  var i, _i, thisItem, log, errBox, h, data;
+  if (options.action === 'notify') {
+    // Cleanups
+    $('.messages, .ajax-preview', formObj).remove();
+    $('input, textarea').removeClass('error status warning required');
+    // Preview
+    if (options.type === 'preview') {
+      log = $('<div>').addClass('ajax-preview');
+      log.html(options.messages);
+      formObj.prepend(log);
+    }
+    // Status, Error, Message
+    else {
+      log = $('<ul>');
+      errBox = $(".messages." + options.type, formObj[0])
+      for (i = 0, _i = options.messages.length; i < _i; i++) {
+        thisItem = $('#' + options.messages[i].id, formObj[0])
+        thisItem.addClass(options.type);
+        if (options.messages[i].required) {
+          thisItem.addClass('required');
+        }
+        log.append('<li>' + options.messages[i].value + '</li>');
+      }
+      if (errBox.length === 0) {
+        errBox = $("<div class='messages " + options.type + "'>");
+        formObj.prepend(errBox);
+      }
+      errBox.html(log);
+    }
+  }
+  else if (options.action === 'clear') {
+    $('.messages, .ajax-preview', formObj).remove();
+  }
+  return true;
+};
+
+/**
+ * Updates message containers
+ * 
+ * @param {Object} updaters
+ * @return {Bool}
+ */
+Drupal.Ajax.updater = function(updaters) {
+  var i, _i, elm;
+  for (i = 0, _i = updaters.length; i < _i; i++) {
+    elm = $(updaters[i].selector);
+    // HTML:IN
+    if (updaters[i].type === 'html_in') {
+      elm.html(updaters[i].value);
+    }
+    // HTML:OUT
+    else if (updaters[i].type === 'html_out') {
+      elm.replaceWith(updaters[i].value);
+    }
+    // FIELD
+    else if (updaters[i].type === 'field') {
+      elm.val(updaters[i].value);
+    }
+    // REMOVE
+    else if(updaters[i].type === 'remove') {
+      elm.remove();
+    }
+  }
+  return true;
+};
+
+/**
+ * Handles data response
+ * 
+ * @param {Object} submitter
+ * @param {Object} formObj
+ * @param {Object} data
+ * @return {Bool}
+ */
+Drupal.Ajax.response = function(submitter, formObj, data){
+  var newSubmitter;
+  data.local = {
+    submitter : submitter,
+    form : formObj
+  };
+  /**
+   * Failure
+   */
+  if (data.status === false) {
+    Drupal.Ajax.updater(data.updaters);
+    Drupal.Ajax.message(formObj, submitter, data, {
+      action : 'notify',
+      messages : data.messages_error,
+      type : 'error'
+    });
+  }
+  /**
+   * Success
+   */
+  else {
+    // Display preview
+    if (data.preview !== null) {
+      Drupal.Ajax.updater(data.updaters);
+      Drupal.Ajax.message(formObj, submitter, data, {
+        action : 'notify',
+        messages : decodeURIComponent(data.preview),
+        type : 'preview'
+      });
+    }
+    // If no redirect, then simply show messages
+    else if (data.redirect === null) {
+      if (data.messages_status.length > 0) {
+        Drupal.Ajax.message(formObj, submitter, data, {
+          action : 'notify',
+          messages : data.messages_status,
+          type : 'status'
+        });
+      }
+      if (data.messages_warning.length > 0) {
+        Drupal.Ajax.message(formObj, submitter, data, {
+          action : 'notify',
+          messages : data.messages_warning,
+          type : 'warning'
+        });
+      }
+      if (data.messages_status.length === 0 &&
+          data.messages_warning.length === 0) {
+        Drupal.Ajax.message(formObj, submitter, data, {action:'clear'});
+      }
+    }
+    // Redirect
+    else {
+      if (Drupal.Ajax.invoke('redirect', data)) {
+        Drupal.Ajax.redirect( data.redirect );
+      }
+      else {
+        Drupal.Ajax.updater(data.updaters);
+        if (data.messages_status.length === 0 &&
+            data.messages_warning.length === 0) {
+          Drupal.Ajax.message(formObj, submitter, data, {action:'clear'});
+        }
+        else {
+          Drupal.Ajax.message(formObj, submitter, data, {
+            action : 'notify',
+            messages : data.messages_status,
+            type : 'status'
+          });
+        }
+      }
+    }
+  }
+  return true;
+};
+
+
+/**
+ * Redirects to appropriate page
+ * 
+ * @todo
+ *   Some of this functionality should possibly hapen on
+ *   the server instead of client.
+ * @param {String} url
+ */
+Drupal.Ajax.redirect = function(url) {
+  window.location.href = url;
+};
+
+Drupal.behaviors.Ajax = Drupal.Ajax.init;
+
+
+;/**/
+/*!
+* jQuery Form Plugin
+* version: 2.43 (12-MAR-2010)
+* @requires jQuery v1.3.2 or later
+*
+* Examples and documentation at: http://malsup.com/jquery/form/
+* Dual licensed under the MIT and GPL licenses:
+* http://www.opensource.org/licenses/mit-license.php
+* http://www.gnu.org/licenses/gpl.html
+*/
+(function(b){function o(){if(b.fn.ajaxSubmit.debug){var a="[jquery.form] "+Array.prototype.join.call(arguments,"");if(window.console&&window.console.log)window.console.log(a);else window.opera&&window.opera.postError&&window.opera.postError(a)}}b.fn.ajaxSubmit=function(a){function d(){function r(){var p=h.attr("target"),n=h.attr("action");j.setAttribute("target",z);j.getAttribute("method")!="POST"&&j.setAttribute("method","POST");j.getAttribute("action")!=g.url&&j.setAttribute("action",g.url);g.skipEncodingOverride||
+h.attr({encoding:"multipart/form-data",enctype:"multipart/form-data"});g.timeout&&setTimeout(function(){C=true;s()},g.timeout);var m=[];try{if(g.extraData)for(var u in g.extraData)m.push(b('<input type="hidden" name="'+u+'" value="'+g.extraData[u]+'" />').appendTo(j)[0]);t.appendTo("body");t.data("form-plugin-onload",s);j.submit()}finally{j.setAttribute("action",n);p?j.setAttribute("target",p):h.removeAttr("target");b(m).remove()}}function s(){if(!D){var p=true;try{if(C)throw"timeout";var n,m;m=v.contentWindow?
+v.contentWindow.document:v.contentDocument?v.contentDocument:v.document;var u=g.dataType=="xml"||m.XMLDocument||b.isXMLDoc(m);o("isXml="+u);if(!u&&(m.body==null||m.body.innerHTML=="")){if(--G){o("requeing onLoad callback, DOM not available");setTimeout(s,250);return}o("Could not access iframe DOM after 100 tries.");return}o("response detected");D=true;i.responseText=m.body?m.body.innerHTML:null;i.responseXML=m.XMLDocument?m.XMLDocument:m;i.getResponseHeader=function(H){return{"content-type":g.dataType}[H]};
+if(g.dataType=="json"||g.dataType=="script"){var E=m.getElementsByTagName("textarea")[0];if(E)i.responseText=E.value;else{var F=m.getElementsByTagName("pre")[0];if(F)i.responseText=F.innerHTML}}else if(g.dataType=="xml"&&!i.responseXML&&i.responseText!=null)i.responseXML=A(i.responseText);n=b.httpData(i,g.dataType)}catch(B){o("error caught:",B);p=false;i.error=B;b.handleError(g,i,"error",B)}if(p){g.success(n,"success");w&&b.event.trigger("ajaxSuccess",[i,g])}w&&b.event.trigger("ajaxComplete",[i,g]);
+w&&!--b.active&&b.event.trigger("ajaxStop");if(g.complete)g.complete(i,p?"success":"error");setTimeout(function(){t.removeData("form-plugin-onload");t.remove();i.responseXML=null},100)}}function A(p,n){if(window.ActiveXObject){n=new ActiveXObject("Microsoft.XMLDOM");n.async="false";n.loadXML(p)}else n=(new DOMParser).parseFromString(p,"text/xml");return n&&n.documentElement&&n.documentElement.tagName!="parsererror"?n:null}var j=h[0];if(b(":input[name=submit]",j).length)alert('Error: Form elements must not be named "submit".');
+else{var g=b.extend({},b.ajaxSettings,a),q=b.extend(true,{},b.extend(true,{},b.ajaxSettings),g),z="jqFormIO"+(new Date).getTime(),t=b('<iframe id="'+z+'" name="'+z+'" src="'+g.iframeSrc+'" onload="(jQuery(this).data(\'form-plugin-onload\'))()" />'),v=t[0];t.css({position:"absolute",top:"-1000px",left:"-1000px"});var i={aborted:0,responseText:null,responseXML:null,status:0,statusText:"n/a",getAllResponseHeaders:function(){},getResponseHeader:function(){},setRequestHeader:function(){},abort:function(){this.aborted=
+1;t.attr("src",g.iframeSrc)}},w=g.global;w&&!b.active++&&b.event.trigger("ajaxStart");w&&b.event.trigger("ajaxSend",[i,g]);if(q.beforeSend&&q.beforeSend(i,q)===false)q.global&&b.active--;else if(!i.aborted){var D=false,C=0;if(q=j.clk){var y=q.name;if(y&&!q.disabled){g.extraData=g.extraData||{};g.extraData[y]=q.value;if(q.type=="image"){g.extraData[y+".x"]=j.clk_x;g.extraData[y+".y"]=j.clk_y}}}g.forceSync?r():setTimeout(r,10);var G=100}}}if(!this.length){o("ajaxSubmit: skipping submit process - no element selected");
+return this}if(typeof a=="function")a={success:a};var e=b.trim(this.attr("action"));if(e)e=(e.match(/^([^#]+)/)||[])[1];e=e||window.location.href||"";a=b.extend({url:e,type:this.attr("method")||"GET",iframeSrc:/^https/i.test(window.location.href||"")?"javascript:false":"about:blank"},a||{});e={};this.trigger("form-pre-serialize",[this,a,e]);if(e.veto){o("ajaxSubmit: submit vetoed via form-pre-serialize trigger");return this}if(a.beforeSerialize&&a.beforeSerialize(this,a)===false){o("ajaxSubmit: submit aborted via beforeSerialize callback");
+return this}var f=this.formToArray(a.semantic);if(a.data){a.extraData=a.data;for(var c in a.data)if(a.data[c]instanceof Array)for(var l in a.data[c])f.push({name:c,value:a.data[c][l]});else f.push({name:c,value:a.data[c]})}if(a.beforeSubmit&&a.beforeSubmit(f,this,a)===false){o("ajaxSubmit: submit aborted via beforeSubmit callback");return this}this.trigger("form-submit-validate",[f,this,a,e]);if(e.veto){o("ajaxSubmit: submit vetoed via form-submit-validate trigger");return this}c=b.param(f);if(a.type.toUpperCase()==
+"GET"){a.url+=(a.url.indexOf("?")>=0?"&":"?")+c;a.data=null}else a.data=c;var h=this,k=[];a.resetForm&&k.push(function(){h.resetForm()});a.clearForm&&k.push(function(){h.clearForm()});if(!a.dataType&&a.target){var x=a.success||function(){};k.push(function(r){var s=a.replaceTarget?"replaceWith":"html";b(a.target)[s](r).each(x,arguments)})}else a.success&&k.push(a.success);a.success=function(r,s,A){for(var j=0,g=k.length;j<g;j++)k[j].apply(a,[r,s,A||h,h])};c=b("input:file",this).fieldValue();l=false;
+for(e=0;e<c.length;e++)if(c[e])l=true;if(c.length&&a.iframe!==false||a.iframe||l||0)a.closeKeepAlive?b.get(a.closeKeepAlive,d):d();else b.ajax(a);this.trigger("form-submit-notify",[this,a]);return this};b.fn.ajaxForm=function(a){return this.ajaxFormUnbind().bind("submit.form-plugin",function(d){d.preventDefault();b(this).ajaxSubmit(a)}).bind("click.form-plugin",function(d){var e=d.target,f=b(e);if(!f.is(":submit,input:image")){e=f.closest(":submit");if(e.length==0)return;e=e[0]}var c=this;c.clk=e;
+if(e.type=="image")if(d.offsetX!=undefined){c.clk_x=d.offsetX;c.clk_y=d.offsetY}else if(typeof b.fn.offset=="function"){f=f.offset();c.clk_x=d.pageX-f.left;c.clk_y=d.pageY-f.top}else{c.clk_x=d.pageX-e.offsetLeft;c.clk_y=d.pageY-e.offsetTop}setTimeout(function(){c.clk=c.clk_x=c.clk_y=null},100)})};b.fn.ajaxFormUnbind=function(){return this.unbind("submit.form-plugin click.form-plugin")};b.fn.formToArray=function(a){var d=[];if(this.length==0)return d;var e=this[0],f=a?e.getElementsByTagName("*"):e.elements;
+if(!f)return d;for(var c=0,l=f.length;c<l;c++){var h=f[c],k=h.name;if(k)if(a&&e.clk&&h.type=="image"){if(!h.disabled&&e.clk==h){d.push({name:k,value:b(h).val()});d.push({name:k+".x",value:e.clk_x},{name:k+".y",value:e.clk_y})}}else if((h=b.fieldValue(h,true))&&h.constructor==Array)for(var x=0,r=h.length;x<r;x++)d.push({name:k,value:h[x]});else h!==null&&typeof h!="undefined"&&d.push({name:k,value:h})}if(!a&&e.clk){a=b(e.clk);f=a[0];if((k=f.name)&&!f.disabled&&f.type=="image"){d.push({name:k,value:a.val()});
+d.push({name:k+".x",value:e.clk_x},{name:k+".y",value:e.clk_y})}}return d};b.fn.formSerialize=function(a){return b.param(this.formToArray(a))};b.fn.fieldSerialize=function(a){var d=[];this.each(function(){var e=this.name;if(e){var f=b.fieldValue(this,a);if(f&&f.constructor==Array)for(var c=0,l=f.length;c<l;c++)d.push({name:e,value:f[c]});else f!==null&&typeof f!="undefined"&&d.push({name:this.name,value:f})}});return b.param(d)};b.fn.fieldValue=function(a){for(var d=[],e=0,f=this.length;e<f;e++){var c=
+b.fieldValue(this[e],a);c===null||typeof c=="undefined"||c.constructor==Array&&!c.length||(c.constructor==Array?b.merge(d,c):d.push(c))}return d};b.fieldValue=function(a,d){var e=a.name,f=a.type,c=a.tagName.toLowerCase();if(typeof d=="undefined")d=true;if(d&&(!e||a.disabled||f=="reset"||f=="button"||(f=="checkbox"||f=="radio")&&!a.checked||(f=="submit"||f=="image")&&a.form&&a.form.clk!=a||c=="select"&&a.selectedIndex==-1))return null;if(c=="select"){c=a.selectedIndex;if(c<0)return null;d=[];a=a.options;
+e=(f=f=="select-one")?c+1:a.length;for(c=f?c:0;c<e;c++){var l=a[c];if(l.selected){var h=l.value;h||(h=l.attributes&&l.attributes.value&&!l.attributes.value.specified?l.text:l.value);if(f)return h;d.push(h)}}return d}return a.value};b.fn.clearForm=function(){return this.each(function(){b("input,select,textarea",this).clearFields()})};b.fn.clearFields=b.fn.clearInputs=function(){return this.each(function(){var a=this.type,d=this.tagName.toLowerCase();if(a=="text"||a=="password"||d=="textarea")this.value=
+"";else if(a=="checkbox"||a=="radio")this.checked=false;else if(d=="select")this.selectedIndex=-1})};b.fn.resetForm=function(){return this.each(function(){if(typeof this.reset=="function"||typeof this.reset=="object"&&!this.reset.nodeType)this.reset()})};b.fn.enable=function(a){if(a==undefined)a=true;return this.each(function(){this.disabled=!a})};b.fn.selected=function(a){if(a==undefined)a=true;return this.each(function(){var d=this.type;if(d=="checkbox"||d=="radio")this.checked=a;else if(this.tagName.toLowerCase()==
+"option"){d=b(this).parent("select");a&&d[0]&&d[0].type=="select-one"&&d.find("option").selected(false);this.selected=a}})}})(jQuery);
+;/**/
+/*!
+ * Add to Homescreen v2.0.1 ~ Copyright (c) 2012 Matteo Spinelli, http://cubiq.org
+ * Released under MIT license, http://cubiq.org/license
+ */
+var addToHome = (function (w) {
+	var nav = w.navigator,
+		isIDevice = 'platform' in nav && (/iphone|ipod|ipad/gi).test(nav.platform),
+		isIPad,
+		isRetina,
+		isSafari,
+		isStandalone,
+		OSVersion,
+		startX = 0,
+		startY = 0,
+		lastVisit = 0,
+		isExpired,
+		isSessionActive,
+		isReturningVisitor,
+		balloon,
+		overrideChecks,
+
+		positionInterval,
+		closeTimeout,
+
+		options = {
+			autostart: true,			// Automatically open the balloon
+			returningVisitor: false,	// Show the balloon to returning visitors only (setting this to true is HIGHLY RECCOMENDED)
+			animationIn: 'drop',		// drop || bubble || fade
+			animationOut: 'fade',		// drop || bubble || fade
+			startDelay: 1000,			// 2 seconds from page load before the balloon appears
+			lifespan: 12000,			// 15 seconds before it is automatically destroyed
+			bottomOffset: 14,			// Distance of the balloon from bottom
+			expire: 20,					// Minutes to wait before showing the popup again (0 = always displayed)
+			message: '',				// Customize your message or force a language ('' = automatic)
+			touchIcon: false,			// Display the touch icon
+			arrow: true,				// Display the balloon arrow
+			hookOnLoad: true,			// Should we hook to onload event? (really advanced usage)
+			iterations: 100				// Internal/debug use
+		},
+
+		intl = {
+			ca_es: 'Per instal·lar aquesta aplicació al vostre %device premeu %icon i llavors <strong>Afegir a pantalla d\'inici</strong>.',
+			cs_cz: 'Pro instalaci aplikace na Váš %device, stiskněte %icon a v nabídce <strong>Přidat na plochu</strong>.',
+			da_dk: 'Tilføj denne side til din %device: tryk på %icon og derefter <strong>Føj til hjemmeskærm</strong>.',
+			de_de: 'Installieren Sie diese App auf Ihrem %device: %icon antippen und dann <strong>Zum Home-Bildschirm</strong>.',
+			el_gr: 'Εγκαταστήσετε αυτήν την Εφαρμογή στήν συσκευή σας %device: %icon μετά πατάτε <strong>Προσθήκη σε Αφετηρία</strong>.',
+			en_us: 'Install this web app on your %device: tap %icon and then <strong>Add to Home Screen</strong>.',
+			es_es: 'Para instalar esta app en su %device, pulse %icon y seleccione <strong>Añadir a pantalla de inicio</strong>.',
+			fi_fi: 'Asenna tämä web-sovellus laitteeseesi %device: paina %icon ja sen jälkeen valitse <strong>Lisää Koti-valikkoon</strong>.',
+			fr_fr: 'Ajoutez cette application sur votre %device en cliquant sur %icon, puis <strong>Ajouter à l\'écran d\'accueil</strong>.',
+			he_il: '<span dir="rtl">התקן אפליקציה זו על ה-%device שלך: הקש %icon ואז <strong>הוסף למסך הבית</strong>.</span>',
+			hu_hu: 'Telepítse ezt a web-alkalmazást az Ön %device-jára: nyomjon a %icon-ra majd a <strong>Főképernyőhöz adás</strong> gombra.',
+			it_it: 'Installa questa applicazione sul tuo %device: premi su %icon e poi <strong>Aggiungi a Home</strong>.',
+			ja_jp: 'このウェブアプリをあなたの%deviceにインストールするには%iconをタップして<strong>ホーム画面に追加</strong>を選んでください。',
+			ko_kr: '%device에 웹앱을 설치하려면 %icon을 터치 후 "홈화면에 추가"를 선택하세요',
+			nb_no: 'Installer denne appen på din %device: trykk på %icon og deretter <strong>Legg til på Hjem-skjerm</strong>',
+			nl_nl: 'Installeer deze webapp op uw %device: tik %icon en dan <strong>Zet in beginscherm</strong>.',
+			pl_pl: 'Aby zainstalować tę aplikacje na %device: naciśnij %icon a następnie <strong>Dodaj jako ikonę</strong>.',
+			pt_br: 'Instale este web app em seu %device: aperte %icon e selecione <strong>Adicionar à Tela Inicio</strong>.',
+			pt_pt: 'Para instalar esta aplicação no seu %device, prima o %icon e depois o <strong>Adicionar ao ecrã principal</strong>.',
+			ru_ru: 'Установите это веб-приложение на ваш %device: нажмите %icon, затем <strong>Добавить в «Домой»</strong>.',
+			sv_se: 'Lägg till denna webbapplikation på din %device: tryck på %icon och därefter <strong>Lägg till på hemskärmen</strong>.',
+			th_th: 'ติดตั้งเว็บแอพฯ นี้บน %device ของคุณ: แตะ %icon และ <strong>เพิ่มที่หน้าจอโฮม</strong>',
+			tr_tr: '%device için bu uygulamayı kurduktan sonra %icon simgesine dokunarak <strong>Ana Ekrana Ekle</strong>yin.',
+			zh_cn: '您可以将此应用程式安装到您的 %device 上。请按 %icon 然后点选<strong>添加至主屏幕</strong>。',
+			zh_tw: '您可以將此應用程式安裝到您的 %device 上。請按 %icon 然後點選<strong>加入主畫面螢幕</strong>。'
+		};
+
+	function init () {
+		// Preliminary check, prevents all further checks to be performed on iDevices only
+		if ( !isIDevice ) return;
+
+		var now = Date.now(),
+			i;
+
+		// Merge local with global options
+		if (w.addToHomeConfig) {
+			for ( i in w.addToHomeConfig ) {
+				options[i] = w.addToHomeConfig[i];
+			}
+		}
+		if ( !options.autostart ) options.hookOnLoad = false;
+
+		isIPad = (/ipad/gi).test(nav.platform);
+		isRetina = w.devicePixelRatio && w.devicePixelRatio > 1;
+		isSafari = nav.appVersion.match(/Safari/gi);
+		isStandalone = nav.standalone;
+		
+		OSVersion = nav.appVersion.match(/OS (\d+_\d+)/i);
+		OSVersion = OSVersion[1] ? +OSVersion[1].replace('_', '.') : 0;
+		
+		lastVisit = +w.localStorage.getItem('addToHome');
+
+		isSessionActive = w.sessionStorage.getItem('addToHomeSession');
+		isReturningVisitor = options.returningVisitor ? lastVisit && lastVisit + 28*24*60*60*1000 > now : true;
+
+		if ( !lastVisit ) lastVisit = now;
+
+		// If it is expired we need to reissue a new balloon
+		isExpired = isReturningVisitor && lastVisit <= now;
+
+		if ( options.hookOnLoad ) w.addEventListener('load', loaded, false);
+		else if ( !options.hookOnLoad && options.autostart ) loaded();
+	}
+
+	function loaded () {
+		w.removeEventListener('load', loaded, false);
+
+		if ( !isReturningVisitor ) w.localStorage.setItem('addToHome', Date.now());
+		else if ( options.expire && isExpired ) w.localStorage.setItem('addToHome', Date.now() + options.expire * 60000);
+
+		if ( !overrideChecks && ( !isSafari || !isExpired || isSessionActive || isStandalone || !isReturningVisitor ) ) return;
+
+		var icons = options.touchIcon ? document.querySelectorAll('head link[rel=apple-touch-icon],head link[rel=apple-touch-icon-precomposed]') : [],
+			sizes,
+			touchIcon = '',
+			closeButton,
+			platform = nav.platform.split(' ')[0],
+			language = nav.language.replace('-', '_'),
+			i, l;
+
+		balloon = document.createElement('div');
+		balloon.id = 'addToHomeScreen';
+		balloon.style.cssText += 'left:-9999px;-webkit-transition-property:-webkit-transform,opacity;-webkit-transition-duration:0;-webkit-transform:translate3d(0,0,0);position:' + (OSVersion < 5 ? 'absolute' : 'fixed');
+
+		// Localize message
+		if ( options.message in intl ) {		// You may force a language despite the user's locale
+			language = options.message;
+			options.message = '';
+		}
+		if ( options.message === '' ) {			// We look for a suitable language (defaulted to en_us)
+			options.message = language in intl ? intl[language] : intl['en_us'];
+		}
+
+		// Search for the apple-touch-icon
+		if ( icons.length ) {
+			for ( i = 0, l = icons.length; i < l; i++ ) {
+				sizes = icons[i].getAttribute('sizes');
+
+				if ( sizes ) {
+					if ( isRetina && sizes == '114x114' ) {
+						touchIcon = icons[i].href;
+						break;
+					}
+				} else {
+					touchIcon = icons[i].href;
+				}
+			}
+
+			touchIcon = '<span style="background-image:url(' + touchIcon + ')" class="addToHomeTouchIcon"></span>';
+		}
+
+		balloon.className = (isIPad ? 'addToHomeIpad' : 'addToHomeIphone') + (touchIcon ? ' addToHomeWide' : '');
+		balloon.innerHTML = touchIcon +
+			options.message.replace('%device', platform).replace('%icon', OSVersion >= 4.2 ? '<span class="addToHomeShare"></span>' : '<span class="addToHomePlus">+</span>') +
+			(options.arrow ? '<span class="addToHomeArrow"></span>' : '') +
+			'<span class="addToHomeClose">\u00D7</span>';
+
+		document.body.appendChild(balloon);
+
+		// Add the close action
+		closeButton = balloon.querySelector('.addToHomeClose');
+		if ( closeButton ) closeButton.addEventListener('click', clicked, false);
+
+		setTimeout(show, options.startDelay);
+	}
+
+	function show () {
+		var duration,
+			iPadXShift = 160;
+
+		// Set the initial position
+		if ( isIPad ) {
+			if ( OSVersion < 5 ) {
+				startY = w.scrollY;
+				startX = w.scrollX;
+				iPadXShift = 208;
+			}
+
+			balloon.style.top = startY + options.bottomOffset + 'px';
+			balloon.style.left = startX + iPadXShift - Math.round(balloon.offsetWidth / 2) + 'px';
+
+			switch ( options.animationIn ) {
+				case 'drop':
+					duration = '0.6s';
+					balloon.style.webkitTransform = 'translate3d(0,' + -(w.scrollY + options.bottomOffset + balloon.offsetHeight) + 'px,0)';
+					break;
+				case 'bubble':
+					duration = '0.6s';
+					balloon.style.opacity = '0';
+					balloon.style.webkitTransform = 'translate3d(0,' + (startY + 50) + 'px,0)';
+					break;
+				default:
+					duration = '1s';
+					balloon.style.opacity = '0';
+			}
+		} else {
+			startY = w.innerHeight + w.scrollY;
+
+			if ( OSVersion < 5 ) {
+				startX = Math.round((w.innerWidth - balloon.offsetWidth) / 2) + w.scrollX;
+				balloon.style.left = startX + 'px';
+				balloon.style.top = startY - balloon.offsetHeight - options.bottomOffset + 'px';
+			} else {
+				balloon.style.left = '50%';
+				balloon.style.marginLeft = -Math.round(balloon.offsetWidth / 2) + 'px';
+				balloon.style.bottom = options.bottomOffset + 'px';
+			}
+
+			switch (options.animationIn) {
+				case 'drop':
+					duration = '1s';
+					balloon.style.webkitTransform = 'translate3d(0,' + -(startY + options.bottomOffset) + 'px,0)';
+					break;
+				case 'bubble':
+					duration = '0.6s';
+					balloon.style.webkitTransform = 'translate3d(0,' + (balloon.offsetHeight + options.bottomOffset + 50) + 'px,0)';
+					break;
+				default:
+					duration = '1s';
+					balloon.style.opacity = '0';
+			}
+		}
+
+		balloon.offsetHeight;	// repaint trick
+		balloon.style.webkitTransitionDuration = duration;
+		balloon.style.opacity = '1';
+		balloon.style.webkitTransform = 'translate3d(0,0,0)';
+		balloon.addEventListener('webkitTransitionEnd', transitionEnd, false);
+
+		closeTimeout = setTimeout(close, options.lifespan);
+	}
+
+	function manualShow (override) {
+		if ( !isIDevice || balloon ) return;
+
+		overrideChecks = override;
+		loaded();
+	}
+
+	function close () {
+		clearInterval( positionInterval );
+		clearTimeout( closeTimeout );
+		closeTimeout = null;
+
+		var posY = 0,
+			posX = 0,
+			opacity = '1',
+			duration = '0',
+			closeButton = balloon.querySelector('.addToHomeClose');
+
+		if ( closeButton ) closeButton.removeEventListener('click', close, false);
+
+		if ( OSVersion < 5 ) {
+			posY = isIPad ? w.scrollY - startY : w.scrollY + w.innerHeight - startY;
+			posX = isIPad ? w.scrollX - startX : w.scrollX + Math.round((w.innerWidth - balloon.offsetWidth)/2) - startX;
+		}
+
+		balloon.style.webkitTransitionProperty = '-webkit-transform,opacity';
+
+		switch ( options.animationOut ) {
+			case 'drop':
+				if ( isIPad ) {
+					duration = '0.4s';
+					opacity = '0';
+					posY = posY + 50;
+				} else {
+					duration = '0.6s';
+					posY = posY + balloon.offsetHeight + options.bottomOffset + 50;
+				}
+				break;
+			case 'bubble':
+				if ( isIPad ) {
+					duration = '0.8s';
+					posY = posY - balloon.offsetHeight - options.bottomOffset - 50;
+				} else {
+					duration = '0.4s';
+					opacity = '0';
+					posY = posY - 50;
+				}
+				break;
+			default:
+				duration = '0.8s';
+				opacity = '0';
+		}
+
+		balloon.addEventListener('webkitTransitionEnd', transitionEnd, false);
+		balloon.style.opacity = opacity;
+		balloon.style.webkitTransitionDuration = duration;
+		balloon.style.webkitTransform = 'translate3d(' + posX + 'px,' + posY + 'px,0)';
+	}
+
+
+	function clicked () {
+		w.sessionStorage.setItem('addToHomeSession', '1');
+		isSessionActive = true;
+		close();
+	}
+
+	function transitionEnd () {
+		balloon.removeEventListener('webkitTransitionEnd', transitionEnd, false);
+
+		balloon.style.webkitTransitionProperty = '-webkit-transform';
+		balloon.style.webkitTransitionDuration = '0.2s';
+
+		// We reached the end!
+		if ( !closeTimeout ) {
+			balloon.parentNode.removeChild(balloon);
+			balloon = null;
+			return;
+		}
+
+		// On iOS 4 we start checking the element position
+		if ( OSVersion < 5 && closeTimeout ) positionInterval = setInterval(setPosition, options.iterations);
+	}
+
+	function setPosition () {
+		var matrix = new WebKitCSSMatrix(w.getComputedStyle(balloon, null).webkitTransform),
+			posY = isIPad ? w.scrollY - startY : w.scrollY + w.innerHeight - startY,
+			posX = isIPad ? w.scrollX - startX : w.scrollX + Math.round((w.innerWidth - balloon.offsetWidth) / 2) - startX;
+
+		// Screen didn't move
+		if ( posY == matrix.m42 && posX == matrix.m41 ) return;
+
+		balloon.style.webkitTransform = 'translate3d(' + posX + 'px,' + posY + 'px,0)';
+	}
+
+	// Clear local and session storages (this is useful primarily in development)
+	function reset () {
+		w.localStorage.removeItem('addToHome');
+		w.sessionStorage.removeItem('addToHomeSession');
+	}
+
+	// Bootstrap!
+	init();
+
+	return {
+		show: manualShow,
+		close: close,
+		reset: reset
+	};
+})(this);;/**/
+/*
+ * 	easyListSplitter 1.0.2 - jQuery Plugin
+ *	written by Andrea Cima Serniotti	
+ *	http://www.madeincima.eu
+ *
+ *	Copyright (c) 2010 Andrea Cima Serniotti (http://www.madeincima.eu)
+ *	Dual licensed under the MIT (MIT-LICENSE.txt)
+ *	and GPL (GPL-LICENSE.txt) licenses.
+ *
+ *	Built for jQuery library
+ *	http://jquery.com
+ *
+ */
+ 
+ /*
+	To activate the plugin add the following code to your own js file:
+	
+	$('.your-list-class-name').easyListSplitter({ 
+			colNumber: 3,
+			direction: 'horizontal'
+	});
+	
+ */
+
+var j = 1;
+ 
+(function(jQuery) {
+	jQuery.fn.easyListSplitter = function(options) {
+	
+	var defaults = {			
+		colNumber: 2, // Insert here the number of columns you want. Consider that the plugin will create the number of cols requested only if there are enough items in the list.
+		direction: 'vertical'
+	};
+			
+	this.each(function() {
+		
+		var obj = jQuery(this);
+		var settings = jQuery.extend(defaults, options);
+		var totalListElements = jQuery(this).children('li').size();
+		var baseColItems = Math.ceil(totalListElements / settings.colNumber);
+		var listClass = jQuery(this).attr('class');
+		
+		// -------- Create List Elements given colNumber ------------------------------------------------------------------------------
+		
+		for (i=1;i<=settings.colNumber;i++)
+		{	
+			if(i==1){
+				jQuery(this).addClass('listCol1').wrap('<div class="list-splitter listContainer'+j+' cols-'+settings.colNumber+'"></div>');
+			} else if(jQuery(this).is('ul')){ // Check whether the list is ordered or unordered
+				jQuery(this).parents('.listContainer'+j).append('<ul class="listCol'+i+'"></ul>');
+			} else{
+				jQuery(this).parents('.listContainer'+j).append('<ol class="listCol'+i+'"></ol>');
+			}
+				jQuery('.listContainer'+j+' > ul,.listContainer'+j+' > ol').addClass(listClass);
+		}
+		
+		var listItem = 0;
+		var k = 1;
+		var l = 0;	
+		
+		if(settings.direction == 'vertical'){ // -------- Append List Elements to the respective listCol  - Vertical -------------------------------
+			
+			jQuery(this).children('li').each(function(){
+				listItem = listItem+1;
+				if (listItem > baseColItems*(settings.colNumber-1) ){
+					jQuery(this).parents('.listContainer'+j).find('.listCol'+settings.colNumber).append(this);
+				} 
+				else {
+					if(listItem<=(baseColItems*k)){
+						jQuery(this).parents('.listContainer'+j).find('.listCol'+k).append(this);
+					} 
+					else{
+						jQuery(this).parents('.listContainer'+j).find('.listCol'+(k+1)).append(this);
+						k = k+1;
+					}
+				}
+			});
+			
+			jQuery('.listContainer'+j).find('ol,ul').each(function(){
+				if(jQuery(this).children().size() == 0) {
+				jQuery(this).remove();
+				}
+			});	
+			
+		} else{  // -------- Append List Elements to the respective listCol  - Horizontal ----------------------------------------------------------
+			
+			jQuery(this).children('li').each(function(){
+				l = l+1;
+
+				if(l <= settings.colNumber){
+					jQuery(this).parents('.listContainer'+j).find('.listCol'+l).append(this);
+					
+				} else {
+					l = 1;
+					jQuery(this).parents('.listContainer'+j).find('.listCol'+l).append(this);
+				}				
+			});
+		}
+		
+		jQuery('.listContainer'+j).find('ol:last,ul:last').addClass('last'); // Set class last on the last UL or OL	
+		j = j+1;
+		
+	});
+	};
+})(jQuery);;/**/
+jQuery(function($) {
+  /**
+   * Override ajax-form submit behavior
+   */
+  if (Drupal.Ajax) {
+    // overriding to disable ajax module's scroll to top on form submission
+    Drupal.Ajax.scroller = function(submitter) { return false; };
+    Drupal.Ajax.go = function (formObj, submitter) {
+      var submitterVal, submitterName, extraData;
+      Drupal.Ajax.invoke('submit', {submitter:submitter});
+      submitterVal = submitter.val();
+      submitterName = submitter.attr('name');
+      submitter.addClass('retrieving');
+      extraData = {};
+      extraData[submitterName] = submitterVal;
+      extraData['drupal_ajax'] = '1';
+      formObj.a_ajaxSubmit({
+        extraData : extraData,
+        beforeSubmit : function(data) {
+          data[data.length] = {
+            name : submitterName,
+            value : submitterVal
+          };
+          data[data.length] = {
+            name : 'drupal_ajax',
+            value : '1'
+          };
+          return true;
+        },
+        dataType : 'json',
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+          window.alert(Drupal.t('ajax.module: An unknown error has occurred.'));
+          if (window.console) {
+            console.log('error', arguments);
+          }
+          return true;
+        },
+        success: function(data){
+          submitter.val(submitterVal);
+          Drupal.Ajax.response(submitter, formObj, data);
+          submitter.removeClass('retrieving');
+          return true;
+        }
+      });
+      return false;
+    };
+  }
+
+});
+
+// this overrides the declaration in modules/contrib/faq/faq.js
+// we've added toggling behavior to faq page group buttons
+Drupal.behaviors.initFaqModule = function (context) {
+  if (!Drupal.settings.faq) return;
+
+  // Hide/show answer for a question.
+  var faq_hide_qa_accordion = Drupal.settings.faq.faq_hide_qa_accordion;
+  if (faq_hide_qa_accordion) {
+    $('div.faq-dd-hide-answer').addClass("collapsible collapsed");
+  }
+  else {
+    $('div.faq-dd-hide-answer').hide();
+  }
+  $('div.faq-dt-hide-answer').click(function() {
+    $(this).toggleClass('faq-qa-visible');
+    if (faq_hide_qa_accordion) {
+      $('div.faq-dd-hide-answer').not($(this).next('div.faq-dd-hide-answer')).addClass("collapsed");
+      $(this).next('div.faq-dd-hide-answer').toggleClass("collapsed");
+    }
+    else {
+      $(this).next('div.faq-dd-hide-answer').slideToggle('fast', function() {
+        $(this).parent().toggleClass('expanded');
+      });
+    }
+    return false;
+  });
+
+  // Hide/show q/a for a category.
+  var faq_category_hide_qa_accordion = Drupal.settings.faq.faq_category_hide_qa_accordion;
+  if (faq_category_hide_qa_accordion) {
+    $('div.faq-qa-hide').addClass("collapsible collapsed");
+    $('#faq-category-group-1 div.faq-qa-hide').removeClass("collapsed");
+  }
+  else {
+    $('div.faq-qa-hide').hide();
+  }
+  $('div.faq-qa-header').click(function() {
+    $(this).toggleClass('faq-category-qa-visible');
+    if (faq_category_hide_qa_accordion) {
+      $('div.faq-qa-header').not($(this)).removeClass("faq-category-qa-visible");
+      $('div.faq-qa-hide').not($(this).next('div.faq-qa-hide')).addClass("collapsed");
+      $(this).next('div.faq-qa-hide').toggleClass("collapsed");
+    }
+    else {
+      $(this).parent().next('div.faq-qa-hide').slideToggle('fast', function() {
+        $(this).parent().toggleClass('expanded');
+      });
+    }
+    return false;
+  });
+
+  // Show expand all link.
+  if (!faq_hide_qa_accordion && !faq_category_hide_qa_accordion) {
+    $('#faq-expand-all').show();
+    $('#faq-expand-all a.faq-expand-all-link').show();
+
+    // Add collapse link click event.
+    $('#faq-expand-all a.faq-collapse-all-link').click(function () {
+      $(this).hide();
+      $('#faq-expand-all a.faq-expand-all-link').show();
+      $('div.faq-qa-hide').slideUp('slow', function() {
+        $(this).removeClass('expanded');
+      });
+      $('div.faq-dd-hide-answer').slideUp('slow', function() {
+        $(this).removeClass('expanded');
+      });
+    });
+
+    // Add expand link click event.
+    $('#faq-expand-all a.faq-expand-all-link').click(function () {
+      $(this).hide();
+      $('#faq-expand-all a.faq-collapse-all-link').show();
+      $('div.faq-qa-hide').slideDown('slow', function() {
+        $(this).addClass('expanded');
+      });
+      $('div.faq-dd-hide-answer').slideDown('slow', function() {
+        $(this).addClass('expanded');
+      });
+    });
+  }
+
+  // Handle faq_category_settings_form.
+  faq_display_handler();
+  questions_top_handler();
+  categories_handler();
+  teaser_handler();
+  $("input[name=faq_display]").bind("click", faq_display_handler);
+  $("input[name=faq_qa_mark]").bind("click", qa_mark_handler);
+  $("input[name=faq_use_teaser]").bind("click", teaser_handler);
+  $("input[name=faq_category_display]").bind("click", categories_handler);
+  $("input[name=faq_hide_child_terms]").bind("click", child_term_handler);
+}
+
+Drupal.behaviors.toolsDisableSubmit = function (context) {
+  $('#edit-next:not(.penton_registration_button_next)').click(function(){
+      if($("#penton-user-registration-step2").length > 0) {
+        $("#modal-content").scrollTop(0);
+      }
+      if($(this.form).valid()){
+          $('#edit-next').hide();
+          $('div.spinner-area').html('<img src="/sites/all/modules/custom/penton_user_registration/images/loading.gif"><p>submitting...</p>');
+      }
+  });
+};
+
+Drupal.behaviors.toolsScrollTop = function (context) {
+  $('#penton-user-registration-step2').load(function(){
+    $("#modalContent").scrollTop(0);
+  });
+};
+// Collapsable system messages.
+// if statement ignores devel print outs and messages with html links.
+Drupal.behaviors.toolsCollapseMsg = function (context) {
+  $('.pm-content .messages:has(a)').addClass('link');
+  if(!($('.pm-content .messages div').hasClass('krumo-root')) && !($('.pm-content .messages').hasClass('link'))) {
+    $('.pm-content .messages').click(function() {
+      $(this).slideToggle('fast');
+    });
+  };
+};
+
+// Galaxy package selection
+$('#package-select-button').click(function(){
+  return galaxy_package_redirect();
+});
+
+
+function galaxy_package_redirect() {
+  var chosenpackage = $('input[name=package]:checked', '#package-selection-form').val()
+  window.location.href='/cart/add/p'+chosenpackage+'_q1?destination=cart';
+  return false;
+}
+
+// Setting Registration Step 2 Custom Questions formatting.
+Drupal.behaviors.inputsChecksSplit = function (context) {
+  //splits radio button and checkbox lists into two columns
+  //$('.ctools-modal-content #penton-user-registration-step2 .form-checkboxes .form-item').easyListSplitter({ colNumber: 2 });
+  //$('.ctools-modal-content #penton-user-registration-step2 .form-radios .form-item').easyListSplitter({ colNumber: 2 });
+  //adding checkLabel class to label field above checkbox and radio button lists.
+  $('#penton-user-registration-step2 .form-checkboxes').prev().addClass('checkLabel');
+  $('#penton-user-registration-step2 .form-radios').prev().addClass('checkLabel');
+  $('#penton-user-registration-step2 .resizable-textarea').prev().addClass('checkLabel');
+};
+;/**/
+jQuery(function($) {
+  /*
+   *   Removing excess click advertising
+   * */
+  $('#admin-menu, #admin-toolbar').bind('click', function (e) {
+    e.stopImmediatePropagation();
+  });
+  $('.pm-nav-menu .block-content > ul > li > ul').each(function() {
+    var countSplit = 8;
+    var colCount = Math.ceil($(this).children().size() / countSplit);
+    $(this).easyListSplitter({ colNumber: colCount });
+    $(this).parent().addClass('colCount-' + colCount);
+  });
+  $('#block-menu-menu-footer ul').each(function() {
+    var countSplit = 3;
+    var colCount = Math.ceil($(this).children().size() / countSplit);
+    $(this).easyListSplitter({ colNumber: colCount });
+    $(this).parent().addClass('colCount-' + colCount);
+  });
+  // each html list listed here will be split into <colNumber> of columns on page load.
+  $('.sitemap > ul, .split-col3 > ul, .split-col3 > ol').easyListSplitter({ colNumber: 3 });
+  $('.split-col2 > ul, .split-col2 > ol, .view-taxonomy-term-penton ol, .view-home-page-hot-topics ol, #block-views-topic_siblings-block_1 ul, #block-related_topics-related_topics ul').easyListSplitter({ colNumber: 2 });
+
+  // My Feed page, wrapping span around page-title text
+  $('.page-myfeed .page-title').append('<span class="hidden-phone beta"></span>');
+
+  // Link Content Type Target Settings
+  $('.link-new-window a').attr('target','_blank');
+
+  /**
+   * Login dropdown
+   */
+  $('div.login-logout a[href="/user/login"]').click(function() {
+    $(this).parent('div.user-block').next('.user-login-block').slideToggle();
+    $(this).toggleClass('on');
+    return false;
+  });
+  $('div.login-logout #close-box a').click(function() {
+    $(this).parent('#close-box').parent('div.user-login-block').slideToggle();
+    $('#login-link').removeClass('on');
+    return false;
+  });
+
+  /**
+   * Add a span to the bottom of the thumbnails so that we can add an icon
+   * .node targets row-style-node
+   * .scrollable-item targets related videos thumbs
+   * .page-media targets media center page
+   */
+  $('.node .thumbnail a, .scrollable-item .thumbnail a, .page-media .thumbnail > a').each(function() {
+    $(this).append('<span class="thumb-icon"></span>');
+  });
+  $('.scrollable-item .field-image-promo-fid').each(function() {
+    $(this).append('<span class="thumb-icon"></span>');
+  });
+
+  /**
+   * change the width of thumbnails to 180 if video content outputs something else.
+   * for some reason the Vimeo media type is outputting 136px as width,
+   * and it displays inconsistent ratios on Video Taxanomy Term page
+   */
+  $('.node-video-teaser div.thumbnail > a > img').attr({
+    'height' : '101',
+    'width' : '180'
+  });
+
+  // resize colorbox elements if it contains a photo - CL
+
+  $(".cboxPhoto").load(function(){
+    var hpos = $("div.cboxPhoto").width();
+    var vpos = $("div.cboxContent").height();
+    // snap title to fit photo width
+    $("#cboxTitle").css('width', hpos);
+    $('#cboxContent').css('height', vpos + 20).css('padding-top', 5);
+  });
+
+  /**
+   * Headlines by Category UL/LI stacking bug fix for both content-bottom, and bottom arrangements
+   */
+  $('.pm-cont-btm .headlines-by-sub-category > ul > li:nth-child(2n+1)').addClass('first');
+  $('.pm-btm .headlines-by-sub-category > ul > li:nth-child(3n+1)').addClass('first');
+
+  /**
+   * block-closable - adding close-button
+   */
+  $('.block-closable').each(function($el) {
+    var $block = $(this);
+    $block.append('<a href="#" class="close-button">Close</a>');
+    $('.close-button', $el).click(function(e) {
+      $block.hide();
+      e.preventDefault();
+    });
+  });
+
+  /**
+   * Adding the Bootstrap Button classes to Forum elements until the contrib module can be updated.
+   **/
+  $('.forum-links').addClass('button-region');
+  $('.forum-links > li > a').addClass('btn btn-branded btn-small');
+  $('.forum-links > li > span > a').addClass('is-processed btn btn-branded btn-small');
+
+});
+;/**/
+jQuery(function($) {
+    /*
+     * Related Media scroller
+     */
+    var clicked_page = 0;
+    var tab_number = 1;
+    $('#block-menu-menu-other-penton-sites ul').append('<li id="other-penton-sites-dropdown"><span>select a site</span></li>');
+    $('#other-penton-sites-dropdown span').click(function() {
+        $(this).parent().parent().toggleClass('open');
+    });
+
+    /*
+     * Global Carousel/Scroller based on .pm-carousel selector
+     */
+    $('.pm-carousel').each(function() { // build the scroller
+        var $carousel = $(this);
+        var scroller_width = $carousel.width();
+        var unencoded_title = $carousel.find('.block-title').text();
+        $carousel.find('.block-title').html(unencoded_title);
+
+        var item_width = $carousel.find('.views-row:first').width(); // width of the first item
+        var item_num = $carousel.find('.views-row').size(); // total number of items
+        var total_width = (item_width + 2) * item_num; // the total width that the scroll should be
+        var visible_thumbs = Math.floor(scroller_width / item_width); // the number of items that should be visible in the scroller
+        if (visible_thumbs == 0) { var visible_thumbs = 1 };
+        $carousel.find('.view').width(total_width);
+        if (item_num > visible_thumbs) {
+            var page_count = Math.ceil(item_num / visible_thumbs); // the number of pages needed
+            $carousel.prepend('<div class="scroller-pager"></div>');
+            if (item_num > 2 * visible_thumbs) {
+                for (var i = 1; i <= page_count; i++) {
+                    $carousel.children('.scroller-pager').append('<a href="#" title="' + i + '">' + i + '</a>');
+                };
+            };
+            $carousel.children('.scroller-pager').append('<a class="prev-active prev" title="previous" href="#">previous</a>');
+            $carousel.children('.scroller-pager').append('<a class="next" title="next" href="#">next</a>');
+            $carousel.find('.scroller-pager a:first').addClass('active');
+        };
+        $carousel.find('.view .views-row:nth-child(' + visible_thumbs + 'n)').addClass('last');
+    });
+
+    var clicked_page = 0;
+    var tab_number = 1;
+    $('.pm-carousel .scroller-pager a').click(function() {
+        var $pager_link = $(this);
+        var scroller_width = $pager_link.closest('.pm-carousel').width();
+        var next_link = $pager_link.parent().find('a').size() - 1;
+        var prev_link = $pager_link.parent().find('a').size() - 2;
+        var page_click = $pager_link.text();
+        var clicked_link = $pager_link.parent().children().index(this);
+        var current_active_link = $pager_link.parent().children('.active');
+        var active_link = $pager_link.parent().children().index(current_active_link);
+        var link_difference = Math.abs(active_link - clicked_link);
+        if (page_click == 'previous') {
+            if ($pager_link.hasClass('prev-active')) {
+                return false;
+            } else {
+                $pager_link.siblings('.next-active').removeClass('next-active');
+                $pager_link.parent().parent().find('.view').animate({
+                    left: '+=' + (scroller_width + 2)
+                }, 500);
+                $pager_link.siblings('.active').removeClass('active').prev().addClass('active');
+                active_link--;
+            };
+        } else if (page_click == 'next') {
+            if ($pager_link.hasClass('next-active')) {
+                return false;
+            } else {
+                $pager_link.siblings('.prev-active').removeClass('prev-active');
+                $pager_link.parent().parent().find('.view').animate({
+                    left: '-=' + (scroller_width + 2)
+                }, 500);
+                $pager_link.siblings('.active').removeClass('active').next().addClass('active');
+                active_link++;
+            };
+        } else {
+            if ($pager_link.hasClass('active')) {
+                return false;
+            } else {
+                $pager_link.parent().parent().find('.view').animate({
+                    left: -((scroller_width + 2) * clicked_link)
+                }, 500 * link_difference);
+                $pager_link.addClass('active').siblings().removeClass('active');
+                var active_link = $pager_link.parent().children().index(this);
+            };
+        };
+        if ($pager_link.parent().children().size() == 2) {
+            if ($pager_link.hasClass('prev')) {
+                $pager_link.parent().find('.next-active').removeClass('next-active');
+                $pager_link.addClass('prev-active');
+            } else {
+                $pager_link.parent().find('.prev-active').removeClass('prev-active');
+                $pager_link.addClass('next-active');
+            };
+        } else {
+            $pager_link.siblings('.prev-active').removeClass('prev-active');
+            $pager_link.siblings('.next-active').removeClass('next-active');
+            if (active_link == 0) {
+                $pager_link.parent().children('.prev').addClass('prev-active');
+            };
+            if (active_link == prev_link - 1) {
+                $pager_link.parent().children('.next').addClass('next-active');
+            };
+        };
+        return false;
+    });
+
+});
+;/**/
+(function () {
+  $.fn.infiniteCarousel = function () {
+    function repeat(str, n) {
+      return new Array( n + 1 ).join(str);
+    }
+
+    return this.each(function () {
+      // magic!
+      var $wrapper = $('> div', this).css('overflow', 'hidden'),
+          $slider = $wrapper.find('> ul').width(9999),
+          $items = $slider.find('> li'),
+          $single = $items.filter(':first')
+          
+          visible_thumbs = 1,
+          singleWidth = $single.outerWidth(),
+          visible = Math.ceil($wrapper.innerWidth() / singleWidth),
+          currentPage = 1,
+          pages = Math.ceil($items.length / visible);
+
+      /* TASKS */
+
+      // 1. pad the pages with empty element if required
+      if ($items.length % visible != 0) {
+        // pad
+        $slider.append(repeat('<li class="empty" />', visible - ($items.length % visible)));
+        $items = $slider.find('> li');
+      }
+
+      // 2. create the carousel padding on left and right (cloned)
+      $items.filter(':first').before($items.slice(-visible).clone().addClass('cloned'));
+      $items.filter(':last').after($items.slice(0, visible).clone().addClass('cloned'));
+      $items = $slider.find('> li');
+
+      // 3. reset scroll
+      $wrapper.scrollLeft(singleWidth * visible);
+
+      // 4. paging function
+      function gotoPage(page) {
+        var dir = page < currentPage ? -1 : 1,
+            n = Math.abs(currentPage - page),
+            left = singleWidth * dir * visible * n;
+
+        $wrapper.filter(':not(:animated)').animate({
+          scrollLeft : '+=' + left
+        }, 500, function () {
+          // if page == last page - then reset position
+          if (page > pages) {
+            $wrapper.scrollLeft(singleWidth * visible);
+            page = 1;
+          } else if (page == 0) {
+            page = pages;
+            $wrapper.scrollLeft(singleWidth * visible * pages);
+          }
+
+          currentPage = page;
+        });
+      }
+
+      // Carousel nav
+      $wrapper.after('<div class="scroller-pager-hero"></div>');
+      if ($items.size() > 2 * visible_thumbs) {
+        for (var i = 1; i <= pages; i++) {
+          $(this).children('.scroller-pager-hero').append('<a href="#" title="' + i + '">' + i + '</a>');
+        };
+      };
+      $(this).find('.scroller-pager-hero a:first').addClass('active');
+
+      // Click on the carousel nav
+      $('.scroller-pager-hero a').click(function() {
+        var clicked_link = $(this).parent().children().index(this) + 1;
+        
+        if ($(this).hasClass('active')) {
+          return false;
+        } else {
+          gotoPage(clicked_link);
+          $(this).addClass('active').siblings().removeClass('active');
+          var active_link = $(this).parent().children().index(this);
+        };
+        return false;
+      });
+
+      // 5. insert the back and forward link
+      $wrapper.after('<a href="#" class="arrow back"><span>&lt;</span></a><a href="#" class="arrow forward"><span>&gt;</span></a>');
+
+      // 6. bind the back and forward links
+      $('a.back', this).click(function () {
+        if (currentPage - 1 <= 0) {
+          $('.scroller-pager-hero').children('.active').removeClass('active');
+          $('.scroller-pager-hero a:last').addClass('active');
+        }
+        else {
+          $('.scroller-pager-hero').children('.active').removeClass('active').prev().addClass('active');
+        }
+        gotoPage(currentPage - 1);
+        return false;
+      });
+
+      $('a.forward', this).click(function () {
+        gotoPage(currentPage + 1);
+        if (currentPage + 1 > pages) {
+          $('.scroller-pager-hero').children('.active').removeClass('active');
+          $('.scroller-pager-hero a:first').addClass('active');
+        }
+        else {
+          $('.scroller-pager-hero').children('.active').removeClass('active').next().addClass('active');
+        }
+
+        return false;
+      });
+
+      $(this).bind('goto', function (event, page) {
+        gotoPage(page);
+      });
+
+      // THIS IS NEW CODE FOR THE AUTOMATIC INFINITE CAROUSEL
+      $(this).bind('next', function () {
+        gotoPage(currentPage + 1);
+        if (currentPage + 1 > pages) {
+          $('.scroller-pager-hero').children('.active').removeClass('active');
+          $('.scroller-pager-hero a:first').addClass('active');
+        }
+        else {
+          $('.scroller-pager-hero').children('.active').removeClass('active').next().addClass('active');
+        }
+      });
+    });
+  };
+})(jQuery);;/**/
+Drupal.behaviors.customSearchFunction = function (context) {
+  //header search form
+  $('#search-theme-form, #search-block-form, form.search-form').submit(function() {
+    //if search input value is empty do not submit
+    if ($("input.form-text", this).val() == "") {
+      return false;
+    }
+  });
+
+  // Lots of overriding of autocomplete.js below to make the search form tasty.
+  if (!!Drupal.jsAC) { // this condition tests if autocomplete has been enabled
+    Drupal.autocompleteSubmit = function () {
+      if ($(this).attr('id') == 'search-theme-form') {
+        return;
+      }
+      return $('#autocomplete').each(function () {
+        this.owner.hidePopup();
+      }).size() === 0;
+    };
+
+    Drupal.jsAC.prototype.hidePopup = function (keycode) {
+      if (keycode == 13) {
+        $('#search-theme-form').unbind('submit'); // replace '#search-theme-form' with your search form id
+        if($("input.form-text", '#search-theme-form').val() != '') {
+           $('#search-theme-form').submit();
+        }
+     }
+      else if (this.selected && ((keycode && keycode != 46 && keycode != 8 && keycode != 27) || !keycode)) {
+        if (this.selected.autocompleteValue) {
+          this.input.value = this.selected.autocompleteValue;
+          $('#search-theme-form').unbind('submit'); // replace '#search-theme-form' with your search form id
+          if($("input.form-text", '#search-theme-form').val() != '') {
+            $('#search-theme-form').submit();
+          }
+        }
+      }
+      // Hide popup
+      var popup = this.popup;
+      if (popup) {
+        this.popup = null;
+        $(popup).fadeOut('fast', function() { $(popup).remove(); });
+      }
+      this.selected = false;
+    };
+
+    /**
+     * Highlights the next suggestion
+     */
+    Drupal.jsAC.prototype.selectDown = function () {
+      if (this.selected && this.selected.nextSibling) {
+        this.updownhighlight(this.selected.nextSibling);
+      }
+      else {
+        var lis = $('li', this.popup);
+        if (lis.size() > 0) {
+          this.updownhighlight(lis.get(0));
+        }
+      }
+    };
+
+    /**
+     * Highlights the previous suggestion
+     */
+    Drupal.jsAC.prototype.selectUp = function () {
+      if (this.selected && this.selected.previousSibling) {
+        this.updownhighlight(this.selected.previousSibling);
+      }
+    };
+
+    Drupal.jsAC.prototype.updownhighlight = function (node) {
+      if (this.selected) {
+        $(this.selected).removeClass('selected');
+      }
+      $(node).addClass('selected');
+      this.selected = node;
+      if (this.selected.autocompleteValue !== undefined) {
+        this.input.value = this.selected.autocompleteValue;
+      }
+    };
+
+    /**
+     * Performs a cached and delayed search
+     */
+    Drupal.ACDB.prototype.search = function (searchString) {
+      var db = this;
+      this.searchString = searchString;
+
+      if (searchString.length < 3) {
+        this.owner.hidePopup();
+        return;
+      }
+
+      // See if this key has been searched for before
+      if (this.cache[searchString]) {
+        return this.owner.found(this.cache[searchString]);
+      }
+
+      db.owner.setStatus('begin');
+
+      // Ajax GET request for autocompletion
+      $.ajax({
+        type: "GET",
+        url: db.uri +'/'+ Drupal.encodeURIComponent(searchString),
+        dataType: 'json',
+        success: function (matches) {
+          if (typeof matches.status == 'undefined' || matches.status !== 0) {
+            db.cache[searchString] = matches;
+            // Verify if these are still the matches the user wants to see
+            if (db.searchString == searchString) {
+              db.owner.found(matches);
+            }
+            db.owner.setStatus('found');
+          }
+        }
+      });
+    };
+  }
+};
+;/**/
+/*!
+ * jQuery Tools v1.2.6 - The missing UI library for the Web
+ * 
+ * tabs/tabs.js
+ * 
+ * NO COPYRIGHTS OR LICENSES. DO WHAT YOU LIKE.
+ * 
+ * http://flowplayer.org/tools/
+ * 
+ */
+(function(a){a.tools=a.tools||{version:"v1.2.6"},a.tools.tabs={conf:{tabs:"a",current:"current",onBeforeClick:null,onClick:null,effect:"default",initialIndex:0,event:"click",rotate:!1,slideUpSpeed:400,slideDownSpeed:400,history:!1},addEffect:function(a,c){b[a]=c}};var b={"default":function(a,b){this.getPanes().hide().eq(a).show(),b.call()},fade:function(a,b){var c=this.getConf(),d=c.fadeOutSpeed,e=this.getPanes();d?e.fadeOut(d):e.hide(),e.eq(a).fadeIn(c.fadeInSpeed,b)},slide:function(a,b){var c=this.getConf();this.getPanes().slideUp(c.slideUpSpeed),this.getPanes().eq(a).slideDown(c.slideDownSpeed,b)},ajax:function(a,b){this.getPanes().eq(0).load(this.getTabs().eq(a).attr("href"),b)}},c,d;a.tools.tabs.addEffect("horizontal",function(b,e){if(!c){var f=this.getPanes().eq(b),g=this.getCurrentPane();d||(d=this.getPanes().eq(0).width()),c=!0,f.show(),g.animate({width:0},{step:function(a){f.css("width",d-a)},complete:function(){a(this).hide(),e.call(),c=!1}}),g.length||(e.call(),c=!1)}});function e(c,d,e){var f=this,g=c.add(this),h=c.find(e.tabs),i=d.jquery?d:c.children(d),j;h.length||(h=c.children()),i.length||(i=c.parent().find(d)),i.length||(i=a(d)),a.extend(this,{click:function(c,d){var i=h.eq(c);typeof c=="string"&&c.replace("#","")&&(i=h.filter("[href*="+c.replace("#","")+"]"),c=Math.max(h.index(i),0));if(e.rotate){var k=h.length-1;if(c<0)return f.click(k,d);if(c>k)return f.click(0,d)}if(!i.length){if(j>=0)return f;c=e.initialIndex,i=h.eq(c)}if(c===j)return f;d=d||a.Event(),d.type="onBeforeClick",g.trigger(d,[c]);if(!d.isDefaultPrevented()){b[e.effect].call(f,c,function(){j=c,d.type="onClick",g.trigger(d,[c])}),h.removeClass(e.current),i.addClass(e.current);return f}},getConf:function(){return e},getTabs:function(){return h},getPanes:function(){return i},getCurrentPane:function(){return i.eq(j)},getCurrentTab:function(){return h.eq(j)},getIndex:function(){return j},next:function(){return f.click(j+1)},prev:function(){return f.click(j-1)},destroy:function(){h.unbind(e.event).removeClass(e.current),i.find("a[href^=#]").unbind("click.T");return f}}),a.each("onBeforeClick,onClick".split(","),function(b,c){a.isFunction(e[c])&&a(f).bind(c,e[c]),f[c]=function(b){b&&a(f).bind(c,b);return f}}),e.history&&a.fn.history&&(a.tools.history.init(h),e.event="history"),h.each(function(b){a(this).bind(e.event,function(a){f.click(b,a);return a.preventDefault()})}),i.find("a[href^=#]").bind("click.T",function(b){f.click(a(this).attr("href"),b)}),location.hash&&e.tabs=="a"&&c.find("[href="+location.hash+"]").length?f.click(location.hash):(e.initialIndex===0||e.initialIndex>0)&&f.click(e.initialIndex)}a.fn.tabs=function(b,c){var d=this.data("tabs");d&&(d.destroy(),this.removeData("tabs")),a.isFunction(c)&&(c={onBeforeClick:c}),c=a.extend({},a.tools.tabs.conf,c),this.each(function(){d=new e(a(this),b,c),a(this).data("tabs",d)});return c.api?d:this}})(jQuery);
+;/**/
+/* Control behavior of images uploaded through CKEditor, including adding captions - CL */
+(function ($) {
+  Drupal.behaviors.InlineCaptions = function (context) {
+    // run a function on each image in the content area 
+    $('.node-article-page img, .node-blog-page img, .node-webinar-page img, .node-press_release-page img').each(function(i) {
+      var $image = $(this);
+      // Select only the images that are not ads and are not in the colorbox
+      if ($image.closest('div[class!="ad"]') && !($image.hasClass('imagefield')) && $('#cboxOverlay', document.body).size() < 1) {
+        // get the float if any
+        $image.parent('.colorbox').each(function() {
+          var $photo = $(this);
+          $photo.click(function() {
+            $.colorbox({
+              onOpen:function(){ $('#colorbox').addClass('penton-img'); },
+              onClosed:function(){ $('#colorbox').removeClass('penton-img'); }
+            });
+          });
+        });
+        var img_float = $image.css("float");
+        var img_width = $image.outerWidth();
+        // wrap 'em in div and append the text  
+        $image.wrap('<div class="captioned-image" />').parent().css('width', img_width).addClass('caption-' + img_float);
+        // plop in the caption, if any
+        if ($image.attr('title') !='') { 
+          $('<div class= "image-description" />').text($image.attr('title')).insertAfter($image);
+        }
+      }
+    });
+  }
+})(jQuery);
+;/**/
+;/**/
+/**
+ * Automatic ajax validation
+ *
+ * @see http://drupal.org/project/ajax
+ * @see irc://freenode.net/#drupy
+ * @depends Drupal 6
+ * @author brendoncrawford
+ * @note This file uses a 79 character width limit.
+ * 
+ * @see http://drupal.org/node/114774#javascript-behaviors
+ *
+ */
+
+/**
+ * Disables redirection for Ajax forms
+ * 
+ * @param {String} hook
+ * @param {Object} args
+ * @return {Bool}
+ */
+Drupal.Ajax.plugins.disable_redirect = function(hook, args) {
+  if (hook === 'redirect') {
+    if (args.options.disable_redirect === true) {
+      args.local.form[0].reset();
+      //IE
+      $('.form-item select', args.local.form[0]).attr('selectedIndex', 0);
+      if (args.options.remove_form === true) {
+        args.local.form.remove();
+      }
+      else {
+        $('.form-item :input', args.local.form[0])[0].focus();
+      }
+      return false;
+    }
+  }
+}
+
+
+;/**/

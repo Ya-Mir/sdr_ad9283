@@ -1,0 +1,296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0102)http://pages.electronicdesign.com/ED_News_EDToday_Subscribe_JL_07112016?partnerref=&elq=&code=&PK=&PR= -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Untitled Document</title>
+<style>
+body {
+	margin:0px;
+	padding:0px;
+	background-color: #333333;
+}
+.main-wrapper {
+	color:#ffffff;
+	width:100%;
+	max-width:300px;
+	text-align:center;
+	font-family:Arial, Helvetica, sans-serif;
+}
+.header {
+	font-family:Arial, Helvetica, sans-serif;
+	color:#ff6400;
+	font-size:24px;
+	font-weight:bold;
+	padding:5px;
+	margin-top:5px;
+}
+.subhead {
+	font-family:Arial, Helvetica, sans-serif;
+	color:#fff;
+	font-size:13px;
+	font-weight:bold;
+	padding:3px;
+	margin-bottom:0px;
+}
+input[type="text"], select {
+	width:80%;
+	padding:6px;
+	border-radius:6px;
+	margin:3px 0px 3px 0px;
+	border:none;
+
+}
+#field0 .LV_validation_message {
+    display:block;    
+}
+select {
+	width:84%;
+	padding:6px;
+	border-radius:6px;
+	margin:3px 0px 3px 0px;
+	border:none;
+}
+input[type="submit"] {
+	color:#fff;
+	background-color:#ff6400;
+	border-radius:6px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:20px;
+	font-weight:bold;
+	margin-top:5px;
+	padding:4px;
+	border:none;
+}
+input[type="submit"]:hover {
+	cursor:pointer;
+}
+.privacy {
+	color:#fff;
+	font-family:Arial, Helvetica, sans-serif;
+	padding:7px;
+	font-size:10px;
+}
+</style>
+<!--START LEGAL CSS STYLES-->
+<style type="text/css">
+.hide {display:none;}
+.show {display:inline;}
+.form-required {color:#CC0000;}
+.formLegal {font-size:10px}
+</style>
+<!--END LEGAL CSS STYLES-->
+<!--START FORM IDS-->
+<script type="text/javascript" async="" src="./elqCfg.min.js.Без названия"></script><script type="text/javascript">
+    var LookupIdVisitor = "6b7e1dc7-42d0-4f82-aa90-de3307f64ec5"; // LOOKUP A:  The ID of your Visitor Web Data Lookup (NH360 - Form PrePop Cookie Lookup)
+    var LookupIdPrimary = "54735c47-e03b-43f8-8023-aa8e0b642096"; // LOOKUP B:  The ID of your Contact/Datacard/Prospect/Company Web Data Lookup (NH360 - Form PrePop Contact Lookup)
+    var VisitorUniqueField = "V_ElqEmailAddress";       // Unique field's HTML Name from LOOKUP A (usually V_Email_Address)
+    var PrimaryUniqueField = "C_EmailAddress";          // Unique field's HTML Name from LOOKUP B (usually C_EmailAddress)
+    var EloquaFormID = document.forms[0].id;               // The ID of your Eloqua Form   
+</script> 
+<!--END FORM IDS-->
+<!--START ELOQUA TRACKING CODE-->
+<script type="text/javascript">
+    var EloquaSiteID = "1904481191";                  // The Site ID of your Eloqua Instance
+    var EloquaScript = "http://img.en25.com/i/elqCfg.min.js";     // Path to elqCfg.min.js
+        var _elqQ = _elqQ || [];
+        _elqQ.push(['elqSetSiteId', EloquaSiteID]);
+        _elqQ.push(['elqTrackPageView']);
+        (function () {
+            function async_load() {
+                var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true;
+                s.src = EloquaScript;
+                var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
+            }
+            if (window.addEventListener) window.addEventListener('DOMContentLoaded', async_load, false);
+            else if (window.attachEvent) window.attachEvent('onload', async_load);
+        })();
+</script>     
+<!--END ELOQUA TRACKING CODE-->   
+<!--START FORM FUCNTIONS-->   
+<script type="text/javascript">
+    function LoadFields(FormID) {   
+      var container, inputs, index;   
+      // Get the Form element
+      container = document.getElementById(FormID);
+      //'#yourFormHTMLName :input'
+      inputs = $(':input');
+      // Loops through every INPUT on the form
+      for (index = 0; index < inputs.length; index++) {
+        var LookupID = inputs[index].name;
+        var LookupValue = GetElqContentPersonalizationValue(LookupID);
+        // This value is used for CHECK BOX value comparisons
+        var LowerCaseValue = LookupValue.toLowerCase();
+        // deal with inputs[index] element.  Compare to LookupID and LookupValue.
+        // Form Field Prepopulation
+        if (inputs[index].name == LookupID) {
+          if (inputs[index].type == "checkbox") {
+            // Place code here for CHECKBOX Inputs
+            if (LowerCaseValue == "on") inputs[index].checked=true;
+            else if (LowerCaseValue == "true") inputs[index].checked=true;
+            else if (LowerCaseValue == "y") inputs[index].checked=true;
+            else if (LowerCaseValue == "yes") inputs[index].checked=true;
+            else if (LowerCaseValue == "checked") inputs[index].checked=true;
+            else if (LowerCaseValue == "1") inputs[index].checked=true;
+          } else if (inputs[index].type == "radio") {
+            // Place code here for RADIO BUTTON Inputs
+          } else if (inputs[index].type == "select-one") {
+           inputs[index].value = LookupValue;
+          } else if (inputs[index].type == "text") {
+            // Place code here for STANDARD TEXT Inputs
+            inputs[index].value = LookupValue;
+          } else {
+            // All Other Inputs = do nothing
+          } 
+        }
+      }
+    }
+</script>     
+<!--END FORM FUCNTIONS--> 
+<!--START DATA LOOKUPS-->
+<script type="text/javascript">
+    // SetElqContent is triggered by the Data Lookup Scripts automatically.  The "FirstLookup" modification allows for the Visitor Lookup to trigger the second Lookup (Contact/Datacard/Prospect/Company)
+    var FirstLookup = true;
+        function SetElqContent() {
+            if (FirstLookup) {
+        //LOOKUP B:  Eloqua Contact/DataCard/Prospect/Company Data Lookup from Email Address
+        _elqQ.push(['elqDataLookup', escape(LookupIdPrimary), '<' + PrimaryUniqueField +'>' + GetElqContentPersonalizationValue(VisitorUniqueField) + '</' + PrimaryUniqueField + '>']);
+        FirstLookup = false;
+      } else {
+        //This is triggered the after Lookup B fires.  LoadFields starts the field prepoulation process.
+        LoadFields(EloquaFormID);
+      }       
+    }
+    // LOOKUP A:  Eloqua Visitor Data Lookup from Cookie  -  Ensure VisitorUniqueField is pulled in the Profile View
+        _elqQ.push(['elqDataLookup', escape(LookupIdVisitor), '']);       
+</script>
+<!--END DATA LOOKUPS-->
+ <script type="text/javascript" src="./jquery.min.js.Без названия"></script>  
+    <script type="text/javascript">  
+    $(document).ready(function(){  
+        $('#field21').hide();  
+        $('input').focus(function(){  
+            $('input[name="botStop"]').val('718');  
+        });  
+    });  
+    </script>  
+<script type="text/javascript" src="./svrGP"></script><script type="text/javascript" src="./svrGP(1)"></script></head>
+
+<body>
+<div class="main-wrapper">
+<div class="main">
+<div class="border">
+<h3 style="color:#ff6400;text-align:center;font-size:24px;font-weight:bold;margin:0;padding:5px 0px;">Join Our Newsletter</h3>
+<div class="newsletter-signup-prefix">
+<span style="font-weight:bold;font-size:13px;">Join over 65,000 engineers who receive fresh Electronic Design Content, 5 days a week.</span></div>
+
+<form method="post" name="ED_NewsletterSignup" action="https://s1904481191.t.eloqua.com/e/f2" id="form22">
+<input type="hidden" value="ED_NewsletterSignup" name="elqFormName">
+<input type="hidden" value="1904481191" name="elqSiteId">
+<input type="hidden" name="elqCampaignId">
+<input type="hidden" value="" name="TrackingCode">
+
+<input id="field21" name="botStop" type="text" value="" style="display: none;">
+<input id="field22" type="hidden" name="source" value="EDRR2">
+
+<div id="formElement0" style="margin-top:5px; margin-bottom: 5px; padding-top:2px; padding-left:10px">
+  <input type="checkbox" name="ED-001" value="on"><label style="margin-left: 4px;font-family:Arial, Helvetica, sans-serif;font-size:12px;">Electronic Design Today<span class="monthly">
+  <a href="http://enewspro.penton.com/preview/electronicdesign/ED-001/current/display?elqTrackId=7031c00fb98245e8b52f28fa432b1e55&amp;elqaid=1257&amp;elqat=2" target="_blank" class="viewsample" style="color:#e3e3e3;font-size:11px;">(View Sample)</a>
+</span></label>
+</div>
+
+<!--Dummy Field-->
+<div style="padding-left:14px">
+<input type="text" name="validationdummy" value="" id="validationdummy" style="width:0px; height:0px; border:0px; margin:0px; padding:0px; font-size:0px; line-height:0px; visibility:hidden">
+</div>
+<!--Dummy Field-->
+
+
+
+<div id="formElement0" style="left: 0px; right: 0px; top: 0px; bottom: 0px; padding: 7px 5px 0px 19px">
+  <input placeholder="Enter your email address..." type="text" id="field0" name="emailAddress" value="" style="display:block;width:92%">
+</div>
+
+<div id="formElement1" style="left: 0px; right: 0px; top: 0px; bottom: 0px; padding: 5px 5px 7px 19px">
+  <select id="field1" name="country" style="display:block;width:96%;"><option value="" selected="selected">Select your country...</option><option value="US">United States</option><option value="GB">United Kingdom</option><option value="CA">Canada</option><option value="IN">India</option><option value="NL">Netherlands</option><option value="AU">Australia</option><option value="ZA">South Africa</option><option value="FR">France</option><option value="DE">Germany</option><option value="SG">Singapore</option><option value="SE">Sweden</option><option value="BR">Brazil</option><option value="">--------------</option><option value="AF">Afghanistan</option><option value="AX">Åland Islands</option><option value="AL">Albania</option><option value="DZ">Algeria</option><option value="AS">American Samoa</option><option value="AD">Andorra</option><option value="AO">Angola</option><option value="AI">Anguilla</option><option value="AQ">Antarctica</option><option value="AG">Antigua and Barbuda</option><option value="AR">Argentina</option><option value="AM">Armenia</option><option value="AW">Aruba</option><option value="AU">Australia</option><option value="AT">Austria</option><option value="AZ">Azerbaijan</option><option value="BS">Bahamas</option><option value="BH">Bahrain</option><option value="BD">Bangladesh</option><option value="BB">Barbados</option><option value="BY">Belarus</option><option value="BE">Belgium</option><option value="BZ">Belize</option><option value="BJ">Benin</option><option value="BM">Bermuda</option><option value="BT">Bhutan</option><option value="BO">Bolivia</option><option value="BA">Bosnia and Herzegovina</option><option value="BW">Botswana</option><option value="BV">Bouvet Island</option><option value="BR">Brazil</option><option value="IO">Brit/Indian Ocean Terr.</option><option value="BN">Brunei Darussalam</option><option value="BG">Bulgaria</option><option value="BF">Burkina Faso</option><option value="BI">Burundi</option><option value="KH">Cambodia</option><option value="CM">Cameroon</option><option value="CA">Canada</option><option value="CV">Cape Verde</option><option value="KY">Cayman Islands</option><option value="CF">Central African Republic</option><option value="TD">Chad</option><option value="CL">Chile</option><option value="CN">China</option><option value="CX">Christmas Island</option><option value="CC">Cocos (Keeling) Islands</option><option value="CO">Colombia</option><option value="KM">Comoros</option><option value="CG">Congo</option><option value="CD">Congo, The Dem. Republic Of</option><option value="CK">Cook Islands</option><option value="CR">Costa Rica</option><option value="CI">Côte D'Ivore</option><option value="HR">Croatia</option><option value="CU">Cuba</option><option value="CY">Cyprus</option><option value="CZ">Czech Republic</option><option value="DK">Denmark</option><option value="DJ">Djibouti</option><option value="DM">Dominica</option><option value="DO">Dominican Republic</option><option value="EC">Ecuador</option><option value="EG">Egypt</option><option value="SV">El Salvador</option><option value="GQ">Equatorial Guinea</option><option value="ER">Eritrea</option><option value="EE">Estonia</option><option value="ET">Ethiopia</option><option value="FK">Falkland Islands</option><option value="FO">Faroe Islands</option><option value="FJ">Fiji</option><option value="FI">Finland</option><option value="FR">France</option><option value="GF">French Guiana</option><option value="PF">French Polynesia</option><option value="TF">French Southern Terr.</option><option value="GA">Gabon</option><option value="GM">Gambia</option><option value="GE">Georgia</option><option value="DE">Germany</option><option value="GH">Ghana</option><option value="GI">Gibraltar</option><option value="GB">United Kingdom</option><option value="GR">Greece</option><option value="GL">Greenland</option><option value="GD">Grenada</option><option value="GP">Guadeloupe</option><option value="GU">Guam</option><option value="GT">Guatemala</option><option value="GN">Guinea</option><option value="GW">Guinea-Bissau</option><option value="GY">Guyana</option><option value="HT">Haiti</option><option value="HM">Heard/McDonald Isls.</option><option value="HN">Honduras</option><option value="HK">Hong Kong</option><option value="HU">Hungary</option><option value="IS">Iceland</option><option value="IN">India</option><option value="ID">Indonesia</option><option value="IR">Iran</option><option value="IQ">Iraq</option><option value="IE">Ireland</option><option value="IL">Israel</option><option value="IT">Italy</option><option value="JM">Jamaica</option><option value="JP">Japan</option><option value="JO">Jordan</option><option value="KZ">Kazakhstan</option><option value="KE">Kenya</option><option value="KI">Kiribati</option><option value="KP">Korea (North)</option><option value="KR">Korea (South)</option><option value="KW">Kuwait</option><option value="KG">Kyrgyzstan</option><option value="LA">Laos</option><option value="LV">Latvia</option><option value="LB">Lebanon</option><option value="LS">Lesotho</option><option value="LR">Liberia</option><option value="LY">Libya</option><option value="LI">Liechtenstein</option><option value="LT">Lithuania</option><option value="LU">Luxembourg</option><option value="MO">Macau</option><option value="MK">Macedonia</option><option value="MG">Madagascar</option><option value="MW">Malawi</option><option value="MY">Malaysia</option><option value="MV">Maldives</option><option value="ML">Mali</option><option value="MT">Malta</option><option value="MH">Marshall Islands</option><option value="MQ">Martinique</option><option value="MR">Mauritania</option><option value="MU">Mauritius</option><option value="YT">Mayotte</option><option value="MX">Mexico</option><option value="FM">Micronesia</option><option value="MD">Moldova</option><option value="MC">Monaco</option><option value="MN">Mongolia</option><option value="MS">Montserrat</option><option value="MA">Morocco</option><option value="MZ">Mozambique</option><option value="MM">Myanmar</option><option value="MP">N. Mariana Isls.</option><option value="NA">Namibia</option><option value="NR">Nauru</option><option value="NP">Nepal</option><option value="NL">Netherlands</option><option value="AN">Netherlands Antilles</option><option value="NC">New Caledonia</option><option value="NZ">New Zealand</option><option value="NI">Nicaragua</option><option value="NE">Niger</option><option value="NG">Nigeria</option><option value="NU">Niue</option><option value="NF">Norfolk Island</option><option value="NO">Norway</option><option value="OM">Oman</option><option value="PK">Pakistan</option><option value="PW">Palau</option><option value="PS">Palestinian Territory, Occupied</option><option value="PA">Panama</option><option value="PG">Papua New Guinea</option><option value="PY">Paraguay</option><option value="PE">Peru</option><option value="PH">Philippines</option><option value="PN">Pitcairn</option><option value="PL">Poland</option><option value="PT">Portugal</option><option value="PR">Puerto Rico</option><option value="QA">Qatar</option><option value="RE">Reunion</option><option value="RO">Romania</option><option value="RU">Russian Federation</option><option value="RW">Rwanda</option><option value="KN">Saint Kitts and Nevis</option><option value="LC">Saint Lucia</option><option value="WS">Samoa</option><option value="SM">San Marino</option><option value="ST">Sao Tome/Principe</option><option value="SA">Saudi Arabia</option><option value="SN">Senegal</option><option value="CS">Serbia and Montenegro</option><option value="SC">Seychelles</option><option value="SL">Sierra Leone</option><option value="SG">Singapore</option><option value="SK">Slovak Republic</option><option value="SI">Slovenia</option><option value="SB">Solomon Islands</option><option value="SO">Somalia</option><option value="ZA">South Africa</option><option value="ES">Spain</option><option value="LK">Sri Lanka</option><option value="SH">St. Helena</option><option value="PM">St. Pierre and Miquelon</option><option value="VC">St. Vincent and Grenadines</option><option value="SD">Sudan</option><option value="SR">Suriname</option><option value="SJ">Svalbard/Jan Mayen Isls.</option><option value="SZ">Swaziland</option><option value="SE">Sweden</option><option value="CH">Switzerland</option><option value="SY">Syria</option><option value="TW">Taiwan</option><option value="TJ">Tajikistan</option><option value="TZ">Tanzania</option><option value="TH">Thailand</option><option value="TL">Timor-Leste</option><option value="TG">Togo</option><option value="TK">Tokelau</option><option value="TO">Tonga</option><option value="TT">Trinidad and Tobago</option><option value="TN">Tunisia</option><option value="TR">Turkey</option><option value="TM">Turkmenistan</option><option value="TC">Turks/Caicos Isls.</option><option value="TV">Tuvalu</option><option value="UG">Uganda</option><option value="UA">Ukraine</option><option value="AE">United Arab Emirates</option><option value="US">United States</option><option value="UM">US Minor Outlying Is.</option><option value="UY">Uruguay</option><option value="UZ">Uzbekistan</option><option value="VU">Vanuatu</option><option value="VA">Vatican City</option><option value="VE">Venezuela</option><option value="VN">Viet Nam</option><option value="VG">Virgin Islands (British)</option><option value="VI">Virgin Islands (U.S.)</option><option value="WF">Wallis/Futuna Isls.</option><option value="EH">Western Sahara</option><option value="YE">Yemen</option><option value="ZM">Zambia</option><option value="ZW">Zimbabwe</option></select>
+</div>
+
+<div class="privacy">
+<!--START LEGAL DIV AND CHECKBOX-->
+<div class="hide" id="legalCheckboxVisiblity">
+<input id="legalCheckbox" name="legalCheckbox" type="checkbox" value="on" disabled="">
+</div>
+<!--END LEGAL DIV AND CHECKBOX-->
+Enter your email above to receive messages about offerings by Penton, its brands, affiliates and/or third-party partners, consistent with Penton’s <a target="_blank" href="http://www.penton.com/privacy-policy/?elqTrackId=76e1849fe9694b299b5610c425cd8c9e&amp;elqaid=1257&amp;elqat=2" style="color:#6598ff">Privacy Policy</a>.</div>
+
+<div style="margin: 0px;text-align: center;">
+<input type="submit" value="Subscribe" class="submit-button">
+</div>
+</form>
+
+<script src="./livevalidation_standalone.compressed.js.Без названия" type="text/javascript"></script><style type="text/css" media="screen">.LV_validation_message{ font-weight:bold; margin: 0 0 0 0px; }
+.LV_valid{ color:#00CC00; display:none; }
+.LV_invalid{ color:#CC0000; font-size:10px; font-family:Arial, Helvetica, sans-serif; }
+.LV_valid_field, input.LV_valid_field:hover, input.LV_valid_field:active, textarea.LV_valid_field:hover, textarea.LV_valid_field:active { border: 1px solid #00CC00; }
+.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active { border: 1px solid #CC0000; }</style><script type="text/javascript">var field0 = new LiveValidation("field0", {validMessage: "", onlyOnBlur: true});field0.add(Validate.Presence, {failureMessage:"This field is required"});field0.add(Validate.Format, {pattern: /^[ ]*([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})[ ]*$/i, failureMessage: "A valid email address is required"});var field1 = new LiveValidation("field1", {validMessage: "", onlyOnBlur: true});field1.add(Validate.Presence, {failureMessage:"This field is required"}); var field21 = new LiveValidation("field21", {validMessage: "", onlyOnBlur: true});field21.add(Validate.Presence, {failureMessage:" "});field21.add(Validate.Numericality, {tooLowMessage:" ", tooHighMessage:" ", minimum: 718, maximum: 718});
+var validationdummy = new LiveValidation("validationdummy", {validMessage: "", onlyOnBlur: true});validationdummy.add(Validate.Presence, {failureMessage:"Select at least one newsletter"});
+</script>
+</div>
+</div>
+
+</div>
+ 
+
+<!--START LEGAL VALIDATION-->
+<script src="./jquery-1.11.0.min.js.Без названия"></script>
+<script type="text/javascript" src="./{4be7ce06-86f4-4d8b-925c-5a9bc2a4cef3}_CASL_Country.js.Без названия"></script>
+<!--END LEGAL VALIDATION-->
+
+
+<!--JS Function-->
+<script type="text/javascript">
+function validate()
+{
+var chks = $('input[type=checkbox]');
+var checkCount = 0;
+for (var i = 0; i < chks.length; i++)
+{
+if (chks[i].checked)
+{
+checkCount++;
+}
+}
+if ($('#legalCheckbox').prop('checked') == true)
+{
+checkCount = checkCount - 1;
+}
+if (checkCount < 1)
+{
+validationdummy.enable() 
+}
+else 
+{
+validationdummy.disable() 
+}
+}
+
+$(document).ready(validate); 
+$('input[type=checkbox]').change(validate); 
+</script>
+<!--JS Function-->
+
+  
+<!--[if lt IE 7]>
+<script src='http://images.link.pentondes.com/i/IE7.js'></script><script type='text/javascript'>var elements = document.all;var len = elements.length;for(var i = 0; i<len; i+=1){IE7.Layout.fixRight(elements[i]);IE7.Layout.fixBottom(elements[i]);}</script>
+<![endif]-->
+
+<script type="text/javascript">
+<!--
+if (navigator.appName == 'Netscape' || navigator.appName == 'Opera'){
+     document.write('<layer hidden=true><img src="http://s1904481191.t.eloqua.com/visitor/v200/svrGP?pps=60&siteid=1904481191&PURLSiteID=7&optin=disabled&PURLSiteAlternateDNSID=0&LandingPageID=1257&PURLRecordID=0&PURLGUID=952D284CB05C4F63835A774D26E4A296&UseRelativePath=True&elq={00000000-0000-0000-0000-000000000000}&ref=http%3A%2F%2Felectronicdesign.com%2Fanalog%2Fhigh-speed-adc-input-impedance-measured-versus-mathematical-approach&elq_ck=0&partnerref=&code=&PK=&PR=" border=0 width=1 height=1 alt="" ><\/layer>');
+}else{
+     document.write('<img style="display:none" src="http://s1904481191.t.eloqua.com/visitor/v200/svrGP?pps=60&siteid=1904481191&PURLSiteID=7&optin=disabled&PURLSiteAlternateDNSID=0&LandingPageID=1257&PURLRecordID=0&PURLGUID=952D284CB05C4F63835A774D26E4A296&UseRelativePath=True&elq={00000000-0000-0000-0000-000000000000}&ref=http%3A%2F%2Felectronicdesign.com%2Fanalog%2Fhigh-speed-adc-input-impedance-measured-versus-mathematical-approach&elq_ck=0&partnerref=&code=&PK=&PR=" border=0 width=1 height=1 alt="">');
+}
+
+-->
+</script><layer hidden="true"><img src="./svrGP(2)" border="0" width="1" height="1" alt=""></layer>
+</body></html>
