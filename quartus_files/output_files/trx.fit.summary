@@ -1,0 +1,16 @@
+Fitter Status : Failed - Wed Jan 25 20:11:35 2017
+Quartus Prime Version : 15.1.0 Build 185 10/21/2015 SJ Standard Edition
+Revision Name : trx
+Top-level Entity Name : trx
+Family : Cyclone IV E
+Device : EP4CE6F17C8
+Timing Models : Final
+Total logic elements : 4,593 / 6,272 ( 73 % )
+    Total combinational functions : 4,032 / 6,272 ( 64 % )
+    Dedicated logic registers : 2,903 / 6,272 ( 46 % )
+Total registers : 2903
+Total pins : 23 / 180 ( 13 % )
+Total virtual pins : 0
+Total memory bits : 40,220 / 276,480 ( 15 % )
+Embedded Multiplier 9-bit elements : 14 / 30 ( 47 % )
+Total PLLs : 1 / 2 ( 50 % )

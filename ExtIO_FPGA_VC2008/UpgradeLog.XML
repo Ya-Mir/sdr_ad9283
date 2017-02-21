@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="ExtIODll">
+</Property><Property Name="Файл решения" Value="D:\MYPROGS\NAVTEX\DDC\ExtIO_Example_VC2008\ExtIODll.sln">
+</Property><Property Name="Файл параметров пользователя" Value="D:\MYPROGS\NAVTEX\DDC\ExtIO_Example_VC2008\ExtIODll.suo">
+</Property><Property Name="Date" Value="7 ноября 2013 г.">
+</Property><Property Name="Time" Value="21:04">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="ExtIODll.sln" Description="Успешно создана резервная копия файла D:\MYPROGS\NAVTEX\DDC\ExtIO_Example_VC2008\ExtIODll.sln.old">
+</Event><Event ErrorLevel="0" Project="" Source="ExtIODll.suo" Description="Успешно создана резервная копия файла D:\MYPROGS\NAVTEX\DDC\ExtIO_Example_VC2008\ExtIODll.suo.old">
+</Event><Event ErrorLevel="0" Project="ExtIODll" Source="ExtIODll.vcproj" Description="Проект обновлен успешно.">
+</Event><Event ErrorLevel="3" Project="ExtIODll" Source="ExtIODll.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="ExtIODll.sln" Description="Преобразование решения успешно завершено">
+</Event><Event ErrorLevel="3" Project="" Source="ExtIODll.sln" Description="Converted">
+</Event></UpgradeLog>

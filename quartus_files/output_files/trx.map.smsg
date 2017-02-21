@@ -1,0 +1,2 @@
+Info (10281): Verilog HDL Declaration information at firinterp.v(23): object "rAddr" differs only in case from object "raddr" in the same scope File: C:/Users/User/GoogleDrive/project/sdr_ad9283/quartus_files/firinterp.v Line: 23
+Warning (10268): Verilog HDL information at data_cntr.v(17): always construct contains both blocking and non-blocking assignments File: C:/Users/User/GoogleDrive/project/sdr_ad9283/quartus_files/data_cntr.v Line: 17

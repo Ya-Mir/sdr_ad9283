@@ -1,0 +1,14 @@
+Analysis & Synthesis Status : Successful - Wed Jan 25 20:11:07 2017
+Quartus Prime Version : 15.1.0 Build 185 10/21/2015 SJ Standard Edition
+Revision Name : trx
+Top-level Entity Name : trx
+Family : Cyclone IV E
+Total logic elements : 4,592
+    Total combinational functions : 4,031
+    Dedicated logic registers : 2,903
+Total registers : 2903
+Total pins : 22
+Total virtual pins : 0
+Total memory bits : 40,220
+Embedded Multiplier 9-bit elements : 14
+Total PLLs : 1

@@ -1,0 +1,130 @@
+Restore Archived Project report for trx
+Wed Jan 25 19:41:26 2017
+Quartus Prime Version 15.1.0 Build 185 10/21/2015 SJ Standard Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Restore Archived Project Summary
+  3. Restore Archived Project Messages
+  4. Files Restored
+  5. Files Not Restored
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 1991-2015 Altera Corporation. All rights reserved.
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, the Altera Quartus Prime License Agreement,
+the Altera MegaCore Function License Agreement, or other 
+applicable license agreement, including, without limitation, 
+that your use is for the sole purpose of programming logic 
+devices manufactured by Altera and sold by Altera or its 
+authorized distributors.  Please refer to the applicable 
+agreement for further details.
+
+
+
++-------------------------------------------------------------------------+
+; Restore Archived Project Summary                                        ;
++---------------------------------+---------------------------------------+
+; Restore Archived Project Status ; Successful - Wed Jan 25 19:41:26 2017 ;
+; Revision Name                   ; trx                                   ;
+; Top-level Entity Name           ; trx                                   ;
+; Family                          ; Cyclone IV E                          ;
++---------------------------------+---------------------------------------+
+
+
++-----------------------------------+
+; Restore Archived Project Messages ;
++-----------------------------------+
+Info: Successfully restored 'C:/Users/User/GoogleDrive/project/sdr_ad9283/firmware/trx_ua4waq.qar' into the 'C:\\Users\\User\\GoogleDrive\\project\\sdr_ad9283\\quartus_files/' directory
+Info: Generated report 'trx.restore.rpt'
+Info (23030): Evaluation of Tcl script c:/altera/15.1/quartus/common/tcl/apps/qpm/qar.tcl was successful
+Info: Quartus Prime Shell was successful. 0 errors, 0 warnings
+    Info: Peak virtual memory: 661 megabytes
+    Info: Processing ended: Wed Jan 25 19:41:26 2017
+    Info: Elapsed time: 00:00:06
+    Info: Total CPU time (on all processors): 00:00:02
+
+
++-----------------------------+
+; Files Restored              ;
++-----------------------------+
+; File Name                   ;
++-----------------------------+
+; qar_info.json               ;
+; TENBASET_RxD.v              ;
+; TENBASET_TxD.v              ;
+; add.bsf                     ;
+; add.qip                     ;
+; add.v                       ;
+; add_bb.v                    ;
+; addtx.bsf                   ;
+; addtx.qip                   ;
+; addtx.v                     ;
+; addtx_bb.v                  ;
+; assignment_defaults.qdf     ;
+; bus_switch11.v              ;
+; bus_switch8.v               ;
+; cic.v                       ;
+; cic_comb.v                  ;
+; cic_integrator.v            ;
+; cic_interp.v                ;
+; clk_div_4.bdf               ;
+; clk_mux1.vhd                ;
+; coefI8.mif                  ;
+; cordic_rx.v                 ;
+; cordic_tx.v                 ;
+; data_cntr.v                 ;
+; db/stp1_auto_stripped.stp   ;
+; excontrol.v                 ;
+; fir_coeffs_rom.hex          ;
+; fir_coeffs_rom.v            ;
+; fir_shiftreg.v              ;
+; firfilt.v                   ;
+; firinterp.v                 ;
+; firram36I.v                 ;
+; firromI.v                   ;
+; mem1.vhd                    ;
+; mem2.vhd                    ;
+; mem_module.bdf              ;
+; memcic.v                    ;
+; memcic_ram.v                ;
+; mult_24sx24s.v              ;
+; mux1.vhd                    ;
+; output_files/Chain1.cdf     ;
+; output_files/Chain2.cdf     ;
+; output_files/Chain3.cdf     ;
+; output_files/Chain4.cdf     ;
+; output_files/Chain5.cdf     ;
+; output_files/Chain7.cdf     ;
+; output_files/stp1.stp       ;
+; pll.vhd                     ;
+; receiver.v                  ;
+; reset_ctrl.v                ;
+; serializer.v                ;
+; spi_master.vhd              ;
+; trx.bdf                     ;
+; trx.qpf                     ;
+; trx.qsf                     ;
+; trx_assignment_defaults.qdf ;
++-----------------------------+
+
+
++--------------------+
+; Files Not Restored ;
++--------------------+
+; File Name          ;
++--------------------+
+
+

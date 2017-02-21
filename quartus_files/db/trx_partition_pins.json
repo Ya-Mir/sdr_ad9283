@@ -1,0 +1,101 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "res_led",
+					"strict" : false
+				},
+				{
+					"name" : "LED3",
+					"strict" : false
+				},
+				{
+					"name" : "LED1",
+					"strict" : false
+				},
+				{
+					"name" : "out_p",
+					"strict" : false
+				},
+				{
+					"name" : "out_m",
+					"strict" : false
+				},
+				{
+					"name" : "pin_name1",
+					"strict" : false
+				},
+				{
+					"name" : "lpf[2]",
+					"strict" : false
+				},
+				{
+					"name" : "lpf[1]",
+					"strict" : false
+				},
+				{
+					"name" : "lpf[0]",
+					"strict" : false
+				},
+				{
+					"name" : "ext_res",
+					"strict" : false
+				},
+				{
+					"name" : "eth_in",
+					"strict" : false
+				},
+				{
+					"name" : "adc_in[7]",
+					"strict" : false
+				},
+				{
+					"name" : "adc_in[6]",
+					"strict" : false
+				},
+				{
+					"name" : "adc_in[5]",
+					"strict" : false
+				},
+				{
+					"name" : "adc_in[4]",
+					"strict" : false
+				},
+				{
+					"name" : "adc_in[3]",
+					"strict" : false
+				},
+				{
+					"name" : "adc_in[2]",
+					"strict" : false
+				},
+				{
+					"name" : "adc_in[1]",
+					"strict" : false
+				},
+				{
+					"name" : "adc_in[0]",
+					"strict" : false
+				},
+				{
+					"name" : "altera_reserved_tms",
+					"strict" : false
+				},
+				{
+					"name" : "altera_reserved_tck",
+					"strict" : false
+				},
+				{
+					"name" : "altera_reserved_tdi",
+					"strict" : false
+				},
+				{
+					"name" : "altera_reserved_tdo",
+					"strict" : false
+				}
+			]
+		}
+	]
+}
