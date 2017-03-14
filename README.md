@@ -4,5 +4,5 @@
 # Communication: Software Ethernet 10Mbit/s
 # Presents: pcb, source code, extio, schematics, iq sample, foto and other
 # known bugs: sometimes reset it does not work properly
-![alt text](https://github.com/Ya-Mir/sdr_ad9283/sdr_ad9283/img/low_size/80m.jpg)
+![80m band](https://github.com/Ya-Mir/sdr_ad9283/blob/master/img/low_size/80m.jpg?raw=true)
 
